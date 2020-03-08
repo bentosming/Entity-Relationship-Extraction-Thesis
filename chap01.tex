@@ -8,37 +8,43 @@ The SemEval-2010 Task 8 dataset (S10T8) was introduced in SemEval-2010 Task 8: M
 
 \todo {nějak napsat, že nebudu citovat, ale je to hodně vykradené?}
 
-First the authors decided on an inventory of semantic relations. They aimed for such a set of relations that it would be exhaustive (enable the description of relations between any pair of nominals) and mutually exclusive (given context and a pair of nominals only one relation should be selectable). \todo {připravit tabulku nebo něco, kam se odkázat na jejich seznam} 
+The authors started by choosing an inventory of semantic relations. They aimed for such a set of relations that it would be exhaustive (enable the description of relations between any pair of nominals) and mutually exclusive (given context and a pair of nominals only one relation should be selectable).  Chosen relations with descriptions and examples are listed in table \ref{table01:S10T8}. \todo{proč není table součást odkazu?}
 
 They decided to accept as relation arguments any noun phrases with common-noun heads not just named entities or some other specific class of noun phrases, mentioning \todo{nechat ut tu citaci?} 'Named entities are a specific category of nominal expressions best dealt with using techniques which do not apply to common nouns.' \todo{quote better} But they restricted noun phrases to single words with the exception to lexicalized terms (such as \todo{formát} science fiction).
+
+The annotation process had three rounds. In the first round, authors manually collected around 1,200 sentences for each relation through pattern-based Web search (with at least a hundred patterns per relation). This way, they obtained around 1200 sentences for each relation. In the second round, each sentence was annotated by two independent annotators. In the third round disagreements were resolved and the dataset was finished. Every sentence was classified either as a true relation mention or was a \todo{lepší uvozovky} near-miss and thus classified as "other", or was removed.
+
+The dataset contains of 10717 relation mentions. For the original competition, teams were given three training dataset of sizes 1000 (TD1), 2000 (TD2), 4000 (TD3), and 8000 (TD4). There was a notable gain TD3 →TD4 therefore the authors concluded that even larger dataset might be helpful to increase performance of models. But \quotation{.. that is so much easier said than done: it took the organizers well in excess of 1000 person-hours to pin down the problem, hone the guidelines and
+relation definitions, construct sufficient amounts of trustworthy training data, and run the task.}
+
 
 
 \begin{table}
 
 \label{table01:S10T8}
-\begin{tabular}{|p{10cm}|P{1,3cm}|p{1cm}|}
+\begin{tabular}{|p{12,2cm}|P{1,3cm}|}
 \hline 
-Label & Freq & num2 \\ 
+Label & Freq  \\ 
 \hline 
-\relationcell{Cause-Effect}{An event or object leads to an effect.}{The \underline{burst} has been caused by water hammer \underline{\smash{pressure}}.} & 12.4\%  (1331) & •  \\ 
+\relationcell{Cause-Effect}{An event or object leads to an effect.}{The \underline{burst} has been caused by water hammer \underline{\smash{pressure}}.} & \freqencycell{12.4}{1331}   \\ 
 \hline 
-\relationcell{Instrument-Agency}{An agent uses an instrument. }{The \underline{author} of a keygen uses a \underline{disassembler} to look at the raw assembly code.}  & 6.2\% (660) & •  \\ 
+\relationcell{Instrument-Agency}{An agent uses an instrument. }{The \underline{author} of a keygen uses a \underline{disassembler} to look at the raw assembly code.}  & \freqencycell{6.2}{660}   \\ 
 \hline 
-\relationcell{Product-Producer}{A producer causes a product to exist.}{The \underline{\smash{factory}}'s products have included flower pots, Finnish rooster-whistles, pans, \underline{\smash{trays}}, tea pots, ash trays and air moisturisers.}  & 8.8\% (948) & •  \\ 
+\relationcell{Product-Producer}{A producer causes a product to exist.}{The \underline{\smash{factory}}'s products have included flower pots, Finnish rooster-whistles, pans, \underline{\smash{trays}}, tea pots, ash trays and air moisturisers.}  & \freqencycell{8.8}{948}   \\ 
 \hline 
-\relationcell{Content-Container}{An object is physically stored in a delineated area of space.}{This cut blue and white striped cotton \underline{dress} with red bands on the bodice was in a \underline{trunk} of vintage Barbie clothing.}& 6.8\% (732) & •\\ 
+\relationcell{Content-Container}{An object is physically stored in a delineated area of space.}{This cut blue and white striped cotton \underline{dress} with red bands on the bodice was in a \underline{trunk} of vintage Barbie clothing.}& \freqencycell{6.8}{732} \\ 
 \hline 
-\relationcell{Entity-Origin}{An entity is coming or is derived from an origin (e.g., position or material). }{The \underline{avalanches} originated in an extensive \underline{mass} of rock that had previously been hydrothermally altered in large part to clay.} & 9.1\% (974) & • \\ 
+\relationcell{Entity-Origin}{An entity is coming or is derived from an origin (e.g., position or material). }{The \underline{avalanches} originated in an extensive \underline{mass} of rock that had previously been hydrothermally altered in large part to clay.} & \freqencycell{9.1}{974}  \\ 
 \hline 
-\relationcell{Entity-Destination}{An entity is moving towards a destination.}{This book has transported \underline{readers} into \underline{ancient times}.}& 10.6\% (1137) & •\\ 
+\relationcell{Entity-Destination}{An entity is moving towards a destination.}{This book has transported \underline{readers} into \underline{ancient times}.}& \freqencycell{10.6}{1137} \\ 
 \hline 
-\relationcell{Component-Whole}{ An object is a component of a larger whole.}{The system as described above has its greatest application in an arrayed \underline{configuration} of antenna \underline{elements}}.&  11.7\% (1253) & •\\ 
+\relationcell{Component-Whole}{ An object is a component of a larger whole.}{The system as described above has its greatest application in an arrayed \underline{configuration} of antenna \underline{elements}}.&  \freqencycell{11.7}{1253} \\ 
 \hline 
-\relationcell{Member-Collection}{ A member forms a nonfunctional part of a collection}{The \underline{student} \underline{association} is the voice of the undergraduate student population of the State University of New York at Buffalo.} & 8.6\% (923) & • \\ 
+\relationcell{Member-Collection}{ A member forms a nonfunctional part of a collection}{The \underline{student} \underline{association} is the voice of the undergraduate student population of the State University of New York at Buffalo.} & \freqencycell{8.6}{923}  \\ 
 \hline 
-\relationcell{Message-Topic}{ A message, written or spoken, is about a topic. }{Cieply's \underline{\smash{story}} makes a compelling \underline{\smash{point}} about modern-day studio economics.} & 8.4\% (895) & • \\ 
+\relationcell{Message-Topic}{ A message, written or spoken, is about a topic. }{Cieply's \underline{\smash{story}} makes a compelling \underline{\smash{point}} about modern-day studio economics.} & \freqencycell{8.4}{895}  \\ 
 \hline 
-\relationcell{Other}{} {The \underline{child} was carefully wrapped and bound into the \underline{cradle} by means of a cord.} & 17.4\% (1864) & • \\ 
+\relationcell{Other}{} {The \underline{child} was carefully wrapped and bound into the \underline{cradle} by means of a cord.} & \freqencycell{17.4}{1864}  \\ 
 \hline 
 \end{tabular} 
 
