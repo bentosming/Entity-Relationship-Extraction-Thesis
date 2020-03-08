@@ -58,6 +58,10 @@
 %\newcommand{\unsure}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
 %\newcommandx{\idea}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
 \usepackage{makecell}
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+\newcommand{\relationcell}[3]{\textbf{#1} \newline #2 \newline \textit{#3}}
 
 
 %%% Basic information on the thesis
