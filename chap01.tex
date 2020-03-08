@@ -2,14 +2,61 @@
 
 \todo{tady představíme existující dataesty}
 
+
+\section{SEMEVAL 2010 task 8 dataset}
+The SemEval-2010 Task 8 dataset (S10T8) was introduced in SemEval-2010 Task 8: Multi-Way Classification of Semantic Relations Between Pairs of Nominals \cite{semeval}. We will summarize how S10T8 was created and some other information from that article so that later we can compare different approaches.
+
+\todo {nějak napsat, že nebudu citovat, ale je to hodně vykradené?}
+
+First the authors decided on an inventory of semantic relations. They aimed for such a set of relations that it would be exhaustive (enable the description of relations between any pair of nominals) and mutually exclusive (given context and a pair of nominals only one relation should be selectable). \todo {připravit tabulku nebo něco, kam se odkázat na jejich seznam} 
+
+They decided to accept as relation arguments any noun phrases with common-noun heads not just named entities or some other specific class of noun phrases, mentioning \todo{nechat ut tu citaci?} 'Named entities are a specific category of nominal expressions best dealt with using techniques which do not apply to common nouns.' \todo{quote better} But they restricted noun phrases to single words with the exception to lexicalized terms (such as \todo{formát} science fiction).
+
+
+\begin{tabular}{|p{10cm}|p{1cm}|p{1cm}|}
+\hline 
+Label & num1 & num2 \\ 
+\hline 
+\textbf{Cause-Effect} 
+\newline  An event or object leads to an effect. 
+\newline  \textit{The \underline{burst} has been caused by water hammer \underline{pressure}.} & • & •  \\ 
+\hline 
+\textbf{Instrument-Agency} \newline  An agent uses an instrument 
+\newline  \textit{The \underline{author} of a keygen uses a \underline{disassembler} to look at the raw assembly code.} & • & •  \\ 
+\hline 
+\textbf{Product-Producer} \newline  A producer causes a product to exist 
+\newline  \textit{The \underline{factory}'s products have included flower pots, Finnish rooster-whistles, pans, \underline{trays}, tea pots, ash trays and air moisturisers.}  & • & •  \\ 
+\hline 
+\textbf{Content-Container} \newline An object is physically stored in a delineated area of space 
+\newline \textit{This cut blue and white striped cotton \underline{dress} with red bands on the bodice was in a \underline{trunk} of vintage Barbie clothing.}& • & •\\ 
+\hline 
+\textbf{Entity-Origin} \newline An entity is coming or is derived from an origin (e.g., position or material). 
+\newline \textit{The \underline{avalanches} originated in an extensive \underline{mass} of rock that had previously been hydrothermally altered in large part to clay.} & • & • \\ 
+\hline 
+\textbf{Entity-Destination} \newline An entity is moving towards a destination.
+\newline \textit{This book has transported \underline{readers} into \underline{ancient times}.}& • & •\\ 
+\hline 
+\textbf{Component-Whole} \newline An object is a component of a larger whole 
+\newline \textit{The system as described above has its greatest application in an arrayed \underline{configuration} of antenna \underline{elements}}.& • & •\\ 
+\hline 
+\textbf{Member-Collection} \newline A member forms a nonfunctional part of a collection
+\newline \textit{The \underline{student} \underline{association} is the voice of the undergraduate student population of the State University of New York at Buffalo.} & • & • \\ 
+\hline 
+\textbf{Message-Topic} \newline A message, written or spoken, is about a topic. 
+\newline \textit{Cieply's \underline{story} makes a compelling \underline{point} about modern-day studio economics.} & • & • \\ 
+\hline 
+\textbf{Other} \newline 
+\newline \textit{The \underline{child} was carefully wrapped and bound into the \underline{cradle} by means of a cord.} & • & • \\ 
+\hline 
+\end{tabular} 
+
+
+
+
 \section{TACRED dataset}
-The TAC Relation Extraction Dataset was introduced in \cite{zhang2017tacred}. Authors claim \begin{quote}
- training data has often been
-too noisy for reliable training of relation extraction systems
-\end{quote}
+The TAC Relation Extraction Dataset was introduced in \cite{zhang2017tacred}. TACRED is a supervised dataset obtained via crowdsourcing. It contains about 100 000 examples. Each example contains  is in  Authors claim so far used training data had often been too noisy for reliable training of relation extraction systems
+
 
 \begin{quotation}
 ... machine learning approaches have suffered from two key problems: (1) the models used have been insufficiently tailored to relation extraction, and (2) there has been insufficient annotated data available to satisfy the training of data-hungry models, such as deep learning models.
 \end{quotation} 
-
-\section{SEMEVAL 2010 task 8 dataset}
