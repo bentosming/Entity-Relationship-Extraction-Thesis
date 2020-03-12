@@ -61,8 +61,10 @@
 \usepackage{array}
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
-\newcommand{\relationcell}[3]{\textbf{#1} \newline #2 \newline \textit{#3}}
+\newcommand{\relationcell}[3]{\textbf{#1} \newline  #2 \newline \textit{{\footnotesize #3}}}
+\newcommand{\relationcelltacred}[2]{\textbf{#1} \newline \textit{ {\footnotesize #2}}}
 \newcommand{\freqencycell}[2]{#1\% \newline (#2)}
+\usepackage{longtable}
 
 
 %%% Basic information on the thesis
@@ -138,15 +140,15 @@ Abstract.
 \include{bibliography}
 
 %%% Figures used in the thesis (consider if this is needed)
-\listoffigures
+%\listoffigures
 
 %%% Tables used in the thesis (consider if this is needed)
 %%% In mathematical theses, it could be better to move the list of tables to the beginning of the thesis.
-\listoftables
+%\listoftables
 
 %%% Abbreviations used in the thesis, if any, including their explanation
 %%% In mathematical theses, it could be better to move the list of abbreviations to the beginning of the thesis.
-\chapwithtoc{List of Abbreviations}
+%\chapwithtoc{List of Abbreviations}
 
 %%% Attachments to the master thesis, if any. Each attachment must be
 %%% referred to at least once from the text of the thesis. Attachments

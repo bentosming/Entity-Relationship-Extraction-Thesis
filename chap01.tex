@@ -1,5 +1,7 @@
 \chapter{Datasets}
 
+In this chapter, we will overwiev well-known datasets related to Entity Relationship Extraction. We will start with supervised datasets (SEMEVAL 2010 task 8 and TACRED), then we will focus on distant supervision.
+
 \todo{tady představíme existující dataesty}
 
 
@@ -14,51 +16,29 @@ They decided to accept as relation arguments any noun phrases with common-noun h
 
 The annotation process had three rounds. In the first round, authors manually collected around 1,200 sentences for each relation through pattern-based Web search (with at least a hundred patterns per relation). This way, they obtained around 1200 sentences for each relation. In the second round, each sentence was annotated by two independent annotators. In the third round disagreements were resolved and the dataset was finished. Every sentence was classified either as a true relation mention or was a \todo{lepší uvozovky} near-miss and thus classified as "other", or was removed.
 
-The dataset contains of 10717 relation mentions. For the original competition, teams were given three training dataset of sizes 1000 (TD1), 2000 (TD2), 4000 (TD3), and 8000 (TD4). There was a notable gain TD3 →TD4 therefore the authors concluded that even larger dataset might be helpful to increase performance of models. But \quotation{.. that is so much easier said than done: it took the organizers well in excess of 1000 person-hours to pin down the problem, hone the guidelines and
-relation definitions, construct sufficient amounts of trustworthy training data, and run the task.}
+The dataset contains of 10717 relation mentions. For the original competition, teams were given three training dataset of sizes 1000 (TD1), 2000 (TD2), 4000 (TD3), and 8000 (TD4). There was a notable gain TD3 →TD4 therefore the authors concluded that even larger dataset might be helpful to increase performance of models. But 
 
+\begin{quotation}.. that is so much easier said than done: it took the organizers well in excess of 1000 person-hours to pin down the problem, hone the guidelines and
+relation definitions, construct sufficient amounts of trustworthy training data, and run the task.
+\end{quotation}
 
-
-\begin{table}
-
-\label{table01:S10T8}
-\begin{tabular}{|p{12,2cm}|P{1,3cm}|}
-\hline 
-Label & Freq  \\ 
-\hline 
-\relationcell{Cause-Effect}{An event or object leads to an effect.}{The \underline{burst} has been caused by water hammer \underline{\smash{pressure}}.} & \freqencycell{12.4}{1331}   \\ 
-\hline 
-\relationcell{Instrument-Agency}{An agent uses an instrument. }{The \underline{author} of a keygen uses a \underline{disassembler} to look at the raw assembly code.}  & \freqencycell{6.2}{660}   \\ 
-\hline 
-\relationcell{Product-Producer}{A producer causes a product to exist.}{The \underline{\smash{factory}}'s products have included flower pots, Finnish rooster-whistles, pans, \underline{\smash{trays}}, tea pots, ash trays and air moisturisers.}  & \freqencycell{8.8}{948}   \\ 
-\hline 
-\relationcell{Content-Container}{An object is physically stored in a delineated area of space.}{This cut blue and white striped cotton \underline{dress} with red bands on the bodice was in a \underline{trunk} of vintage Barbie clothing.}& \freqencycell{6.8}{732} \\ 
-\hline 
-\relationcell{Entity-Origin}{An entity is coming or is derived from an origin (e.g., position or material). }{The \underline{avalanches} originated in an extensive \underline{mass} of rock that had previously been hydrothermally altered in large part to clay.} & \freqencycell{9.1}{974}  \\ 
-\hline 
-\relationcell{Entity-Destination}{An entity is moving towards a destination.}{This book has transported \underline{readers} into \underline{ancient times}.}& \freqencycell{10.6}{1137} \\ 
-\hline 
-\relationcell{Component-Whole}{ An object is a component of a larger whole.}{The system as described above has its greatest application in an arrayed \underline{configuration} of antenna \underline{elements}}.&  \freqencycell{11.7}{1253} \\ 
-\hline 
-\relationcell{Member-Collection}{ A member forms a nonfunctional part of a collection}{The \underline{student} \underline{association} is the voice of the undergraduate student population of the State University of New York at Buffalo.} & \freqencycell{8.6}{923}  \\ 
-\hline 
-\relationcell{Message-Topic}{ A message, written or spoken, is about a topic. }{Cieply's \underline{\smash{story}} makes a compelling \underline{\smash{point}} about modern-day studio economics.} & \freqencycell{8.4}{895}  \\ 
-\hline 
-\relationcell{Other}{} {The \underline{child} was carefully wrapped and bound into the \underline{cradle} by means of a cord.} & \freqencycell{17.4}{1864}  \\ 
-\hline 
-\end{tabular} 
-
-\caption{S10T8 summary. List of relations, their official descriptions, a random example and both relative and absolute count.}
-
-
-\end{table}
-
+\input{s10t8_table}
 
 
 \section{TACRED dataset}
-The TAC Relation Extraction Dataset was introduced in \cite{zhang2017tacred}. TACRED is a supervised dataset obtained via crowdsourcing. It contains about 100 000 examples. Each example contains  is in  Authors claim so far used training data had often been too noisy for reliable training of relation extraction systems
+The TAC Relation Extraction Dataset was introduced in \cite{zhang2017tacred}. TACRED is a supervised dataset obtained via crowdsourcing. It contains about 100 000 examples. 
+
+The authors are relatively brief about the data collection process:
+
+\begin{quote}
+We create TACRED based on query entities and annotated system responses in the yearly TAC KBP evaluations. In each year of the TAC KBP evaluation (2009–2015), 100 entities (people or organizations) are given as queries, for which participating systems should find associated relations and object entities. We make use of Mechanical Turk to annotate each sentence in the source corpus that contains one of these query entities. For each sentence, we ask crowd workers to annotate both the subject and object entity spans and the relation types.
+\end{quote}
+
+TACRED relation inventory captures only relations with subject being an organization or a person. Objects are of following types: cause of death, city, country, criminal charge, date, duration, ideology, location, misc (used for alternative name relation and no\_relation only), nationality, number, organization, person, religion, state or province, title and url.
 
 
-\begin{quotation}
-... machine learning approaches have suffered from two key problems: (1) the models used have been insufficiently tailored to relation extraction, and (2) there has been insufficient annotated data available to satisfy the training of data-hungry models, such as deep learning models.
-\end{quotation} 
+TACRED was designed to be highly unbalanced. 79.5\% of data is the no\_relation relation, which should be closer to real-world text and supposedly should help with not prediction false positive. However even if we look only at actual relations, there are vast differences in frequency: top six relations make up half the dataset and bottom six lest than 2\%. In absolute numbers the least common ord:dissolved relation has only 33 examples and median is only 286 examples.
+ 
+
+
+\input{tacred_table}
