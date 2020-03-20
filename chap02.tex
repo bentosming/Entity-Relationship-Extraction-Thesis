@@ -1,12 +1,44 @@
-\chapter{Title of the second chapter}
+\chapter{Datasets}
 
-\section{Title of the first subchapter of the second chapter}
+In this chapter, we will overwiev well-known datasets related to Entity Relationship Extraction. We will start with supervised datasets (SEMEVAL 2010 task 8 and TACRED), then we will focus on distant supervision.
 
-\begin{figure}[p]\centering
-\includegraphics[width=140mm, height=117mm]{./img/Corpus_diagram}
-\caption{Zjednodušený diagram výroby korpusu}
-\label{obr03:Nhust}
-\end{figure}
+\todo{tady představíme existující dataesty}
 
 
-\section{Title of the second subchapter of the second chapter}
+\section{SEMEVAL 2010 task 8 dataset}
+The SemEval-2010 Task 8 dataset (S10T8) was introduced in SemEval-2010 Task 8: Multi-Way Classification of Semantic Relations Between Pairs of Nominals \cite{semeval}. We will summarize how S10T8 was created and some other information from that article so that later we can compare different approaches.
+
+\todo {nějak napsat, že nebudu citovat, ale je to hodně vykradené?}
+
+The authors started by choosing an inventory of semantic relations. They aimed for such a set of relations that it would be exhaustive (enable the description of relations between any pair of nominals) and mutually exclusive (given context and a pair of nominals only one relation should be selectable).  Chosen relations with descriptions and examples are listed in table \ref{table01:S10T8}. \todo{proč není table součást odkazu?}
+
+They decided to accept as relation arguments any noun phrases with common-noun heads not just named entities or some other specific class of noun phrases, mentioning \todo{nechat ut tu citaci?} 'Named entities are a specific category of nominal expressions best dealt with using techniques which do not apply to common nouns.' \todo{quote better} But they restricted noun phrases to single words with the exception to lexicalized terms (such as \todo{formát} science fiction).
+
+The annotation process had three rounds. In the first round, authors manually collected around 1,200 sentences for each relation through pattern-based Web search (with at least a hundred patterns per relation). This way, they obtained around 1200 sentences for each relation. In the second round, each sentence was annotated by two independent annotators. In the third round disagreements were resolved and the dataset was finished. Every sentence was classified either as a true relation mention or was a \todo{lepší uvozovky} near-miss and thus classified as "other", or was removed.
+
+The dataset contains of 10717 relation mentions. For the original competition, teams were given three training dataset of sizes 1000 (TD1), 2000 (TD2), 4000 (TD3), and 8000 (TD4). There was a notable gain TD3 →TD4 therefore the authors concluded that even larger dataset might be helpful to increase performance of models. But 
+
+\begin{quotation}.. that is so much easier said than done: it took the organizers well in excess of 1000 person-hours to pin down the problem, hone the guidelines and
+relation definitions, construct sufficient amounts of trustworthy training data, and run the task.
+\end{quotation}
+
+\input{s10t8_table}
+
+
+\section{TACRED dataset}
+The TAC Relation Extraction Dataset was introduced in \cite{zhang2017tacred}. TACRED is a supervised dataset obtained via crowdsourcing. It contains about 100 000 examples. 
+
+The authors are relatively brief about the data collection process:
+
+\begin{quote}
+We create TACRED based on query entities and annotated system responses in the yearly TAC KBP evaluations. In each year of the TAC KBP evaluation (2009–2015), 100 entities (people or organizations) are given as queries, for which participating systems should find associated relations and object entities. We make use of Mechanical Turk to annotate each sentence in the source corpus that contains one of these query entities. For each sentence, we ask crowd workers to annotate both the subject and object entity spans and the relation types.
+\end{quote}
+
+TACRED relation inventory captures only relations with subject being an organization or a person. Objects are of following types: cause of death, city, country, criminal charge, date, duration, ideology, location, misc (used for alternative name relation and no\_relation only), nationality, number, organization, person, religion, state or province, title and url.
+
+
+TACRED was designed to be highly unbalanced. 79.5\% of data is the no\_relation relation, which should be closer to real-world text and supposedly should help with not predicting false positive. However even if we look only at actual relations, there are vast differences in frequency: top six relations make up half the dataset and bottom six less than 2\%. In absolute numbers the least common ord:dissolved relation has only 33 examples and median is only 286 examples.
+ 
+
+
+\input{tacred_table}
