@@ -1,1 +1,23 @@
-\chapter{Thesis }
+\chapter{Relationship extraction intro} \todo{změnit název}
+
+\subsection{Terminology}
+Terminology in NLP is often not exact or non-standardized. We will attempt to introduce following concepts as exactly as possible and respecting the terms that seems to be established by majority. \todo{hloupá věta} 
+
+\defineterm{Relation} in this context is semantic (not grammatical etc.). It has a type, is binary and oriented and describes relationship between a relation subject and a relation object.
+
+\defineterm{Relation subject} and \defineterm{relation object}. Subject is the first argument of relation, object the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type\relationtype{son} is captured, subject is John and object is Eric. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, than we would probably have both the information that his son is Albus Severus and his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences like \vuvozovkach{James is Harry's father.}  Harry is a grammatical object. We will use the notation \relation{relation type}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
+
+Both subject and object can generally be any word or sequence of words that have the ability to form relations. In some cases subjects, objects or both are limited to entities or named entities. 
+
+\defineterm{Named entity} \todo{ukradeno z wiki, ocitovat nebo ukráct od jinud}  is a real-world object, such as persons, locations, organizations, products, etc., that can be denoted with a proper name. It can be abstract or have a physical existence. Named entities can simply be viewed as entity instances (e.g., New York City is an instance of a city).
+
+
+\defineterm{Relation mention} is a sentence, that captures a relation, together with type of the relation and tagged subject and object. 
+
+\defineterm{Negative mention}
+
+\defineterm{Relationship Extraction} \todo{znímit entity z názvu}
+
+
+
+\defineterm{Negative mention}

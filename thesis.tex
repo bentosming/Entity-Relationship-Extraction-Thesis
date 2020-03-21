@@ -65,6 +65,12 @@
 \newcommand{\relationcelltacred}[2]{\textsc{#1} \footnotesize{ \newline Example: \textit{  #2}}}
 \newcommand{\freqencycell}[2]{#1\% \newline (#2)}
 \usepackage{longtable}
+\newcommand{\defineterm}[1]{\textbf{#1}}
+\newcommand{\relationtype}[1]{\textsc{#1}}
+\newcommand{\relation}[3]{\relationtype{#1}(#2,#3)}
+%\newcommand{\prvniuvozovka}{``}
+%\newcommand{\druhauvozovka}{''}
+\newcommand{\vuvozovkach}[1]{``#1''}
 
 
 %%% Basic information on the thesis
@@ -133,6 +139,7 @@ Abstract.
 \include{preface}
 \include{chap01}
 \include{chap02}
+\include{chap03}
 
 \include{epilog}
 
