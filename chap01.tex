@@ -1,7 +1,7 @@
 \chapter{Relationship extraction intro} \todo{změnit název}
 
-\subsection{Terminology}
-Terminology in NLP is often not exact or non-standardized. We will attempt to introduce following concepts as exactly as possible and respecting the terms that seems to be established by majority. \todo{hloupá věta} 
+\section{Terminology}
+Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce following concepts as exactly as possible and respecting the terms that seem to be established by majority. \todo{hloupá věta} 
 
 \defineterm{Relation} in this context is semantic (not grammatical etc.). It has a type, is binary and oriented and describes relationship between a relation subject and a relation object.
 
@@ -9,15 +9,19 @@ Terminology in NLP is often not exact or non-standardized. We will attempt to in
 
 Both subject and object can generally be any word or sequence of words that have the ability to form relations. In some cases subjects, objects or both are limited to entities or named entities. 
 
-\defineterm{Named entity} \todo{ukradeno z wiki, ocitovat nebo ukráct od jinud}  is a real-world object, such as persons, locations, organizations, products, etc., that can be denoted with a proper name. It can be abstract or have a physical existence. Named entities can simply be viewed as entity instances (e.g., New York City is an instance of a city).
+\defineterm{Named entity} \todo{ukradeno z wiki, ocitovat nebo ukráct od jinud}  is a real-world object, such as persons, locations, organizations, products, etc., that can be denoted with a proper name. It can be abstract or have a physical existence. Named entities can simply be viewed as entity instances (e.g., New York City is an instance of a city). Sometimes, numeric data is considered in this category as well (for example by NER tools). \todo{rozepsat ner} 
 
+\defineterm{Relation inventory} is the set of types of relations, that are considered valid for given dataset or model.
 
 \defineterm{Relation mention} is a sentence, that captures a relation, together with type of the relation and tagged subject and object. 
 
-\defineterm{Negative mention}
+\defineterm{Negative mention} is close to relation mention in the sense that it is a sentence with tagged subject and object, but the relation type is one of these types: \todo{odrážky}
+\begin{itemize}
+\item \relationtype{other} - human annotator would classify a relation of type, that is not in relation inventory. 
+\item \relationtype{no relation} - in this case, human annotator should feel an absence of relation between subject and object. \todo{doplnit příklady} 
+
+\end{itemize}
+
+\relationtype{No relation} comes with difficulties. Since there is no semantic relation between subject and object, it makes it harder to choose subject-object pairs. It is probably desirable to have subject-object pairs, that could be related in a different sentence. 
 
 \defineterm{Relationship Extraction} \todo{znímit entity z názvu}
-
-
-
-\defineterm{Negative mention}
