@@ -18,10 +18,32 @@ Both subject and object can generally be any word or sequence of words that have
 \defineterm{Negative mention} is close to relation mention in the sense that it is a sentence with tagged subject and object, but the relation type is one of these types: \todo{odrážky}
 \begin{itemize}
 \item \relationtype{other} - human annotator would classify a relation of type, that is not in relation inventory. 
-\item \relationtype{no relation} - in this case, human annotator should feel an absence of relation between subject and object. \todo{doplnit příklady} 
+\item \relationtype{no relation} - in this case, human annotator should feel an absence of relation between subject and object. \todo{doplnit příklady, včetně vyloženě ne příkladu} 
 
 \end{itemize}
 
 \relationtype{No relation} comes with difficulties. Since there is no semantic relation between subject and object, it makes it harder to choose subject-object pairs. It is probably desirable to have subject-object pairs, that could be related in a different sentence. 
 
 \defineterm{Relationship Extraction} \todo{znímit entity z názvu}
+
+\defineterm{Lemma} \todo{A form from a lexeme chosen by convention (e.g.,
+nominative singular for nouns, infinitive for verbs) to represent that
+set.
+Also called the canonical/base/dictionary/citation form. For every
+form, there is a corresponding lemma}
+
+\defineterm{Lexeme}\todo{An abstract entity; the set of all forms related by
+inflection (but not derivation).
+}
+
+\defineterm{Noun phrase}
+\section{Czech language}
+One of the objective of this thesis is to work with Czech language, therefore we find it useful to make some notes on Czech (for non Czech speaking readers). Czech is a Slavic language with rich morphology and relatively free word order. Most of Czech morphology can be treated with a morphological analyzer, still, it might be useful to have a better understanding of the language we will work with.
+
+\subsection{Declanation}
+In Czech, nouns, adjectives, pronounce and numerals are inflected. The inflection expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has a grammatical gender, for words, that have natural gender, those two genders align: \vuvozovkach{žena} (\textit{woman}) is feminime and \vuvozovkach{muž} (\textit{man}) is masculine. Inflection of each inflective word follows a pattern. This all means that a single word (lemma) can have a lexeme of size 
+
+Verbs are conjugated, the conjugation expresses person, numeral, tense, voice and mode. Verbs follow one of 14 patterns and average Czech either finds the theory about Czech verbs and tenses confusing, or is unaware there even are verb patterns. With that, we will not elaborate on conjugation.
+
+An important aspect of declanation for us is agreement. In English, subject and verb agrees (limited just to third person). In Czech subject and verb also agree, but in noun phrases there needs to be an agreement as well. \todo{příklad: toho, jak je nějaká noun phrase, počet lexémů, počet validních .. } \todo{odkaz dopředu, kde řeším, jak matchovat}
+
