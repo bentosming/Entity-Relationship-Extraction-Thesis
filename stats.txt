@@ -1,0 +1,68 @@
+Statistiky o pqp_out
+
+histogram, který říká, kolik dvojic QQ mají daný počet násobnosti vztahů (třeba CBS má 72 peabody awards a má nejvyšší násobnost ze všech.
+
+cat pqp_out | cut -d ' ' -f 1,3 | sort | uniq -c | sort -nr | cut -b 6- | cut -b 1,2 | uniq -c
+      1 72
+      1 63
+      1 51
+      1 33
+      1 27
+      2 25
+      2 24
+      2 22
+      2 21
+      4 20
+      7 19
+      7 18
+      7 17
+     13 16
+     25 15
+     23 14
+     33 13
+     36 12
+     63 11
+     86 10
+    108  9
+    166  8
+    248  7
+    340  6
+    613  5
+   1703  4
+  13692  3
+ 164954  2
+8533862  1
+
+
+histogram, který říká, kolik řádků má daný počet násobnosti vztahů (třeba CBS má 72 peabody awards a má nejvyšší násobnost ze všech.
+
+cat pqp_out | sort | uniq -c | sort -nr | cut -b 6- | cut -b 1,2 | uniq -c
+      1 72
+      1 63
+      1 39
+      1 30
+      1 26
+      2 25
+      2 24
+      2 22
+      2 21
+      3 20
+      2 19
+      6 18
+      9 17
+     12 16
+     14 15
+     22 14
+     25 13
+     38 12
+     52 11
+     70 10
+     78  9
+    140  8
+    202  7
+    287  6
+    403  5
+    899  4
+   2496  3
+  18782  2
+8865849  1

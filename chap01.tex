@@ -3,6 +3,8 @@
 \section{Terminology}
 Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce following concepts as exactly as possible and respecting the terms that seem to be established by majority. \todo{hloupá věta} 
 
+\todo{někam zapracovat příklad na větě, jak je nejdřív najití rozštíření a tak všechno}
+
 \defineterm{Relation} in this context is semantic (not grammatical etc.). It has a type, is binary and oriented and describes relationship between a relation subject and a relation object.
 
 \defineterm{Relation subject} and \defineterm{relation object}. Subject is the first argument of relation, object the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type\relationtype{son} is captured, subject is John and object is Eric. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, than we would probably have both the information that his son is Albus Severus and his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences like \vuvozovkach{James is Harry's father.}  Harry is a grammatical object. We will use the notation \relation{relation type}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
@@ -46,5 +48,7 @@ In Czech, nouns, adjectives, pronounce and numerals are declined. The inflection
 Verbs are conjugated, the conjugation expresses person, numeral, tense, voice and mode. Verbs follow one of 14 patterns and average Czech either finds the theory about Czech verbs and tenses confusing, or is unaware there even are verb patterns. With that, we will not elaborate on conjugation.
 
 An important aspect of declanation for us is agreement. In English, subject and verb agrees (limited just to third person). In Czech subject and verb also agree, but in noun phrases there needs to be an agreement as well. \todo{příklad: toho, jak je nějaká noun phrase, počet lexémů, počet validních .. } \todo{odkaz dopředu, kde řeším, jak matchovat}
+
+\subsection{Free word order}
 
 \todo{https://www.aclweb.org/anthology/P14-5003.pdf, statistiky o češtině}
