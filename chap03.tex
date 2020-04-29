@@ -63,7 +63,17 @@ Information about any item is recorded in statements. Statement is a key-value p
 
 Wikidata project contains over 80 000 000 items, which raises requirements on technological resources, that we will need to work efficiently with such data. Json dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
 
+\input{chap_03_analysis}
 \section{Analysis}
+
+The process of creation of CERED is mostly an attempt to execute the first two part of a pipeline we mention in the first chapter. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for Named Entity Recognition that we could theoretically use to our advantage if we decided to focus on named entity only.
+
+Therefore we need to find a way, to get to similar results as the pipeline would get. We do not expect that our CERED generator will be as powerful as respective dedicated tools would be. We will not try to create a general entity recognition and linking tools - on the contrary we will exploit any extra information that chosen Wikimedia projects provide. 
+
+There are several aspect that we need to think through. 
+
+- Dataflow - jaké info kde vezmeme a s čím ho v jakém pořadí spojíme?
+
 
 \begin{figure}[h]\centering
 \includegraphics[width=70mm]{./img/Distant}
@@ -86,7 +96,6 @@ We decided to update the dataflow to address those issues. We will preprocess Wi
 
 
 Czech Wikipedia maintains a wbc entity usage table, which contains information about which wiki article uses which item. If we use this table, we are able to obtain a list of items, that should be mentioned in an article, lets call this list a \defineterm{wbc candidates}. 
-
 
 
 
