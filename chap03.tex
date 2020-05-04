@@ -64,89 +64,6 @@ Information about any item is recorded in statements. Statement is a key-value p
 Wikidata project contains over 80 000 000 items, which raises requirements on technological resources, that we will need to work efficiently with such data. Json dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
 
 \input{chap_03_analysis}
-\section{Analysis}
-
-The process of creation of CERED is mostly an attempt to execute the first two part of a pipeline we mention in the first chapter. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for Named Entity Recognition that we could theoretically use to our advantage if we decided to focus on named entity only.
-
-Therefore we need to find a way, to get to similar results as the pipeline would get. We do not expect that our CERED generator will be as powerful as respective dedicated tools would be. We will not try to create a general entity recognition and linking tools - on the contrary we will exploit any extra information that chosen Wikimedia projects provide. 
-
-There are several aspect that we need to think through. 
-
-- Dataflow - jaké info kde vezmeme a s čím ho v jakém pořadí spojíme?
-
-
-\begin{figure}[h]\centering
-\includegraphics[width=70mm]{./img/Distant}
-\caption{Distant supervision diagram}
-\label{obr03:Nhust}
-\end{figure}
-
-\subsection{Dataflow}
-
-We are starting with two files. One being a Czech Wikipedia dump: it is a collection of articles. Each article has, among other information, its title, id and text. The other is a Wikidata dump. The simpliest way of processing those files would be to process them separately and thus obtaining sentences on one side and relations (a relation type with two items) on the other, see \ref{obr02:AVerySimple}. This approach comes with a clear disadvantage. We would lose any additional information to the sentences, that could be potentially useful (for example article title might be helpful to determine which items are mentioned in a sentence). To solve this we could precompute something for each article and attach it to each sentence, risking a massive increase in required capacity to work with such data. On a similar note, if we were to follow the diagram exactly, we would probably store item names (labels and aliases) in each relation, worsening the situation even further.
-
-
-\begin{figure}[p]\centering
-\includegraphics[width=140mm, height=117mm]{./img/Corpus_diagram}
-\caption{Zjednodušený diagram výroby korpusu}
-\label{obr03:Nhust}
-\end{figure}
-
-We decided to update the dataflow to address those issues. We will preprocess Wikidata dump to contain only the data we will use. An item will be kept only if it has a Czech name and we will significantly reduce its statements: we will keep title of its Czech Wikipedia article and create a list of (QID,PID,QID) triples - \defineterm{QPQ}, representing statements that contained information about relations between between this and other items. This way, we have all the necessary information - article title to be able to connect article to item, names for each item to be able to find mentions of items and finally QPQ triples to connect relations and sentences.
-
-
-Czech Wikipedia maintains a wbc entity usage table, which contains information about which wiki article uses which item. If we use this table, we are able to obtain a list of items, that should be mentioned in an article, lets call this list a \defineterm{wbc candidates}. 
-
-
-
-
-
-sice by šlo neparalelně, ale co rychlost?
-
-Mluvit o tom, proč nejdřív najdeme, co v článku hledat, pak to nasekáme na věty, pak matchujeme. Zmínit, kolik je jiných možností, že teoreticky by šlo ještě před rozsekáním na věty dělat entity linking ...
-
-Detailně popsat, co kdy kam poteče + diagram
-
-\subsection{WikiManipulace}
-Popsat, že wikitext má sám o sobě strukturovaná a divná data a že je to třeba nejspíš řešit
-
-\subsection{Jak teda matchovat entity}
-
-Napsat, že v aj dělají často jen exact modulo zkratky a malé přípony, což tady nejde.
-
-Ukázat nápady se sebráním linků z wikipedie a zavrhnout to
-
-připomenout, jak moc se dá čeština skloňovat
-říct, že nemá nejspíš smysl snažit se najít jen validní tvary, protože stejně v textu nejspíš nebudou nevalidní
-
-asi mluvit o word order? a možná i implementovat
-
-Říct, že jako kontrolní dataset budou přímo z linků
-
-\subsection{silver data}
-Co to je
-proč je nejspíš větší šance na kvalitu
-možná i ručně udělat měření kvality na těhle datech v druhé části
-
-
-\subsection{Distant supervision assumption}
-aneb jak matchovat vztahy
-
-\subsection{možná to bude chtít zobrazovátko? aneb jak hodnotit kvalitu?}
-možná navrhout nějaké random dotazy na odhalení nevalidních dat?
-
-
-\subsection{Jaké kategorie?}
-
-
-
-\begin{figure}[h]
-\begin{center}
-\includegraphics[width=70mm, height=60mm]{./img/a_very_simple_diagram}
-\caption{A very simple diagram of dataset generation.}
-\label{obr02:AVerySimple}
-\end{center}
-\end{figure}
 
 \section{Used technologies}
 \todo{koukli jsme se na diagram a mysleli, že celé ve spark a tak}
@@ -164,5 +81,10 @@ MorphoDiTa \cite{Morphodita} (Morphological Dictionary and Tagger) is an open-so
 
 
 \section{Implementation}
+
+
+\subsection{WikiManipulace}
+Popsat, že wikitext má sám o sobě strukturovaná a divná data a že je to třeba nejspíš řešit Přesunout do implementace?
+
 \section{Viewer}
 \section{Results}
