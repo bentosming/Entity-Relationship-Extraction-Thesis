@@ -1,30 +1,30 @@
 \chapter{Relationship extraction intro} \todo{změnit název}
 
 \section{Terminology}
-Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce following concepts as exactly as possible and respecting the terms that seem to be established by majority. \todo{hloupá věta} 
+Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce the following concepts as exactly as possible while respecting the terms that seem to be established by the majority. \todo{hloupá věta}
 
 \todo{někam zapracovat příklad na větě, jak je nejdřív najití rozštíření a tak všechno}
 
-\defineterm{Relation} in this context is semantic (not grammatical etc.). It has a type, is binary and oriented and describes relationship between a relation subject and a relation object.
+\defineterm{Relation} in this context is semantic (not grammatical etc.). It has a type, is binary and oriented, and describes the relationship between a subject and an object of the relationship. We will use the word relation as an equivalent for its type and the term relationship for an instance of the relation. 
 
-\defineterm{Relation subject} and \defineterm{relation object}. Subject is the first argument of relation, object the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type\relationtype{son} is captured, subject is John and object is Eric. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, than we would probably have both the information that his son is Albus Severus and his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences like \vuvozovkach{James is Harry's father.}  Harry is a grammatical object. We will use the notation \relation{relation type}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
+\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, the object is the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type\relationtype{son} is captured, the subject is John and the object is Eric. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkach{James is Harry's father.} We will use the notation \relation{relation type}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
 
-Both subject and object can generally be any word or sequence of words that have the ability to form relations. In some cases subjects, objects or both are limited to entities or named entities. 
+Both the subject and the object can generally be any word or sequence of words that represent concepts that have the ability to form relations. In some cases subjects, objects, or both are limited to entities or named entities.
 
-\defineterm{Named entity} \todo{ukradeno z wiki, ocitovat nebo ukráct od jinud}  is a real-world object, such as persons, locations, organizations, products, etc., that can be denoted with a proper name. It can be abstract or have a physical existence. Named entities can simply be viewed as entity instances (e.g., New York City is an instance of a city). Sometimes, numeric data is considered in this category as well (for example by NER tools). \todo{rozepsat ner} 
+\defineterm{Named entity} \todo{ukradeno z wiki, ocitovat nebo ukráct od jinud}  is a real-world object, such as persons, locations, organizations, products, etc., that can be denoted with a proper name. It can be abstract or have a physical existence. Named entities can simply be viewed as entity instances (e.g., New York City is an instance of a city). Sometimes, numeric data is considered in this category as well (for example by Named Entity Recognition tools). An \defineterm{entity} is a named entity whose proper name is unknown or unimportant but still is an entity instance. \todo{definice kruhem}
 
-\defineterm{Relation inventory} is the set of types of relations, that are considered valid for given dataset or model.
+\defineterm{Relation inventory} is the set of relations, that are considered valid for a given dataset or model.
 
-\defineterm{Relation mention} is a sentence, that captures a relation, together with type of the relation and tagged subject and object. 
+\defineterm{Relation mention} is a sentence, that captures a relationship: a relation together with a tagged subject and object.
 
 \defineterm{Negative mention} is close to relation mention in the sense that it is a sentence with tagged subject and object, but the relation type is one of these types: \todo{odrážky}
 \begin{itemize}
-\item \relationtype{other} - human annotator would classify a relation of type, that is not in relation inventory. 
-\item \relationtype{no relation} - in this case, human annotator should feel an absence of relation between subject and object. \todo{doplnit příklady, včetně vyloženě ne příkladu} 
+\item \relationtype{other} - human annotator would classify a relation, that is not in inventory.
+\item \relationtype{no relation} - in this case, human annotators should feel an absence of a relationship between a subject and an object. \todo{doplnit příklady, včetně vyloženě ne příkladu}
 
 \end{itemize}
 
-\relationtype{No relation} comes with difficulties. Since there is no semantic relation between subject and object, it makes it harder to choose subject-object pairs. It is probably desirable to have subject-object pairs, that could be related in a different sentence. 
+\relationtype{No relation} comes with difficulties. Since there is no semantic relationship between subject and object, it makes it harder to choose subject-object pairs. It is probably desirable to have subject-object pairs, that could be related in a different sentence.
 
 \defineterm{Relationship Extraction} \todo{znímit entity z názvu}
 
@@ -40,14 +40,14 @@ inflection (but not derivation).
 
 \defineterm{Noun phrase}
 \section{Czech language}
-One of the objective of this thesis is to work with Czech language, therefore we find it useful to make some notes on Czech (for non Czech speaking readers). Czech is a Slavic language with rich morphology and relatively free word order. Most of Czech morphology can be treated with a morphological analyzer, still, it might be useful to have a better understanding of the language we will work with.
+One of the objectives of this thesis is to work with Czech language, therefore we find it useful to make some notes on Czech (for non-Czech speaking readers). Czech is a Slavic language with rich morphology and relatively free word order. Most of Czech morphology can be treated with a morphological analyzer, still, it might be useful to have a better understanding of the language we will work with.
 
 \subsection{Inflection}
-In Czech, nouns, adjectives, pronounce and numerals are declined. The inflection expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has a grammatical gender, for words, that have natural gender, those two genders align: \vuvozovkach{žena} (\textit{woman}) is feminime and \vuvozovkach{muž} (\textit{man}) is masculine. Inflection of each declinable word follows a pattern. This all means that a single word (lemma) can have a lexeme of size 
+In Czech, nouns, adjectives, pronounce and numerals are declined. The inflection expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has a grammatical gender, for words, that have natural gender, those two genders align: \vuvozovkach{žena} (\textit{woman}) is feminine and \vuvozovkach{muž} (\textit{man}) is masculine. The inflection of each declinable word follows a pattern. This all means that a single word (lemma) can have a lexeme of size \todo{kolik?}
 
-Verbs are conjugated, the conjugation expresses person, numeral, tense, voice and mode. Verbs follow one of 14 patterns and average Czech either finds the theory about Czech verbs and tenses confusing, or is unaware there even are verb patterns. With that, we will not elaborate on conjugation.
+Verbs are conjugated, the conjugation expresses person, numeral, tense, voice, and mode. Verbs follow one of 14 patterns. An average Czech either finds the theory about Czech verbs and tenses confusing or is even unaware of the existence of the verb patterns, some verbs tend to be used in a grammatically incorrect forms even in the official language.
 
-An important aspect of declanation for us is agreement. In English, subject and verb agrees (limited just to third person). In Czech subject and verb also agree, but in noun phrases there needs to be an agreement as well. \todo{příklad: toho, jak je nějaká noun phrase, počet lexémů, počet validních .. } \todo{odkaz dopředu, kde řeším, jak matchovat}
+An important aspect of declension for us is agreement. In English, subject and verb agree (limited just to the third person). In Czech, subject and verb also agree, but in noun phrases there needs to be an agreement as well. \todo{příklad: toho, jak je nějaká noun phrase, počet lexémů, počet validních .. } \todo{odkaz dopředu, kde řeším, jak matchovat}
 
 \subsection{Free word order}
 
