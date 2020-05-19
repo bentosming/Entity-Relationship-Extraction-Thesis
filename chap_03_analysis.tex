@@ -2,16 +2,16 @@
 
 The process of creation of CERED is mostly an attempt to execute the first two parts of a pipeline we mention in the first chapter \todo{link}. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for Named Entity Recognition that we could theoretically use to our advantage if we decided to focus on named entities only.
 
-Therefore we need to find a way, to get to similar results as the pipeline would get. We do not expect that our CERED generator will be as powerful as the respective dedicated tools would be. We will not try to create a general entity recognition and linking tools - on the contrary, we will exploit any extra information that chosen Wikimedia projects provide.
+Therefore we need to find a way to get to similar results as the pipeline would get. We do not expect that our CERED generator will be as powerful as the respective dedicated tools would be. We will not try to create a general entity recognition and linking tools - on the contrary, we will exploit any extra information that chosen Wikimedia projects provide.
 
-There are several aspects that we need to think through.
+There are several aspects that we need to think through. We introduce them in the following list for better orientation. A subsection in this section is dedicated to each of those aspects. \todo{úplně odstranit ten list?}
 \begin{itemize}
- \item  Dataflow - we already chosen Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome to be able to proceed to locating mentions.
- \item  Entity Matching - suppose we collected a set of entities that could be mentioned in a piece of text and the text. The process of entity matching attemps to mark parts of the text that mention an entity.
- \item  Wikilink mentions - Wikilinks are (mostly) human labeled entity mentions. Utilizing them is the closes we can get to a supervised dataset without actually supervising the dataset.
- \item  Relation Matching - entities are matched, relationships are extracted, can we assume that a sentence with two entities that are related is a mention of this relation? 
+ \item  Dataflow - we chose Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome to be able to proceed to locating mentions.
+ \item  Entity Matching - suppose we collected a piece of text together wit a set of entities that could be mentioned in the text. The process of entity matching attempts to mark words in the text that mention an entity.
+ \item  Wikilink mentions - Wikilinks are (mostly) human labeled entity mentions. Utilizing them is the closest we can get to a supervised dataset without actually supervising the dataset.
+ \item  Relation Matching - entities are matched, relationships are extracted, we use distant supervision assumption to locate relation mentions.
 \item Relation Inventory - we generated CERED, but the relation inventory is overly diverse. Moreover, the dataset is extremely unbalanced - the number of mentions per relation varies. And no “no relation” relation is obtained.
- \item  Result Evaluation - after each iteration of the development cycle, test are normally run. How to evaluate the consequences of a new feature in the whole CERED?
+ \item  Result Evaluation - every time we generate CERED during development, we need to evaluate its quality. We propose methods for this evaluation. 
 \end{itemize}
 
 
@@ -24,9 +24,9 @@ There are several aspects that we need to think through.
 
 \subsection{Dataflow}
 
-We are starting with two files. One being a Czech Wikipedia dump: it is a collection of articles. Each article has, among other information, its title, id, and text. The other is a Wikidata dump. 
+We start the whole process of creating our dataset with two files. The first file is a Czech Wikipedia dump. It is a collection of articles where each article has its tile, id and text. And the other file is a Wikidata dump. 
 
-The simplest way of processing those files would be to process them separately and thus obtaining sentences on one side and relationships (a relation type with two items) on the other, see \ref{obr03:DSD} \todo{nene}. This approach comes with a clear disadvantage. We would lose any additional information to the sentences, that could be potentially useful (for example article title might be helpful to determine which items are mentioned in the sentence). To solve this we could precompute something for each article and attach it to each sentence, risking a massive increase in required capacity to work with such data. On a similar note, if we were to follow the diagram exactly, we would probably store item names (labels and aliases) in each relation, worsening the situation even further.
+The simplest way of processing those files would be to process them separately and thus obtaining sentences on one side and relationships (a relation type with two items) on the other (Figure \ref{obr03:DSD}) \todo{nene}. This approach comes with a clear disadvantage. We would lose any additional information to the sentences, that could be potentially useful (for example article title might be helpful to determine which items are mentioned in the sentence). To solve this we could precompute something for each article and attach it to each sentence, risking a massive increase in required capacity to work with such data. On a similar note, if we were to follow the diagram exactly, we would probably store item names (labels and aliases) in each relation, worsening the situation even further.
 
 \begin{figure}
 \centering

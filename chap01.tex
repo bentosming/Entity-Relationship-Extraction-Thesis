@@ -1,13 +1,15 @@
 \chapter{Relationship extraction intro} \todo{změnit název}
 
 \section{Terminology}
-Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce the following concepts as exactly as possible while respecting the terms that seem to be established by the majority. \todo{hloupá věta}
+Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce the most important concepts for our work as exactly as possible while respecting the terms that seem to be already established. \todo{hloupá věta}
 
 \todo{někam zapracovat příklad na větě, jak je nejdřív najití rozštíření a tak všechno}
 
-\defineterm{Relation} in this context is semantic (not grammatical etc.). It has a type, is binary and oriented, and describes the relationship between a subject and an object of the relationship. We will use the word relation as an equivalent for its type and the term relationship for an instance of the relation. 
+\defineterm{Relation} in this context is an abstraction of a semantic relation, for example a father relation. Relation is of a type (father) is binary (between the son and the father) and oriented (the father and the son are not interchangeable), and describes the relationship between a subject (the son) and an object (the father). We will use the term relation as an equivalent for its type and the term relationship for an instance of the relation. 
 
-\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, the object is the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type\relationtype{son} is captured, the subject is John and the object is Eric. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkach{James is Harry's father.} We will use the notation \relation{relation type}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
+\todo{obrázek pro příklad v dalším odstavci}
+
+\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, the object is the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type\relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkach{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
 
 Both the subject and the object can generally be any word or sequence of words that represent concepts that have the ability to form relations. In some cases subjects, objects, or both are limited to entities or named entities.
 
