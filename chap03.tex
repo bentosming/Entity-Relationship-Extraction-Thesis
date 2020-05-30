@@ -25,7 +25,13 @@ Results
 
 \section{Data sources}
 
-To be able to perform distant supervision, we need to find suitable data - Czech text corpus and a knowledge base. In the first subsection, we will explain the requirements and constraints we have on such data and present our options. In the next two subsections, we will provide more information on the chosen ones.
+To be able to perform distant supervision we need to find suitable data - Czech text corpus and a knowledge base (Figure \ref{obr03:DSD}). In the first subsection, we will explain the requirements and constraints we have on such data and present our options. In the next two subsections, we will provide more information on the chosen ones.
+
+\begin{figure}[h]\centering
+\includegraphics[width=60mm]{./img//Diplomka diagramy-Distant supervision}
+\caption{Distant supervision diagram}
+\label{obr03:DSD}
+\end{figure}
 
 \subsection{Constraints and requirements}
 The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect more fact-based texts to be more suitable, and therefore we will prefer encyclopedic or journalistic genre \todo{tak špatná věta}. One option is to focus on some subset of Czech National Corpus \footnote{https://www.korpus.cz/}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
@@ -66,21 +72,22 @@ We chose Python to be our main programming language. To be able to work faster w
 
 In this section we will briefly introduce those technologies.
 \subsection{Python}
+Python je rozšířený, asi nejčastější u AI/ML.
+
+Má spoustu fajn knihoven na všechno (pandy, numpy, scikit, tesorflow, pytorch, transformers ...)
+
 \todo{zmiň pandy a numpy a tak}
 \subsection{Spark}
+Umožňuje práci s clusterem
 
 \subsection{MorphoDiTa}
 MorphoDiTa \cite{Morphodita} (Morphological Dictionary and Tagger) is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. Internally, during training tries are built to represent patterns for declension. Externally, MorphoDiTa API provides functionalities such as splitting text into sentences, tokenization, and lemmatization.
 
 \subsection{Streamlit}
+Webb app, zaměřeno na data
+
+\input{chap_03_implementation}
 
 
-\section{Implementation}
-
-
-\subsection{WikiManipulace}
-Popsat, že wikitext má sám o sobě strukturovaná a divná data a že je to třeba nejspíš řešit Přesunout do implementace?
-
-\section{Viewer}
 \section{Results}
 
