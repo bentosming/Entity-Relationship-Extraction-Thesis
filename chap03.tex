@@ -14,11 +14,11 @@ First we research available knowledge bases and Czech text corpora to determine 
 
 Next we analyze how we will find mentions of Wikidata relations in Czech Wikipedia. We sketch out dataflow diagrams and we think about all the different complex aspects of this task.
 
-We continue by choosing technologies that we use. Aware of the volume and other characteristics of chosen data, we choose Python as the main programming language, spark as a way to speed up the computations and MorphoDita to deal with the Czech language.
+We continue by choosing technologies that we use. Aware of the volume and other characteristics of chosen data, we choose Python as the main programming language, Spark as a way to speed up the computations and MorphoDita to deal with the specifics of the Czech language.
 
-The amount of questions and options that raised from the analysis gets at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED, or more exactly many different versions of CERED in search of the best one to use for training in the second part of this thesis. 
+The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED, or more exactly many different versions of CERED in search for the best one to use for training in the second part of this thesis. 
 
-Results
+\chybi{Results}
 \todo{results}
 
 
@@ -71,23 +71,28 @@ Wikidata project contains over 80 000 000 items, which raises \todo{jiná slova}
 We chose Python to be our main programming language. To be able to work faster with a bigger volume of data, we wanted to use a cluster, which leads to Spark and occasionally to some small scripts in shell/bash\todo{co je co?}. To top it, we will use MorphoDiTa to work with the Czech language. Later, we will implement a simple Streamlit app we used to comfortably view the results of our Spark queries.
 
 In this section we will briefly introduce those technologies.
-\subsection{Python}
-Python je rozšířený, asi nejčastější u AI/ML.
+\chybi{Neřešit moc do detailu, cca dva odstavce o každém. }
 
-Má spoustu fajn knihoven na všechno (pandy, numpy, scikit, tesorflow, pytorch, transformers ...)
+\subsection{Python}
+\chybi{Python je rozšířený, asi nejčastější u AI/ML.}
+
+\chybi{Má spoustu fajn knihoven na všechno (pandy, numpy, scikit, tesorflow, pytorch, transformers ...)}
 
 \todo{zmiň pandy a numpy a tak}
 \subsection{Spark}
-Umožňuje práci s clusterem
+\chybi{Umožňuje práci s clusterem}
 
 \subsection{MorphoDiTa}
+\chybi{Nepsat o tom, jak funguje uvnitř}
+
 MorphoDiTa \cite{Morphodita} (Morphological Dictionary and Tagger) is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. Internally, during training tries are built to represent patterns for declension. Externally, MorphoDiTa API provides functionalities such as splitting text into sentences, tokenization, and lemmatization.
 
 \subsection{Streamlit}
-Webb app, zaměřeno na data
+\chybi{Webb app, zaměřeno na data}
 
-\input{chap_03_implementation}
+\input{chap_03_implemenation}
 
 
 \section{Results}
+\chybi{statistiky výsledného datasetu, ve kterém jsou zanechány všechny třídy + jedna "deploy" verze, ve které jsou i negative mentions}
 
