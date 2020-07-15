@@ -1,17 +1,21 @@
 \chapter{Previous Work on Relationship Extraction}
 In this chapter, we first introduce the most popular pre-trained models that are currently used in NLP. Then we discuss different metrics that are used on Relationship Extraction. Lastly, we research previous work done on the topic of training models for the relationship extraction task.
 
-Pre-trained Models
+\section{Pre-trained Models}
 Lately, NLP tasks are dominated by solutions using pre-trained deep neural models. In this section, we introduce BERT, the first well-known model of this type that has set the trend.
-BERT
+\chybi{BERT, albert? + obecně asi transformer architektura}
+\subsection{BERT}
 
-Metrics
-This section focuses on metrics in the Relationship extraction task, we first define those metrics and later discuss the pros and cons of each.
+
+\section{Metrics}
+\todo{outdated}This section focuses on metrics in the Relationship extraction task, we first define those metrics and later discuss the pros and cons of each.
+
+\subsection{Binary classification}
 
 Let us start with metrics for binary classification. In binary classification, we are presented with an input vector and the goal is to determine whether the vector is of class A pro class B. Each prediction then falls into one of the following categories: correctly classified A input, correctly classified B input, wrongly classified A input as B, and a B input wrongly classified as A (Figure \ref{obr:CM}). 
 
 \begin{figure}[h]\centering
-\includegraphics[width=60mm]{./img//Diplomka diagramy-Big Confusion matric}
+\includegraphics[width=140mm]{./img//Diplomka diagramy-Confusion matric}
 \caption{Confusion matrix for binary classification}
 \label{obr:CM}
 \end{figure}
@@ -20,22 +24,24 @@ Another way to look at the same situation is to just predict whether an input is
 
 
 
-Accuracy
-
-Accuracy expresses the ration between correct and incorrect predictions.
-
-$Acc = \frac{TP+TN}{FP+FN}$
-
-Precision
-
-Precision expresses the ratio correctly predicted positives within all predicted positives. Therefore, precision is a good metric if we want to avoid mistakenly classify falses as positives.
-$Prec = \frac{TP}{TP + FP}$
+\defineterm{Accuracy} expresses the ration between correct and incorrect predictions.
+\begin{align}
+Acc = \frac{TP+TN}{FP+FN}
+\end{align} 
 
 
-Recall
 
-Recall is the complementary metric to precision. It expresses the ratio of all positives that were correctly predicted. In other words, it should be used when we need to find the maximum of positives in the data.
-$Rec = \frac{TP}{TP + FN}$
+\defineterm{Precision} expresses the ratio correctly predicted positives within all predicted positives. Therefore, precision is a good metric if we want to avoid mistakenly classify falses as positives.
+
+\begin{align} 
+Prec = \frac{TP}{TP + FP}
+\end{align}
+
+\defineterm{Recall} is the complementary metric to precision. It expresses the ratio of all positives that were correctly predicted. In other words, it should be used when we need to find the maximum of positives in the data.
+
+\begin{align}
+Rec = \frac{TP}{TP + FN}
+\end{align}
 
 Let us show three use cases, each of the defined metrics will be the best fit in one case.
 
@@ -55,9 +61,12 @@ This whole section is in this thesis mostly to remind us that if we want to scor
 
 F1
 
-Often we might want a trade-off between being as precise as possible and recalling as much as possible. F1 score is a harmonic mean of precision and recall (scaled to range from 0 to 1): $F1 = 2\frac{Prec \dot Rec}{Prec + Rec}$ and is quite widely used in competition tasks.
+Often we might want a trade-off between being as precise as possible and recalling as much as possible. \defineterm{F1 score} is a harmonic mean of precision and recall (scaled to range from 0 to 1): \begin{align}
+F1 = 2\frac{Prec \dot Rec}{Prec + Rec}
+\end{align}and is quite widely used in competition tasks.
 
-Metrics for multiclass classification
+\subsection{Multiclass classification}
+
 
 We already run into issues with asymmetry of precision and recall in binary classification (it is dependent on which class is chosen to be the positive one). We can address this by creating metrics per class. In the previous example about binary pet classification, we would get two sets of metrics, each describing the ability of the classifier to recognize given class apart from the rest.
 
@@ -78,8 +87,6 @@ Now we can easily extend this per class approach to multiclass classification. T
 
 As a solid way of examining the quality of the classifier, one could simply look at the confusion matrix and at all the per-class metrics. Although this would be insightful, it is not the most practical in terms of a clear comparison of two classifiers. Ideally, we aim for a metric or metrics that are as descriptive and comprehensive as possible but define an ordering of the classifiers.
 
-Weighting metrics
-
 Intuitively we will minimize the number of metrics by combining them into one value. To do so, we should acknowledge that the dataset we evaluate the performance of a classifier and a metric on needs to be taken into consideration.
 
 An ideal dataset would be perfectly balanced. In real life we encounter two types of imbalance in datasets:
@@ -90,27 +97,28 @@ class representation distribution is different in the test and the train part of
 The second imbalance is tricky. Often, when optimizing the classifier, we do not know the CRD of the test dataset. We will therefore mostly focus on the first one. 
 
 
-Macro-averaged metrics
+\subsubsection{Macro-averaged metrics}
 
 The first method that comes to mind when we aim to combine the same metric of multiple classes into one, is the arithmetic mean. In most libraries and papers the term macro-[metric] (macro-recall, macro-F1, etc.) is used.  Macro averaged metrics tend to be the easy option that is used without much thought. So much so, that even though two macro-F1s are being used, often the exact formula is not included in papers. (The more common formula is the arithmetic mean of classes F1s, but the less often formula where the F1 is computed from macro-recall and macro-precision is also used \cite{Opitz2019MacroFA}.)
 
-Weight-averaged metrics
-If we aimed to pretty much just maximize a metric ignoring the class, instead of averaging the classes with the same weight, we would wight them by their \defineterm{support}
+\subsubsection{Weight-averaged metrics}
+If we aimed to pretty much just maximize a metric ignoring the class, instead of averaging the classes with the same weight, we would wight them by their \defineterm{support}. \chybi{co je support}
+
+\chybi{vzorec}
+
+\subsection{Relationship extraction metrics}
+Whether or not to use macro metrics depends deeply on the use case and the dataset. In our case, the datasets tend to be very imbalanced (the majority of data are negative mentions, and even within the positive mentions the classes are highly unbalanced). This often leads to the idea of computing the combined metric only from positive classes.
+
+\chybi{přehled co se běžně uvádí u kterého datasetu}
+
+\chybi{problémy s tím, že CERED je sice taky nevyvážený, ale dost jinak}
 
 
-Whether or not to use macro metrics depends deeply on the use case and the dataset. In our case, the datasets tend to be very imbalanced (the majority of data are negative mentions, and even within the positive mentions the classes are highly unbalanced). This often leads to the idea of computing the combined metric only from positive classes and keeping the metric 
 
 
 
+\section{Relationship Extraction Models}
 
+\chybi{matching the blanks}
 
-Accuracy
-
-FF, TT a spol -> precision, F1
-
-Vážení předchozích
-
-Discussion
-
-
-Relationship Extraction Models
+\chybi{další články}
