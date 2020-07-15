@@ -42,3 +42,18 @@ TACRED was designed to be highly unbalanced. 79.5\% of data is the no\_relation 
 
 
 \input{tacred_table}
+
+
+
+\section{Riedel NYT dataset}
+The previous two datasets were obtained through a tedious human labour - human annotators went through texts and manually annotated the data. This process is slow and expensive, which explains the relatively why the datasets are relatively small. In this section, we will introduce a dataset that was presented in XX and that was created without the need for any additional manual annotation.
+
+
+This dataset was generated with the distant supervision approach. This approach is based on aligning structured data (knowledge base) with text, i.e. automatically tagging mentions of the structured data in the text. In distant supervision, we usually expect that if there are two entity mentions in a sentence that are related, then the sentence expresses their relationship. The authors acknowledge that this assumption is often violated and they propose a methodology that attempts to predict whether the assumption is violated in a sentence. Using this methodology, they generated a dataset from the NYT Corpus \todo{link} and Freebase. We will refer to this dataset as Riedel NYT.
+
+The dataset is divided into two parts, each of them containing a test set and a train set. We will use both train sets for training and the \vuvozovkach{heldout} test set for evaluation in the second part of this thesis.
+
+
+Relation inventory for the part of the dataset that we used contains 58 relations. The best represented is the NA relation with XX\%. The representation of relations varies between the train and test set. For example, there are two relations, that are not represented in the train set. Given the size of the relation inventory, we do not include an exhaustive table as we did with previous datasets.  
+
+
