@@ -3,29 +3,99 @@
 
 
 \subsection{Wikidata preprocessing}
-\chybi{zopakovat kritéria pro vztahy a itemy, které si nechat}
+This module aims to load the wikidata dump file and output three lists. The first list contains QPQ triples, triples of ids representing a relationship (Q173998 P3373 Q187923 for example). The second list provides us with names for the ids mentioned in the first list (Q187923 Ginny Weasley, P3373 sibling). The third one provides the mapping of entity id to the title of the corresponding article if such exists (příklad). Those three lists will serve as the source of structured data, as we discussed in XX.
 
-\chybi{Zvážit další informace, které by se daly využít (třeba kdy vztah platil, možná ale spíš do analýzy}
+The first step of our preprocessing is to filter wikidata to remove entities, that we will not use. We require each entity to have at least one Czech name (alias or label), otherwise, there would be no good way to find mentions of that entity later in the entity matching step. CERED creation does not require the Czech names of relations so we will keep all of them.
 
+Apart from the filtering, we should consider whether we might benefit from keeping more information about a relationship (meaning the instantiation of a relation) than just the ids. Wikidata relationships often contain additional information specific for the relation type. For example, some relationships are valid only for some period of time. The minister of magic changes every few years (“position held” relationship between Cornelius Fudge and the Ministry of Magic has following additional information attached to it: start time 1990, end time 1996, replaces Millicent Bagnold, replaced by Rufus Scrimgeour). In our use case, as we plan to limit text analysis to the syntactic level, such information is not beneficial. 
 
-\chybi{vztahy to chce nechávat, i když nemají český název}
+The second step addresses removing duplicate relationships that differ only in the additional information tied to the relationship (CBS received many Peabody Awards for example). Such duplicates where the entire QPQ is the same would not be useful in the future and might require special attention in the relation matching step. We will remove even relationships that differ only in the “P” part. If we kept them, in the relation matching we would either create multiple relation mentions (sentence with two tagged entities and the label of their relationship) that only differ in the relationship. CERED is supposed to be a dataset on which it is possible to train a model in a single label classification task. Such mentions would result in the same inputs (sentence with two tagged entities) and different outputs (the relationship label). We could change the format of our dataset to have a set of relations for each mention, but such data is confusing, non-traditional and overall not what we aim for in this thesis. 
 
-
-\chybi{zmínit, že je tam někde readme s tím, jak to spustit}
-
+After these steps, the first list contains approximately 2 million QPQ triples.
 
 \subsection{Wikitext parsing}
-\chybi{ došlo k zahození všelijakých boxů, při práci s linky je tricky říct, kde mu končí text ..}
-Popsat, že wikitext má sám o sobě strukturovaná a divná data a že je to třeba nejspíš řešit Přesunout do implementace?
+This module aims to parse wikitext (Wikipedia markup language) from the Czech Wikipedia dump into a clean text with attached information about wikilinks in the original markup.
 
-\chybi{data pro to, jak (ne) užitečné jsou texty linků jako dodatečná jména}
+As we already explained in XX, wikitext contains a lot more than fully unstructured data. Different kinds of infoboxes, tables or lists are contained within the sentence-like text. Some of these elements are implemented using the so-called template syntax. Therefore, it would be tempting to simply remove all the text that is contained in a template. The problem is that not all templates are bad. For example, we may use a template to divide the text into two columns containing valid sentences. Therefore, discarding all such data seems unnecessarily harsh.
+
+When developing the methodology for wikitext parsing, there was not a “gold” to compare it with. The only means of evaluation we had at the time was repeatedly going through a small set of articles and trying to discard unnecessary data. We tailored the rules for wikitext parsing to these articles in such a way that only sentence-like parts remained. 
+
+Once we implemented the whole CERED generator and were able to see the relation mentions, we realized that the previous method of evaluation was not good enough. Therefore, we adopted a new one, as described in XX (\todo{do závorky dát jméno metodiky}). We looked at the different histograms and investigated the abnormalities. For example, a lot of sports articles report results of a match (tournament, event?) and these are often stored in custom tables that were not filtered by the rules from the previous paragraph. Moreover, these tables oftentimes contain information about the nationality of the players, resulting in a huge amount of matched entities and relations.
+
+Based on the analysis of all the available data, we decided not to include the following content in the clean text:
+HTML tags within wikitext
+headings
+tables
+lists
+templates matching the following patterns: obsazení*, sloupce*, seznam*, příbuzenstvo*, *předkové*, *box*, *locmap*, *tabulka*.
+wikilinks to categories and files
+
+One more technical issue we encountered was correctly assigning spans to wikilinks, i.e. where the link starts and ends in the text. We can demonstrate the problem on the following sentence: “The main [[story arc]] concerns Harry's struggle against [[Lord Voldemort]], a dark wizard who intends to become immortal, overthrow the wizard governing body known as the [[Ministry of Magic]] and subjugate all wizards and [[Muggle]]s (non-magical people).” The correct span for Muggles should contain the trailing s even though it is not part of the wikilink itself. In Czech such trailing characters are common. The set of chars that seem to end wikilinks written in such forms are ' ,.\\n'. \todo{vynechat? nevynechat?}
+
+One more thing we mentioned in the analysis about wikitext is the possible boost of performance if the text-part of a wikilink was added to the set of names for the given entity. We exported such names, kept only those that were not already added to wikidata, and read through many of them. This process is time-consuming because one often has to actually look up the entity to know whether a given name is sensible. Even though we do not have any data about the proportion of good and bad names, the overall impression was clearly leaning towards not using such data. The two main reasons were that commonly the name was actually a class name, not instance name (like school linking to Hogwarts). Cases, where the name was just a pronoun, were less frequent but would likely cause much trouble later on. (napsat, že čeština umí zájmena úpužívat fakt mistrně a všude? nebo to napsat do části o češtiny a tady odkaz?)
+
+
+\chybi{data pro to, jak (ne) užitečné jsou texty linků jako dodatečná jména} data nejsou
 
 \subsection{Entity matching}
-\chybi{morphodita + pevný word order}
+We discussed in great detail the pros and cons of different entity matching methods, implying that the more complex the matching method, the better. We work with a single language and tools for lexical analysis are available and reliable. Therefore implementing language-independent matching methods (string similarity for example) is not beneficial. 
+
+We load the entity names in a slightly transformed form. We lower the case and add spaces around every dot character We used lexical analyzer to split text to sentences and to obtain features from sentences (tokens, lemmas and lexemes). An entity name (sequence of k strings-tokens separated by a space) is matched in a sentence \todo{je to kandidát pro tu větu} if there is a sequence of k consecutive tokens in the sentence such that each token in the name is a member of the lexeme of the corresponding token in the sentence. 
+
+We intended to allow a less strict word order, but we were unable to justify such a choice. After reading several articles we did not find any entity mentions that would be newly matched. This might imply that even though word order is relatively free in Czech, noun phrases tend to keep their word order. The other explanation is based more on the fact that a human reader is more likely to recognize entity mention if it is in the standard word order. Looking for entity mention is again more time consuming than it seems, because we do not know, what is a wikidata entity, therefore a lot of looking up is involved and we believe that often we would not have thought that something is a wikidata entity even though it is. Such "improvement” could still raise the number of entities matched but probably would lower the precision.
+
+We considered allowing one special case. Most articles are based on one entity, therefore we expect many sentences to mention this entity. Often the entity is mentioned either by a pronounce (pronounces that express the subject are typically omitted in Czech), or by part of its full name.  Přijali ho do školy čar a kouzel v Bradavicích. Když se Harry vydal do Bradavic, našel nového kamaráda Rona Weasleyho. .. Pak už jel \vuvozovkach{domů} a musel přežít další dva měsíce u Dursleyových. We already stated that we will not attempt to deal with pronounces. We tried to propose rules for choosing the correct substring of the entity name. The diversity of wikdata makes such a task extremely difficult. Together with the risk that we would decrease the precision of entity matching we decided to stick with full names only.
+
+In the wikitext parsing section, we prepared spans and ids for wikilinks. We merge these with the ones matched by this module and post-process them. We discard each mention whose span is within a span of different mention of the same entity. This removes duplicates and keeps the one that is more specific.
+
 
 \chybi{jestli bude čas, tak udělat statistiky i pro jiné metody}
 
 \chybi{na obrázku s volemortem ukázat, jak to nakonec funguje}
 
+\subsection{Relation matching}
+So far we obtained sentences with tagged entity mentions. For each tuple of entity mentions within the same sentence, we checked if a relationship of those two entities was present in wikidata (using the prepared QPQ list). Given the filtering in wikidata preprocessing we are guaranteed that there is at most one such relationship. 
+
+At this stage, we need to address likely incorrectly matched entities that make the dataset bloat. One example of such bloating that we encountered was in an article about kindergarten \todo{prolink na https://cs.wikipedia.org/?curid=25590}, in the sentence Jsou závazná pro předškolní vzdělávání v mateřských školách, v mateřských školách zřízených podle § 16 odst. 9 školského zákona, v lesních mateřských školách a v přípravných třídách základních škol. thousands of relation mentions were found. Many kindergartens are named Mareřská škola (kindergarten), all of them are an instance of the abstract kindergarten entity and therefore candidate entities. If a sentence contains the term “mateřská škola” (or its form), all these entities will be matched. And the relationship “Mateřská škola is a mateřská škola” will be assigned many times as well. 
+
+After investigating many other unusual cases, we decided to discard any sentence with at least 10 entity mentions in it. We also tried to experiment with different limits, but the results were unconvincing. For example, increasing the constant to 50 keeps an additional 13\% of relationship mentions but extends the set of sentences only by 1\%.
+\subsection{statistiky jak to dopadlo}
+The full CERED dataset, which was obtained by the process we described in the previous sections, contains almost one and a half million relation mentions. In the next few paragraphs, we will talk about some more detailed statistic of CERED. And we will propose a few other CERED versions.
+
+The mentions are from 293591 articles (=293591 přispělo aspoň jedním), on average slightly less than 5 mentions are from the same article with the median of nearly 7. The article with most mentions is Spojené království \todo{https://cs.wikipedia.org/?curid=1031} (United Kingdom).
+
+There are 490501 different sentences that are used in the mentions. We set the limit on entity mentions per sentence to 10. On average there were approximately 3 relation mentions in a sentence (that had at least one mention) and the maximum of 72 mentions per sentence was reached 34 times. The length of sentences ranges from 2 to 401 tokens, the very short ones usually came from templates that were not removed, on the other hand, the very long ones are often caused by incorrectly written articles. \todo{https://cs.wikipedia.org/w/index.php?title=Petr\_Jan\%C4\%8D\%C3\\\%A1rek\&oldid=18723498 } We tried to remove all templates to see if the range (and distribution) of the number of words improves, but we did not find a significant improvement.
+
+Another possibility is to observe how the position of a sentence in an article influences the number of relation mentions. We expected that the first sentences in an article will contain the highest number of relation mentions. The first sentences tend to contain wikilinks and the use of pronounces or shorter names is limited because each entity has to first be introduced by its full name. As we can see in Figure XX, our hypothesis seems to be correct. 904803 mentions come from sentences that are first in their respective articles. This constitutes over 60% of all mentions.
+
+
+
+
+
+\subsection{CERED Versions}
+The full CERED is already a valid relationship classification dataset. It has nearly one and a half million mentions, but as we discussed in the previous section, some of them might be of poorer quality than others. In this section, we will describe different versions of CERED with CERED0 being the biggest (least filtered) and CERED4 the smallest. 
+
+Each version is split up into three disjunct sets: train set, dev set and test set. Ideally, the test set would operate on a different set of entities (so that models learn to predict relationships based on sentences, not on the knowledge of entities). We believe that such a restriction is unnecessarily strong. Some entities are mentioned in many articles, which does, in fact, make them part of common knowledge (connected to the language we train on). Instead, we decided to relax the restriction to distinct articles. We sampled two sets of 10000 articles, one for test and one for dev set. In each version of CERED, the same articles are used for dev, test and train.
+\subsubsection{CERED0}
+CERED0 is the raw dataset just as we described it in the previous section. We do not artificially change the relation type, so no negative relation is present. We do not recommend this version for direct training, we mostly keep it to preserve the full information obtainable from our generator.
+
+\subsubsection{CERED1}
+CERED1 is close in size to CERED0. We removed long (over 100 words) and short (under 5 words) sentences. We also changed labels of underrepresented relations to “other relation”, which will be the negative relation in CERED1.
+
+\subsubsection{CERED2}
+So far, one sentence could be included multiple times in a dataset. Moreover, there was no required number of mentions per relation, for the relation to be considered a valid relation. And lastly, we did not try to handicap overly represented relations. In CERED2 we start with CERED1, we discard relations (and their mentions) that were not represented enough (under 100 mentions). Then, if a sentence was used in multiple mentions, we choose the mention of the least common relation in the sentence and we discard the others. 
+
+\subsubsection{CERED3}
+Even after the restriction on the uniqueness of sentences, half of the CERED2 sentences are the first sentences within the articles they originated from. Such sentences have a rather unique structure that is not as common outside of Wikipedia. This inspired CERED3 which is the remainder of CERED2 after removing all mentions in “first” sentences.
+
+\subsubsection{CERED4}
+There are two stages in the CERED generation process that might be relatively unprecise. The entity matching stage and the relation matching stage. CERED4 keeps only the relation mentions from CERED3, in which both entities were manually-labelled directly in wikitext in the form of wikilinks. The CERED4 dataset is, therefore, the smallest, but has the highest potential to be precise.
+
+\todo{tabulka, řádky CERED0-4\_set, sloupce počet mentions, počet vztahů}
+
 \subsection{•}
 
+
+Even though this is not exactly part of wikidata preproccesing we will o tom, že named entity jsou instance, že stačí jít po cestě instance-podtřída*. Že je těžké vybrat rozumné věci jako “rodiče”, že mezi nepříjemnými entitami jsou třeba seznamy, kategorie a podobně, že ve finále to hlavní jméno je velké právě když je to instance. 
+
+někam zmínit, že test data jsou ze spešl článků
