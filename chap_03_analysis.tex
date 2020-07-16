@@ -91,7 +91,7 @@ Tokenization is a process that aims to split text (sequence of characters) into 
 Tokenizers (and lemmatizers) are usually trained to perform well on sentences and might be inaccurate on noun phrases when they stand alone, as entity names do. If we were determined to tokenize them, a simple trick like constructing a sentence with the name in it and tokenizing this sentence can partially solve this problem. Such a sentence that would be grammatically correct and not semantically terrible could be something like “This is /name/”, but realistically, this sentence was quite likely not at all common in the training process of MorphoDiTa. Some foreign words can be erroneous as well and keeping their original form might be the only easy way around it.
 
 \subsubsection{Matching methods}
-Entity matching can be done with various degrees of sophistication. We provide a short overview of those degrees (1 -- 4), focusing mainly on those that are to be implemented. For simplicity, we will assume that we are only looking for mentions in one sentence at a time unless written otherwise. We also include an example of such matchings to demonstrate how successful we are likely to be.
+Entity matching can be done with various degrees of sophistication. We provide a short overview of those degrees (1 -- 4). 1 and 2 do not require any knowledge of the language they work with, 3 and 4 are language dependant. For simplicity, we will assume that we are only looking for mentions in one sentence at a time unless written otherwise. We also include an example of such matchings to demonstrate how successful we are likely to be.
 
 \begin{figure}
 
