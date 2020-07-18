@@ -4,9 +4,8 @@ This thesis is split into two parts that focus on different aspects of relations
 
 
 \section{Terminology}
-Terminology in NLP subtasks is often not exact or non-standardized. We will attempt to introduce the most important concepts for our work as exactly as possible while respecting the terms that seem to be already established. \todo{hloupá věta}
+Terminology in NLP subtasks is often non-standardized or not exact. We will attempt to introduce the most important concepts for our work as exactly as possible while respecting the terms that seem to be already established. 
 
-\todo{někam zapracovat příklad na větě, jak je nejdřív najití rozštíření a tak všechno}
 
 \defineterm{Relation} in this context is an abstraction of a semantic relation, for example, a father relation. A relation is of a type (father) is binary (between the son and the father) and oriented (the father and the son are not interchangeable), and describes the relationship between a subject (the son) and an object (the father). We will use the term relation as an equivalent for its type and the term relationship for an instance of the relation. 
 
@@ -16,29 +15,25 @@ Terminology in NLP subtasks is often not exact or non-standardized. We will atte
 
 Both the subject and the object can generally be any word or sequence of words that represent concepts that can form relations. In some cases, subjects, objects, or both are limited to entities or named entities.
 
-\defineterm{Named entity} is a real-world object, such as persons, locations, organizations, and products, that can be denoted with a proper name. Named entities can be viewed as instances (e.g., New York City is an instance of a city) of some concept - \defineterm{class}. Sometimes, numeric data is considered in this category as well (for example, by Named Entity Recognition tools). An \defineterm{entity} is a named entity whose proper name is unknown or unimportant but still is an instance. (The word book can represent an abstract concept - class as well as entity.) 
+\defineterm{Named entity} is a real-world object, such as persons, locations, organizations, and products, that can be denoted with a proper name. Named entities can be viewed as instances (e.g., New York City is an instance of a city) of some concept - \defineterm{class}. Sometimes, numeric data is considered in this category as well (for example, by Named Entity Recognition tools). An \defineterm{entity} is a named entity whose proper name is unknown or unimportant but still is an instance. (The word book can represent an abstract concept - a class - as well as an entity.) 
 
 \defineterm{Relation inventory} is the set of relations that are considered valid for a given dataset or model.
 
 \defineterm{Positive relation mention} is a sentence, that captures a relationship: a relation together with a tagged subject and object. We will omit the word positive unless we want to emphasize the fact.
 
-\defineterm{Negative mention} is close to relation mention in the sense that it is a sentence with tagged subject and object, but the relation type is one of these types: 
+\defineterm{Negative mention} is close to (positive) relation mention in the sense that it is a sentence with tagged subject and object, but the relation type is one of the following types: 
 \begin{itemize}
-\item \relationtype{other} - human annotator would classify a relation, that is not in inventory.
-\item \relationtype{no relation} - in this case, human annotators should feel an absence of a relationship between a subject and an object. \todo{doplnit příklady, včetně vyloženě ne příkladu}
-
-
+\item \relationtype{other} - human annotator would classify a relation, that is not in the inventory.
+\item \relationtype{no relation} - in this case, human annotators should feel an absence of a relationship between the subject and the object. \todo{doplnit příklady, včetně vyloženě ne příkladu}
 
 \end{itemize}
 
 \relationtype{No relation} comes with difficulties. Since there is no semantic relationship between subject and object, it makes it harder to choose subject-object pairs. It is probably desirable to have subject-object pairs, that could be related in a different sentence.
 
-\chybi{\defineterm{Relationship Extraction}} \todo{znímit entity z názvu}
-
 
 \section{Relationship Extraction}
 
-The relationship extraction task concentrates on prediction relationships. In the typical setup, the task is to predict a relation type based on a sentence with two tagged entities. Variations of this exist, for example, in real-life applications, the goal might be to output a set of relationship based on a longer piece of text (and therefore the extractor would have several sentences mentioning the same entities). 
+The relationship extraction task concentrates on the prediction of relationships. In the typical setup, the goal is to predict a relation type based on a sentence with two tagged entities. Variations of this exist, for example, in real-life applications, the goal might be to output a set of relationships based on a longer piece of text (and therefore the extractor would have several sentences mentioning the same entities). 
 
 Since the input for a relationship extraction model should contain tagged entities, a pipeline of an entity tagging tool and relationship extraction model would be necessary to perform relationship extraction on real data. 
 
@@ -49,29 +44,30 @@ Since many applications are likely to benefit from entity disambiguation, a pipe
 \section{Czech language}
 One of the objectives of this thesis is to work with the Czech language. Therefore we find it useful to make some notes on Czech (for non-Czech speaking readers). Czech is a Slavic language with rich morphology and relatively free word order. Most of the Czech morphology can be treated with a morphological analyzer. Still, it might be useful to have a better understanding of the language we will work with.
 
-\subsection{Inflection}
-In Czech, nouns, adjectives, pronounce and numerals are declined. The declination expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has grammatical gender; for words, that have natural gender, those two genders align: \vuvozovkach{žena} (\textit{woman}) is feminine and \vuvozovkach{muž} (\textit{man}) is masculine. The inflexion of each declinable word follows a pattern. This all means that a single word (lemma) can have a lexeme of size \todo{kolik?}
+\subsection{Inflexion}
+In Czech, nouns, adjectives, pronounce and numerals are declined. The declination expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has grammatical gender. For words, that have natural gender, those two genders align: \vuvozovkach{žena} (\textit{woman}) is feminine and \vuvozovkach{muž} (\textit{man}) is masculine. The inflexion of each declinable word follows a pattern. This all means that a single word can have relatively many different forms.
 
-Verbs are conjugated, the conjugation expresses person, numeral, tense, voice, and mode. Verbs follow one of 14 patterns. An average Czech either finds the theory about Czech verbs and tenses confusing or is even unaware of the existence of the verb patterns. That likely contributes to commonly incorrectly used forms of verbs even in the official language.
+Verbs are conjugated, the conjugation expresses person, numeral, tense, voice, and mode. Verbs follow one of 14 patterns. An average Czech either finds the theory about Czech verbs and tenses confusing or is even unaware of the existence of the verb patterns. That likely contributes to common use of incorrect forms of verbs even in the official language.
 
-An important aspect of declension for us is agreement. In English, subject and verb agree (limited just to the third person). In Czech, subject and verb also agree, but in noun phrases there needs to be an agreement as well. 
+An important aspect of declension for us is agreement. In English, subject and verb agree (limited just to the third person). In Czech, subject and verb also agree, but there also needs to be an agreement in noun phrases. 
 
 
 \begin{figure}
 \centering
-\subfloat[Declension of \vuvozovkach{příčný} (diagonal)]{\includegraphics[width=0.55\textwidth]{./img/pricna} \label{obr:pricna}}
-%\qquad
-\subfloat[Declension of \vuvozovkach{ulice} (street)]{\includegraphics[width=0.33\textwidth]{./img/ulice} \label{obr:ulice}}
-\label{obr:pricnaUlice}
-\caption{Examples of czech declension, taken from Wiktionary.}
+\subfloat[Declension of \vuvozovkach{příčný} (diagonal)]{\includegraphics[width=0.95\textwidth]{./img/pricna} \label{obr:pricna}}
+\qquad
+\subfloat[Declension of \vuvozovkach{ulice} (street)]{\includegraphics[width=0.60\textwidth]{./img/ulice} \label{obr:ulice}}
+
+\caption{Examples of czech declension, taken from Wiktionary.\label{obr:pricnaUlice}}
 \end{figure}
 
-We include an example to help grasp those concepts to readers who do not speak any inflexive language. In figure XX words \vuvozovkach{příčný} (diagonal) and \vuvozovkach{ulice} (street) are declined, the noun phrase \vuvozovkach{Příčná ulice} is the Czech equivalent of the Diagon Alley. The lexemes sizes are 11 and 7, so combinatorically, the noun phrase could have 77 forms. As we explained, in Czech, there is an agreement in noun phrases, and only 9 different forms of the noun phrase \vuvozovkach{Příčná ulice} are valid. 
 
-\todo{příklad: toho, jak je nějaká noun phrase, počet lexémů, počet validních .. } \todo{odkaz dopředu, kde řeším, jak matchovat}
+We include an example to help grasp these concepts to readers who do not speak any inflexive language. In \autoref{obr:pricnaUlice} words \vuvozovkach{příčný} (diagonal) and \vuvozovkach{ulice} (street) are declined, the noun phrase \vuvozovkach{Příčná ulice} is the Czech equivalent of the Diagon Alley. The lexemes sizes are 11 and 7, so combinatorically, the noun phrase could have 77 forms. As we explained, in Czech, there is an agreement in noun phrases, and only 9 different forms of the noun phrase \vuvozovkach{Příčná ulice} are valid. 
+
+
 
 \subsection{Word order}
-Unlike in English, the sentence structure is relatively relaxed in Czech. The basic sentence structure is of SVO (subject verb object) type, but even when the word order is entirely different, the sentence might still be understandable thank to the inflected forms of words. At the same time, the word order is not arbitrary; some orderings of words do not form a valid sentence. Those that are valid can carry a different message (completely different, with a different emotion or a different emphasis).
+Unlike in English, the sentence structure is relatively relaxed in Czech. The basic sentence structure is of SVO (subject verb object) type, but even when the word order is entirely different, the sentence might still be understandable thanks to the inflected forms of words. At the same time, the word order is not arbitrary; some orderings of words do not form a valid sentence. Those that are valid can carry a different message (completely different, with a different emotion or a different emphasis).
 
-The position of attributes tends to be mostly fixed. Some attributes are prepositive, some postpositive, but most of them stay the same (within the noun phrase) unless some enumeration is used. If we return to the \vuvozovkach{Příčná ulice} example, we are not able to recollect a sentence, where the reversed order is used and no other \vuvozovkach{ulice} is mentioned.
+The position of attributes tends to be mostly fixed. Some attributes are prepositive, some postpositive, but most of them stay the same (within the noun phrase) unless some enumeration is used. If we return to the \vuvozovkach{Příčná ulice} example, we are not able to recollect a sentence, where the reversed order is used.
 

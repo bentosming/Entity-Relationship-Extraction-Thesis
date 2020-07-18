@@ -3,12 +3,9 @@
 In this chapter we will describe our process of generating \textbf{C}z\textbf{e}ch \textbf{R}elationship \textbf{E}xtraction \textbf{D}ataset (CERED). We will discuss various decisions that we made during this process and their impacts.
 
 
-\todo{nějaká návaznost - říct, že popisuju, že budu spojovat wikipedie}
-
-
 \section{Overview}
 
-The objective is to use distant supervision\todo{link zpátky} to create a Relationship Extraction dataset for the Czech language. This section is a brief summary for easier orientation in this chapter. Each of these paragraphs is a teaser for one section of this chapter.
+The objective is to use distant supervision to create a Relationship Extraction dataset for the Czech language. This section is a brief summary for easier orientation in this chapter. Each of these paragraphs is a teaser for one section of this chapter.
 
 First we research available knowledge bases and Czech text corpora to determine which ones will best suit our purpose. We chose Wikimedia projects Wikidata and Czech Wikipedia.
 
@@ -16,10 +13,7 @@ Next we analyze how we will find mentions of Wikidata relations in Czech Wikiped
 
 We continue by choosing technologies that we use. Aware of the volume and other characteristics of chosen data, we choose Python as the main programming language, Spark as a way to speed up the computations and MorphoDita to deal with the specifics of the Czech language.
 
-The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED, or more exactly many different versions of CERED in search for the best one to use for training in the second part of this thesis. 
-
-\chybi{Results}
-\todo{results}
+The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED, or more exactly many different CERED0-4 in search for the best one to use for training in the second part of this thesis. 
 
 
 
@@ -34,7 +28,7 @@ To be able to perform distant supervision we need to find suitable data - Czech 
 \end{figure}
 
 \subsection{Constraints and requirements}
-The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect more fact-based texts to be more suitable, and therefore we will prefer encyclopedic or journalistic genre \todo{tak špatná věta}. One option is to focus on some subset of Czech National Corpus \footnote{https://www.korpus.cz/}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
+The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we will prefer encyclopedic or journalistic genre \todo{tak špatná věta}. One option is to focus on some subset of Czech National Corpus \footnote{https://www.korpus.cz/}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
 
 To the best of our knowledge, our options for knowledge base are limited to Wikidata or Google Knowledge graph \footnote{https://developers.google.com/knowledge-graph}.
 
@@ -59,8 +53,8 @@ Information about any item is recorded in statements. Statement is a key-value p
 \begin{itemize}
 \item \wikiitem{sibling}{P3373} \wikiitem{Ginny Weasley}{Q187923},
 \item \wikiitem{sibling}{P3373} \wikiitem{Fred Weasley}{Q13359612},
-\item \wikiitem{sibling}{P3373} \wikiitem{George Weasley}{Q13359613} and so on
-\end{itemize} . \todo{formating}
+\item \wikiitem{sibling}{P3373} \wikiitem{George Weasley}{Q13359613} and so on.
+\end{itemize}  \todo{formating}
 
 Wikidata project contains over 80 000 000 items, which raises \todo{jiná slova} requirements on technological resources so that we can work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
 
