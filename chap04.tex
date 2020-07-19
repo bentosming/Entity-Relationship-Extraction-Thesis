@@ -1,37 +1,60 @@
 \chapter{Previous Work on Relationship Extraction}
-In this chapter, we first introduce the most popular pre-trained models that are currently used in NLP. Then we discuss different metrics that are used on Relationship Extraction. Lastly, we research previous work done on the topic of training models for the relationship extraction task.
+In this chapter, we first introduce the most popular pre-trained models that are currently used in natural language processing (NLP). Then we discuss different metrics that are used on Relationship Extraction. Lastly, we research previous work done on the topic of training models for the relationship extraction task.
 
-\section{NLP Models}
-Lately, NLP tasks are dominated by solutions using pre-trained deep neural models with the transormer architecture. In this section, we introduce BERT, the first well-known model of this type that has set the trend.
-\chybi{BERT, albert? + obecně asi transformer architektura}
+\section{Deep NLP models}
+Lately, NLP tasks have been dominated by solutions using pre-trained deep neural models with the transformer architecture. The aim of this section is to roughly describe such a model to a reader familiar with the basics of neural networks. We will introduce the two big concepts used in such models: the transformer architecture and pre-training. Then we will be able to explain how an actual modern NLP model looks and is trained. We choose the BERT model for this purpose since it is likely the best-known and we also use it later in this thesis. 
+
+
+
+\subsection{The Transformer Architecture}
+Suppose that we aim to perform some NLP task, like translation, using deep neural networks. We want the network to read a sentence in language A and output a translation of the sentence in language B. If the model was just a sequence of densely connected layers (so-called feedforward neural network), it would be nearly naive to expect the model to function. There is no structure that would help with gathering information about the entire sentence, there is also no intuitive place where we would expect the model to switch from one language to another and there is nothing ensuring that the translated sentence is good. Those arguments are vague but might provide some intuition.
+
+The recurrent neural networks (RNN) were used in the past to help the network capture the entire sentence. The RNNs introduce a cell that is more complicated than the typical neuron (perceptron). This cell usually has internal memory and the ability to both add and forget information. In the network, this cell is then presented with a sequence of inputs. The cell then goes trough the sequence one by one and edits its internal state. If we feed it with words of a sentence, we might expect the internal memory to contain an abstract representation of the sentence. 
+
+There were two main issues with RNNs. Working with RNNs is slow. We input the sentence \vuvozovkach{word by word}, so instead of one step per layer, we need $n$ steps for a sentence of length $n$. Moreover, especially if the sentence was long, it was difficult for the cells to remember the whole sentence and not just the later part. Both of these issues arise from the fact that input is fed into RNN cells serially. 
+
+In \cite{vaswani2017attention}, the transformer architecture is introduced. It builds on a so-called encoder-decoder architecture. In the translation task, we can roughly say, that the encoder would process the sentence in language A, the decoder an already predicted part of the translated sentence, and the network would predict the next word for the translated sentence.
+
+The issue of the accumulation of the right information at the right place is addressed with attention mechanisms and these mechanisms managed to make the slow recurrent cells unnecessary. The attention mechanism makes it possible to focus only on the important parts of the input sentence. For example, if we want to translate a specific word in a sentence, the network can learn to primarily look at the beginning of the sentence. A similar attention mechanism is used multiple times in the transformer architecture. \todo{nejspíš je na hraně s tím, jestli to zjenodušení je vůbec pravada}
+
+So far we ignored the fact that words cannot be directly fed to the network as an input. Usually, words are mapped to a vector in an embedding space. Such mapping is reusable in multiple tasks and brings us to the next section, where we will explain them a bit more.
+ 
+\subsection{Pre-training}
+
+The training of deep neural networks can be timely and costly. The term pre-trained model indicates a (part of) neural network, that can be reusable for multiple tasks or settings. Such reusability fastens deployment of complicated models and makes them accessible for a broader spectrum of people and companies. Pre-training is time-efficient, economical and consequently ecological.
+
+Word embeddings could be seen as an example of pre-training. Word embedding is a vector that represents a word in a vector space (as, for models, vector spaces are easier to work with than words). The distance of embeddings of two words should reflect their semantic relation. An embedding itself is usually inferred from a pre-trained neural network and used as an input for the task-specific model. The model that generates embeddings is usually trained by some variation of predicting a missing (masked) word from its context. The popularity of word embeddings rose in the previous years, most popular embeddings were likely the Word2vec \cite{mikolov2013word2vec}.  
+
+Nowadays a new type of embeddings is starting to get popular. In the classical word embeddings, a word always has the same embedding. The word \vuvozovkach{book} has the same embedding in \vuvozovkachtextit{She wrote a book on car maintenance.} and \vuvozovkachtextit{We were advised to book early if we wanted to get a room.} which is intuitively wrong. Contextualized embeddings take into account the entire (or at least preceding part of) sentence. One such embedding can be created via the BERT model.
+
 \subsection{BERT}
 
 
 \section{Metrics}
-\todo{outdated}This section focuses on metrics in the Relationship extraction task, we first define those metrics and later discuss the pros and cons of each.
+\todo{outdated}This section focuses on metrics since the quality of a model in the relationship extraction task is often hard to determine. We first define some popular metrics and later discuss the pros and cons of each for the relationship extraction task.
 
 \subsection{Binary classification}
 
-Let us start with metrics for binary classification. In binary classification, we are presented with an input vector and the goal is to determine whether the vector is of class A pro class B. Each prediction then falls into one of the following categories: correctly classified A input, correctly classified B input, wrongly classified A input as B, and a B input wrongly classified as A (Figure \ref{obr:CM}). 
+We will start with metrics for binary classification. In binary classification, we are presented with an input vector and the goal is to determine whether the vector is of class A for class B. Each prediction then falls into one of the following categories: correctly classified A input, correctly classified B input, wrongly classified A input as B, and a B input wrongly classified as A (Figure \ref{obr:CM}). 
 
 \begin{figure}[h]\centering
-\includegraphics[width=140mm]{./img//Diplomka diagramy-Confusion matric}
-\caption{Confusion matrix for binary classification}
+\includegraphics[width=0.9\textwidth]{./img//Diplomka diagramy-Confusion matric}
+\caption{Confusion matrix for binary classification, normally count of occurrences would be written in each square. }
 \label{obr:CM}
 \end{figure}
 
-Another way to look at the same situation is to just predict whether an input is of class A or not. Those that way the prediction is a True / False value determining whether the model is of class A. This way, we can define the previously mentioned categories without using the specific classes as \defineterm{true positive} (TP), \defineterm{true negative} (TN), \defineterm{false negative} (FN) and \defineterm{false positive} (FP). Visualization of the result of classification on a dataset is called a \defineterm{confusion matrix}, we include such matrix\todo{without of the number of samples in each category} \ref{obr:CM}). We will use the abbreviations to represent the number of predictions that belong to the given category.  
+Another way to look at the same situation is to just predict whether an input is of class A or not. This way the prediction is a True / False value determining whether the input is of class A. This way, we can define the previously mentioned categories without using the specific classes as \defineterm{true positive} (TP), \defineterm{true negative} (TN), \defineterm{false negative} (FN) and \defineterm{false positive} (FP). Visualization of the result of a classification on a dataset is called a \defineterm{confusion matrix}, we include such matrix in \autoref{obr:CM}. We will use the abbreviations to represent the number of predictions that belong to the given category.  
 
 
 
-\defineterm{Accuracy} expresses the ration between correct and incorrect predictions.
+\defineterm{Accuracy} expresses the ratio between correct predictions and all predictions.
 \begin{align}
-Acc = \frac{TP+TN}{FP+FN}
+Acc = \frac{TP+TN}{TP+TN+FP+FN}
 \end{align} 
 
 
 
-\defineterm{Precision} expresses the ratio correctly predicted positives within all predicted positives. Therefore, precision is a good metric if we want to avoid mistakenly classify falses as positives.
+\defineterm{Precision} expresses the ratio of correctly predicted positives within all predicted positives. Therefore, precision is a good metric if we want to avoid mistakenly classified negatives as positives.
 
 \begin{align} 
 Prec = \frac{TP}{TP + FP}
@@ -43,32 +66,32 @@ Prec = \frac{TP}{TP + FP}
 Rec = \frac{TP}{TP + FN}
 \end{align}
 
-Let us show three use cases, each of the defined metrics will be the best fit in one case.
-
-Suppose we have a collection of pictures of cats and dogs for adoption. If we were to classify pictures of cats and dogs based on the animal, we would most likely want to maximize the number of correct predictions. Accuracy would aim exactly for that.
-
-If we knew that some adopters suffer from cynophobia (fear of dogs), suddenly the classifier should accommodate the fact by optimizing precision (where a cat is a positive). Note that precision (and recall) in binary classification will return different values if we swap which class is the positive and which is negative.
-
-If the demand for cats extends supply and therefore we have more dogs than cats in the collection, searching for cats could get harder. In such a case, we would want to make sure that all cats are actually classified as cats, and recall would help with that.
-
-
-To emphasize that the right choice of metric is significant suppose that we have balanced data (both true and false classes are equally represented). If our classifier just predicted that every input is positive, we would obtain the following: 0.5 accuracy, 0.5 precision, and 1 recall. If we were to predict all negatives accuracy and precision would remain 0.5 but recall suddenly drops to 0. If we were to randomly predict the result with even chances for both classes the expected results are 0.5 for all of those metrics. We just described three very different classifiers and the only thing we learned from accuracy and precision was that they were equally bad, without any insight about them. Recall in contrast successfully gave us insight about what the predictions likely are, but evaluated a bad classifier with the highest possible score.   
-
-This whole section is in this thesis mostly to remind us that if we want to score well in a given metric, we will likely exploit the metric even if it might actually worsen our classifier. The choice of a metric for a task determines what gets optimized. Later in this section, we will debate such issues in our case, in the relationship extraction task.
-
-
-
-
-F1
-
 Often we might want a trade-off between being as precise as possible and recalling as much as possible. \defineterm{F1 score} is a harmonic mean of precision and recall (scaled to range from 0 to 1): \begin{align}
-F1 = 2\frac{Prec \dot Rec}{Prec + Rec}
-\end{align}and is quite widely used in competition tasks.
+F1 = 2\frac{Prec \cdot Rec}{Prec + Rec}
+\end{align}
+F1 is quite widely used in competition tasks.
+
+%Let us show three use cases, each of the defined metrics will be the best fit in one case.
+
+%Suppose we have a collection of pictures of cats and dogs for adoption. If we were to classify pictures of cats and dogs based on the animal, we would most likely want to maximize the number of correct predictions. Accuracy would aim exactly for that.
+
+%If we knew that some adopters suffer from cynophobia (fear of dogs), suddenly the classifier should accommodate the fact by optimizing precision (where a cat is a positive). Note that precision (and recall) in binary classification will return different values if we swap which class is the positive and which is negative.
+
+%If the demand for cats extends supply and therefore we have more dogs than cats in the collection, searching for cats could get harder. In such a case, we would want to make sure that all cats are actually classified as cats, and recall would help with that.
+
+
+To emphasize that the right choice of metric is significant suppose that we have balanced data (both true and false classes are equally represented). If our classifier just predicted that every input is positive, we would obtain the following: 0.5 accuracy, 0.5 precision, and 1 recall. If we were to predict all negatives, accuracy and precision would remain 0.5 but recall suddenly drops to 0. If we were to randomly predict the result with even chances for both classes, the expected results would be 0.5 for all of those metrics. We just described three very different classifiers and the only thing we learned from accuracy and precision was that they were equally bad, without any insight about them. Recall, in contrast, successfully gave us insight about what the predictions likely are, but evaluated a bad classifier with the highest possible score. We should also note, that the metrics will likely change, if we exchange which class corresponds to True and which to False. 
+
+This whole section is in this thesis mostly to remind us that if we want to score well in a given metric, we will likely exploit the metric even if it might actually worsen our classifier. The choice of a metric for a task determines what gets optimized. Later in this section, we will debate such issues in our scenario, in the relationship extraction task.
+
+
+
+
 
 \subsection{Multiclass classification}
 
 
-We already run into issues with asymmetry of precision and recall in binary classification (it is dependent on which class is chosen to be the positive one). We can address this by creating metrics per class. In the previous example about binary pet classification, we would get two sets of metrics, each describing the ability of the classifier to recognize given class apart from the rest.
+We already run into issues with asymmetry of precision and recall in binary classification (it is dependent on which class is chosen to be the positive one). We can address this by creating metrics per class. In the previous subsection, where we had a classifier for classes A and B, we would get two sets of metrics, each describing the ability of the classifier to recognize given class apart from the rest.
 
 Now we can easily extend this per class approach to multiclass classification. The formulas will remain exactly the same, only the way we obtain the TP, FP, TN, and FN values is a little different. In a sense nothing changed - if we imagine that the classifier is still binary then the situation is exactly the same. But if we compute those values out of confusion matrix (for class B) than TP is the value on position [B, B], FP is the sum of all in column B without TP, FN the sum of the row B without TP and the sum of cells outside of the Bth row and column are the TN. (Figure \ref{obr:BigCM})
 
@@ -85,31 +108,53 @@ Now we can easily extend this per class approach to multiclass classification. T
 
 
 
-As a solid way of examining the quality of the classifier, one could simply look at the confusion matrix and at all the per-class metrics. Although this would be insightful, it is not the most practical in terms of a clear comparison of two classifiers. Ideally, we aim for a metric or metrics that are as descriptive and comprehensive as possible but define an ordering of the classifiers.
+As a solid way of examining the quality of the classifier, one could simply look at the confusion matrix and at all the per-class metrics. Although this would be insightful, it is not the most practical in terms of a clear comparison of two classifiers. Ideally, we aim for a metric or metrics that are as descriptive and comprehensive as possible and also define an ordering of the classifiers.
 
-Intuitively we will minimize the number of metrics by combining them into one value. To do so, we should acknowledge that the dataset we evaluate the performance of a classifier and a metric on needs to be taken into consideration.
+Ideally we would compute one number that fully describes the quality of the classifier. The common practice is to assign each metric a weight and combine them. Before we do so, we should acknowledge that the dataset we evaluate the classifier on needs to be taken into consideration.
 
 An ideal dataset would be perfectly balanced. In real life we encounter two types of imbalance in datasets:
 
-class representation distribution (CRD) is not uniform - classes are not equally represented 
-class representation distribution is different in the test and the train part of the dataset
+\begin{itemize}
+\item class representation distribution (CRD) is not uniform - classes are not equally represented 
 
+\item class representation distribution is different in the test and the train part of the dataset
+\end{itemize}
 The second imbalance is tricky. Often, when optimizing the classifier, we do not know the CRD of the test dataset. We will therefore mostly focus on the first one. 
 
 
 \subsubsection{Macro-averaged metrics}
 
-The first method that comes to mind when we aim to combine the same metric of multiple classes into one, is the arithmetic mean. In most libraries and papers the term macro-[metric] (macro-recall, macro-F1, etc.) is used.  Macro averaged metrics tend to be the easy option that is used without much thought. So much so, that even though two macro-F1s are being used, often the exact formula is not included in papers. (The more common formula is the arithmetic mean of classes F1s, but the less often formula where the F1 is computed from macro-recall and macro-precision is also used \cite{Opitz2019MacroFA}.)
+An easy way to combine a metric over multiple classes into a single value is to compute the arithmetic mean. In most libraries and papers the term macro-[metric] (macro-recall, macro-F1, etc.) is used.  Macro averaged metrics tend to be the easy option that is used without much thought. So much so, that even though two different definitions of macro-F1s exist, the exact formula is often not included in papers. (The more common formula is the arithmetic mean of classes F1s, but the less commonly used formula where the F1 is computed from macro-recall and macro-precision is also used as  \cite{Opitz2019MacroFA} reports.)
 
-\subsubsection{Weight-averaged metrics}
-If we aimed to pretty much just maximize a metric ignoring the class, instead of averaging the classes with the same weight, we would wight them by their \defineterm{support}. \chybi{co je support}
+\subsubsection{Micro-averaged metrics}
+The second most used approach of computing a single metric over mutliple classes is to compute a weighted average with the weight correspoding to the support of individual classes. In most libraries and papers the term micro-[metric] (micro-recall, micro-F1, etc.) is used. 
+
+The main difference between micro and macro metrics is that macro metrics treat all classes equally, i.e. if there is a class that is heavily under-represented, the metric prefers TODO. On the other hand, we should use micro metric if we want to optimize the total accuracy of the model. \chybi{co je support}
 
 \chybi{vzorec}
 
 \subsection{Relationship extraction metrics}
-Whether or not to use macro metrics depends deeply on the use case and the dataset. In our case, the datasets tend to be very imbalanced (the majority of data are negative mentions, and even within the positive mentions the classes are highly unbalanced). This often leads to the idea of computing the combined metric only from positive classes.
 
-\chybi{přehled co se běžně uvádí u kterého datasetu}
+In \nameref{chap:datasets} we described three relationship extraction datasets. je zvykem, že k datasetu je definovaná metrika, aby šlo porovnávat řešení. teď představíme metriky používané pro tamty datasety podle nlpprogress. Pak navrhneme metriku pro CERED, poučeni a inspirováni.
+
+\subsubsection{S10T8 metric}
+For the S10T8 datasets, authors (\cite{semeval}) define the official metric directly in the paper: \vuvozovkach{Our official scoring metric is macro-averaged F1-Score for (9+1)-way classification, taking directionality into account.} avoiding any confusion.
+
+\subsubsection{TACRED}
+On TACRED's git page\footnote{\url{https://github.com/yuhaozhang/tacred-relation}}, we can find the official implementation of an evaluator which computes a slightly modified version of micro metrics. Micro metrics are computed as average of metric per class weighted the by the support of that class. The authors modified the metric such that the weight of the \relationtype{no relation} class is zero. The micro-F1 is computed from the micro-precision and micro-recall. The main metric for comparing results seems to be the micro-F1.
+
+The decision to exclude the \relationtype{no relation} class is understandable. The class makes up 80\% of the dataset, therefore the micro metrics would be mostly influenced by the performance on this class. Such behaviour is unwanted considering the fact, that in usual use cases, we care more about the model to correctly classify  positive relations rather than the negative one. We would like to note that it is not possible to cheat the metric by forbidding the classifier to predict the negative relation. If we do so, it would negatively influence the false positives of all classes and, therefore, decrease the overall performance.
+
+
+\subsubsection{Riedel NYT}
+
+
+
+\subsubsection{CERED}
+
+
+
+\subsubsection{TACRED}
 
 \chybi{problémy s tím, že CERED je sice taky nevyvážený, ale dost jinak}
 
