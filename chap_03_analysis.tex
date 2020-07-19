@@ -1,15 +1,16 @@
 \section{Analysis}
 \label{text:Analysis}
-The process of creation of CERED is mostly an attempt to execute the first two parts of the pipeline we mention in the first chapter \todo{link}. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for Named Entity Recognition that we could theoretically use to our advantage if we decided to focus on named entities only.
+The process of creation of CERED is mostly an attempt to execute the first two parts of the pipeline we mention in the 
+\nameref{sec:relation_extraction_pipeline_proposal} section. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for named entity recognition that we could theoretically use to our advantage if we decided to focus on named entities only.
 
 Therefore we need to find a way to get to similar results as the first stages of the pipeline would get. We do not expect that our CERED generator will be as powerful as the respective dedicated tools would be. We will not try to create general entity recognition and linking tools - on the contrary, we will exploit any extra information that chosen Wikimedia projects provide.
 
 There are several aspects that we need to think through. We introduce them in the following list for better orientation. A subsection in this section is dedicated to each of those aspects. \todo{úplně odstranit ten list?}
 \begin{itemize}
- \item  Dataflow - we chose Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome to be able to proceed to locating mentions.
+ \item  Dataflow - we chose Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome so that we can proceed to locating mentions.
  \item  Entity Matching - suppose we collected a piece of text together wit a set of entities that could be mentioned in the text. The process of entity matching attempts to mark words in the text that mention an entity.
- \item  Wikilink mentions - Wikilinks are (mostly) human labeled entity mentions. Utilizing them is the closest we can get to a supervised dataset without actually supervising the dataset.
- \item  Relation Matching - entities are matched, relationships are extracted, we use distant supervision assumption to locate relation mentions.
+ \item  Wikilink Mentions - Wikilinks are (mostly) human labeled entity mentions. Utilizing them is the closest we can get to a supervised dataset without actually supervising the dataset.
+ \item  Relation Matching - entities are matched in the Wikipedia texts, relationships are extracted from the Wikidata dump, we use distant supervision assumption to locate relation mentions in the texts.
 \item Relation Inventory - we generated CERED, but the relation inventory is overly diverse. Moreover, the dataset is extremely unbalanced - the number of mentions per relation varies. And no “no relation” relation is obtained.
  \item  Result Evaluation - every time we generate CERED during development, we need to evaluate its quality. We propose methods for this evaluation. 
 \end{itemize}
@@ -80,7 +81,7 @@ We plan on using one or even a combination of existing Wikitext parsers since ea
 
 One problem that needs to be addressed is what should we consider to be a valid text. For example, it is not clear how to work with tables. From one point of view, if we convert a table into an unstructured text, the text will not be a regular text in terms of sentence structure. From a different point of view, an unstructured text obtained by converting a table still contains information, that human readers will likely decode. Moreover, tables and other structured data tend to contain a lot of information. This will likely cause problems because we want to concentrate on sentence-like data, not just for example tuples of data that for example a table of athletes might provide (tuples of persons and countries). This kind of data might significantly damage the quality of CERED.
 
-The elimination of all Wikipedia content, that is too structured or generally, not enough sentence-like, but at the same keeping as much as possible will be addressed later in XX. That way we can see the consequences of the eliminated and kept content.
+The elimination of all Wikipedia content, that is too structured or generally, not enough sentence-like, but at the same keeping as much as possible will be addressed later in \nameref{sec:wikiperia_parsing_implementation}. That way we can see the consequences of the eliminated and kept content.
 
 
 \subsubsection{Lexical Analysis}
@@ -197,13 +198,13 @@ For the authors the results signalized that a more sophisticated tool is needed 
 We want to mention that we build CERED to easily fit into the modern deep learning models and to be as simple as possible. Therefore, the main piece of text we use is a sentence, it might seem intuitive, but it has one downfall. If the relationship extractor was to be used on a real text not to determine where some relations are mentioned but to provide a summary of relations expressed by the text as a whole, some information will be lost. \todo{najít článek nebo někam přesunout?}
 
 \subsection{Relation Inventory}
-In chapter XX some examples of Relationship classification datasets were introduced. The creators of those datasets claim that in the creation process they first decided on the relation inventory (relation types).  Creating the relation inventory seems to be the straight forward and rational approach and we wanted to create such inventory before actually implementing the CERED generator. We stumbled upon the following issues.
+In the \nameref{chap:datasets} chapter some examples of Relationship classification datasets were introduced. The creators of those datasets claim that in the creation process they first decided on the relation inventory (relation types).  Creating the relation inventory seems to be the straight forward and rational approach and we wanted to create such inventory before actually implementing the CERED generator. We stumbled upon the following issues.
 
 \subsubsub{Issue 1}Wikidata relation inventory (properties in Wikidata terminology) is an order of magnitude larger compared to the traditional relationship extraction datasets and handpicking our inventory is overwhelming. We even considered reducing the size of this inventory by creating our own relations that would combine Wikidata relations (parent would be the combination of mother and father relations). 
 
 By restricting the Wikidata inventory to just some properties we reduce the size of CERED and if we choose the inventory without considering the number of mentions per relationship, the best-represented relations could be omitted.
 
-\subsubsub{Issue 2}Knowledge bases, in general, do not contain negative relations (such relations that could be easily mapped to the “no relation” or “other relation”\todo{typografie}), but for relationship extraction negative mentions are essential. If we generate mentions using all properties we can later decide which relationships will be in the inventory and the rest of them relabel to “other relation” \todo{typografie}. If we were to assign all tuples of entity mentions that share a sentence and are not related as “no\_relationship”, we could increase the noise in CERED because not all relationships are in Wikidata and therefore part of the no\_relationship mentions could in fact be a positive mention. The commonly used ratio of negative and positive mentions is \todo{kolik?}.
+\subsubsub{Issue 2}Knowledge bases, in general, do not contain negative relations (such relations that could be easily mapped to the \relationtype{no relation} or \relationtype{other relation}), but for relationship extraction negative mentions are essential. If we generate mentions using all properties we can later decide which relationships will be in the inventory and the rest of them relabel to \relationtype{other relation}. If we were to assign all tuples of entity mentions that share a sentence and are not related as \relationtype{no relation}, we could increase the noise in CERED because not all relationships are in Wikidata and therefore some of the \relationtype{no relation} mentions could in fact be a positive mention. The ratio of negative and positive mentions in the two bigger datasets we introduced in the \nameref{chap:datasets} chapter were approximately 80\%.
 
 While curating the inventory, we should keep in mind that we are not just choosing the relations but also their representations and we need to attempt to fulfill the three following requirements to the best of our abilities:
 \begin{itemize}
@@ -258,4 +259,68 @@ Streamlit made implementing such viewer quite easy and we used spaCy’s \todo{f
 
 \todo{do sekce o češtině přidat velká malá pismenka}
 
+\tikzset{lines/.style={draw=none},}
+
+\begin{figure}
+\centering
+\subfloat[TACRED]{
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\small]
+\pie [rotate = 180, hide number,radius =2,style={lines}]{
+8e+01/no\_relation,
+1.3/ ,0.54/ ,0.71/ ,0.031/ ,0.16/ ,0.25/ ,0.16/ ,0.27/ ,
+0.11/ ,0.42/ ,0.12/ ,0.14/ ,0.33/ ,0.43/ ,2.6/ ,0.21/ ,
+0.78/ ,0.14/ ,0.32/ ,0.26/ ,0.33/ ,0.7/ ,0.097/ ,0.21/ ,
+0.77/ ,0.05/ ,0.057/ ,0.097/ ,0.37/ ,2.0/ ,0.63/ ,0.3/ ,
+0.28/ ,0.14/ ,0.22/ ,0.24/ ,0.45/ ,0.068/ ,0.098/ ,0.46/ ,
+3.6/ 
+}
+\end{tikzpicture}
+
+
+
+
+\label{obr:tacred_rel_dist}}
+%\qquad
+\subfloat[S10T8]{
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\small]
+\pie [rotate = 210,  hide number,radius =2,style={lines}] {
+1.7e+01/Other,
+1.2e+01/Cause-Effect,8.8/Product-Producer,9.1/Entity-Origin,6.2/Instrument-Agency,
+1.2e+01/Component-Whole,6.8/Content-Container,1.1e+01/Entity-Destination,8.6/Member-Collection,8.4/Message-Topic
+}
+\end{tikzpicture}
+\label{obr:semeval_rel_dist}
+
+}
+\qquad
+\subfloat[CERED]{
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\small]
+\pie [rotate = 150, hide number,radius =2,style={lines}]{
+5.4/místo narození,
+1.4/ ,0.75/ ,1.4e+01/other,9.8/územní jednotka,8.6/profese,4.0/ ,
+2.2/ ,0.55/ ,2.1/ ,1.8/ ,4.7/ ,0.36/ ,1.7/ ,1.6/ ,7.1/obyvatel země,
+0.64/ ,0.13/ ,5.4/podcelky,1.6/ ,5.0/ ,1.9/ ,1.1/ ,0.21/ ,1.9/ ,
+0.96/ ,0.83/ ,0.3/ ,0.38/ ,1.5/ ,0.55/ ,0.2/ ,0.33/ ,0.46/ ,0.27/ ,0.5/ ,
+0.4/ ,0.19/ ,0.21/ ,0.19/ ,0.39/ ,0.21/ ,0.47/ ,0.31/ ,1.0/ ,
+0.7/ ,0.7/ ,0.22/ ,0.27/ ,0.19/ ,0.27/ ,0.26/ ,0.3/ ,0.9/ ,
+0.33/ ,0.36/ ,0.36/ ,0.33/ ,0.25/ ,0.18/ ,0.16/ ,0.18/ ,0.16/ ,0.21/ 
+}
+\end{tikzpicture}
+\label{obr:semeval_rel_dist}
+
+}
+\end{figure}
+
+TACRED
+
+
+
+
+
+
 https://www.aclweb.org/anthology/P19-1074.pdf
+
+

@@ -1,6 +1,6 @@
 \chapter{CERED}
 
-In this chapter we will describe our process of generating \textbf{C}z\textbf{e}ch \textbf{R}elationship \textbf{E}xtraction \textbf{D}ataset (CERED). We will discuss various decisions that we made during this process and their impacts.
+In the previous chapter, we concluded that creating relationship extraction manually is expesive. We introduced Riedel NYT dataset that shouws, that automatic generation of relationship extraction datasets is possible. In this chapter we will describe our process of generating \textbf{C}z\textbf{e}ch \textbf{R}elationship \textbf{E}xtraction \textbf{D}ataset (CERED). We will discuss various decisions that we made during this process and their impacts.
 
 
 \section{Overview}
@@ -13,7 +13,9 @@ Next we analyze how we will find mentions of Wikidata relations in Czech Wikiped
 
 We continue by choosing technologies that we use. Aware of the volume and other characteristics of chosen data, we choose Python as the main programming language, Spark as a way to speed up the computations and MorphoDita to deal with the specifics of the Czech language.
 
-The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED, or more exactly many different CERED0-4 in search for the best one to use for training in the second part of this thesis. 
+The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED0.
+
+The generated dataset have a huge relation inventory and other properties that would be impractical for training. We describe variations of the generated dataset CERED1-4, that were designed to be more practical.
 
 
 
@@ -28,16 +30,16 @@ To be able to perform distant supervision we need to find suitable data - Czech 
 \end{figure}
 
 \subsection{Constraints and requirements}
-The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we will prefer encyclopedic or journalistic genre \todo{tak špatná věta}. One option is to focus on some subset of Czech National Corpus \footnote{https://www.korpus.cz/}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
+The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we will prefer encyclopedic or journalistic genre. One option is to focus on some subset of Czech National Corpus\footnote{\url{https://www.korpus.cz/}}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
 
-To the best of our knowledge, our options for knowledge base are limited to Wikidata or Google Knowledge graph \footnote{https://developers.google.com/knowledge-graph}.
+To the best of our knowledge, our options for knowledge base are limited to Wikidata or Google Knowledge graph\footnote{\url{https://developers.google.com/knowledge-graph}}.
 
-We decided to use Czech Wikipedia and Wikidata, mostly because the intersection of information expressed in text data and in structured data seems promising because they are build on each other. Another advantage could be the multilingualism of Wikimedia projects, and therefore the transferability of this work will be higher. \todo{Další důvody.. že jde stáhnout? že není blackbox? lepší disambiguita}
+We decided to use Czech Wikipedia and Wikidata, mostly because the intersection of information expressed in text data and in structured data seems promising because they are build on each other. Another advantage could be the multilingualism of Wikimedia projects, and therefore the transferability of this work will be higher. Moreover, the Wikimedia projects are downloadable, which makes them easier to work with.
 
 
 \subsection{Czech Wikipedia}
 
-Wikipedia is a multilingual online encyclopedia created and maintained as an open collaboration project by a community of volunteers as defined in \cite{wiki:wiki}. From our point of view, Wikipedia is a corpus of text with tagged topics of articles and some entity mentions. Czech Wikipedia contains approximately 440 000 articles and ranks top 30 across all the different language editions of Wikipedia.\footnote{As of March 2020 according to https://en.wikipedia.org/wiki/List\_of\_Wikipedias}
+Wikipedia is a multilingual online encyclopedia created and maintained as an open collaboration project by a community of volunteers as defined in \cite{wiki:wiki}. From our point of view, Wikipedia is a corpus of text with tagged topics of articles and some entity mentions. Czech Wikipedia contains approximately 440 000 articles and ranks top 30 across all the different language editions of Wikipedia.\footnote{As of March 2020 according to \url{https://en.wikipedia.org/wiki/List\_of\_Wikipedias}}
 
 A dump of Czech Wikipedia is about 1,6GB and 770MB when compressed.
 
@@ -45,11 +47,11 @@ A dump of Czech Wikipedia is about 1,6GB and 770MB when compressed.
 
 Wikidata is a knowledge base which acts as a central storage of the structured data of Wikimedia projects. Just like Wikipedia, this project is freely available and edited by users (and bots). It provides the option to query the database online (for small enough queries), but it is also possible to download the database in standard formats.
 
-The database focuses on \defineterm{items}, which represent objects, entities, concepts, etc.  The first data collected in Wikidata were links to a multilingual version of Wikipedia articles on the same topic - on the same Wikidata item. Each item is assigned an identifier, prefix Q and a unique number, referred to as \defineterm{QID}. A label together with a description of an item should serve as a human readable identifier. Labels, descriptions and optional aliases are language dependant.
+The database focuses on \defineterm{items}, which represent objects, entities, concepts, etc.  The first data collected in Wikidata were links to the multilingual versions of Wikipedia articles on the same topic - on the same Wikidata item. Each item is assigned an identifier, prefix Q and a unique number, referred to as \defineterm{QID}. A label together with a description of an item should serve as a human readable identifier. Labels, descriptions and optional aliases are language dependant.
 
 \defineterm{Properties}, another big concept of Wikidata, can be thought of as categories of items (\wikiitem{mother}{P25} implies a category of all mothers) or as relations between items (\wikiitem{Ron Weasley}{Q173998} has a \wikiitem{mother}{P25} \wikiitem{Molly Weasley}{Q3255012}). Each property has its \defineterm{PID}, an identifier consisting of a prefix P and a unique number, and a data type for a value it can be paired with (such as an item, string, url, number or media file). \todo{hezčí formátování wikiitemm}
 
-Information about any item is recorded in statements. Statement is a key-value pair of a property and a value of prescribed data type. For example, for \wikiitem{Ron Weasley}{Q173998} there are seven statements about his siblings:
+Information about any item is recorded in statements. Statement is a key-value pair of a property and a value of prescribed data type. For example, for \wikiitem{Ron Weasley}{Q173998} there are six statements about his siblings:
 \begin{itemize}
 \item \wikiitem{sibling}{P3373} \wikiitem{Ginny Weasley}{Q187923},
 \item \wikiitem{sibling}{P3373} \wikiitem{Fred Weasley}{Q13359612},
@@ -60,12 +62,10 @@ Wikidata project contains over 80 000 000 items, which raises \todo{jiná slova}
 
 \input{chap_03_analysis}
 
-\section{Used technologies}
-\todo{koukli jsme se na diagram a mysleli, že celé ve spark a tak}
+\section{Used Technologies}
 We chose Python to be our main programming language. To be able to work faster with a bigger volume of data, we wanted to use a CPU cluster, which leads to Spark. To top it, we will use MorphoDiTa to work with the Czech language. We implemented a simple Streamlit app we used to comfortably view the results of our Spark queries.
 
 In this section we will briefly introduce these technologies.
-\chybi{Neřešit moc do detailu, cca dva odstavce o každém. }
 
 \subsection{Python}
 Python is probably the most popular programming language in the ML community. It is a high-level language with a wide range of libraries. Libraries as NumPy, Pandas and Spark enable fast and accesible computation. Tensorflow, scikit and PyTorch allow users to focus mostly on data and ideas in machine learning. Less known libraries help us with Wikipedia parsing (wikitextparser, mwparserfromhell) or easy-to-create web apps (streamlit).
@@ -84,6 +84,4 @@ Streamlit is a framework for creating simple web apps. It has minimal and practi
 \input{chap_03_implemenation}
 
 
-\section{Results}
-\chybi{statistiky výsledného datasetu, ve kterém jsou zanechány všechny třídy + jedna "deploy" verze, ve které jsou i negative mentions}
 

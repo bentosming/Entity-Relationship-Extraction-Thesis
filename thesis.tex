@@ -62,6 +62,7 @@
 \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \usepackage{subfig}
 \usepackage{caption}
+\usepackage{pgf-pie}
 
 \newcommand{\relationcell}[3]{\textsc{#1} \newline  {\footnotesize #2 \newline Example: \textit{ #3}}}
 \newcommand{\relationcelltacred}[2]{\textsc{#1} \footnotesize{ \newline Example: \textit{  #2}}}
@@ -69,13 +70,15 @@
 \usepackage{longtable}
 \newcommand{\defineterm}[1]{\textbf{#1}}
 \newcommand{\relationtype}[1]{\textsc{#1}}
-\newcommand{\relation}[3]{\relationtype{#1}(#2,#3)}
+\newcommand{\relation}[3]{\relationtype{#1}(#2, #3)}
 %\newcommand{\prvniuvozovka}{``}
 %\newcommand{\druhauvozovka}{''}
 \newcommand{\vuvozovkach}[1]{``#1''}
+\newcommand{\vuvozovkachtextit}[1]{\textit{``#1''}}
 \newcommand{\wikiitem}[2]{\textit{#1 #2}}
 \newcommand{\subsubsub}[1]{\vspace{2mm}\textbf{#1}.}
 \newcommand{\chybi}[1]{\textcolor{red}{#1}}
+\newcommand{\preklad}[1]{(#1)}
 
 %%% Basic information on the thesis
 

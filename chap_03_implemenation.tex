@@ -2,7 +2,8 @@
 
 
 
-\subsection{Wikidata preprocessing}
+\subsection{Wikidata Preprocessing}
+\label{sec:wikidata_preprocessing}
 This module aims to load the wikidata dump file and output three lists. The first list contains QPQ triples, triples of ids representing a relationship (Q173998 P3373 Q187923 for example). The second list provides us with names for the ids mentioned in the first list (Q187923 Ginny Weasley, P3373 sibling). The third one provides the mapping of entity id to the title of the corresponding article if such exists (příklad). Those three lists will serve as the source of structured data, as we discussed in XX.
 
 The first step of our preprocessing is to filter wikidata to remove entities, that we will not use. We require each entity to have at least one Czech name (alias or label), otherwise, there would be no good way to find mentions of that entity later in the entity matching step. CERED creation does not require the Czech names of relations so we will keep all of them.
@@ -13,7 +14,10 @@ The second step addresses removing duplicate relationships that differ only in t
 
 After these steps, the first list contains approximately 2 million QPQ triples.
 
-\subsection{Wikitext parsing}
+\subsection{Wikitext Parsing}
+
+\label{sec:wikiperia_parsing_implementation}
+
 This module aims to parse wikitext (Wikipedia markup language) from the Czech Wikipedia dump into a clean text with attached information about wikilinks in the original markup.
 
 As we already explained in XX, wikitext contains a lot more than fully unstructured data. Different kinds of infoboxes, tables or lists are contained within the sentence-like text. Some of these elements are implemented using the so-called template syntax. Therefore, it would be tempting to simply remove all the text that is contained in a template. The problem is that not all templates are bad. For example, we may use a template to divide the text into two columns containing valid sentences. Therefore, discarding all such data seems unnecessarily harsh.
@@ -37,7 +41,7 @@ One more thing we mentioned in the analysis about wikitext is the possible boost
 
 \chybi{data pro to, jak (ne) užitečné jsou texty linků jako dodatečná jména} data nejsou
 
-\subsection{Entity matching}
+\subsection{Entity Matching}
 We discussed in great detail the pros and cons of different entity matching methods, implying that the more complex the matching method, the better. We work with a single language and tools for lexical analysis are available and reliable. Therefore implementing language-independent matching methods (string similarity for example) is not beneficial. 
 
 We load the entity names in a slightly transformed form. We lower the case and add spaces around every dot character We used lexical analyzer to split text to sentences and to obtain features from sentences (tokens, lemmas and lexemes). An entity name (sequence of k strings-tokens separated by a space) is matched in a sentence \todo{je to kandidát pro tu větu} if there is a sequence of k consecutive tokens in the sentence such that each token in the name is a member of the lexeme of the corresponding token in the sentence. 
@@ -53,49 +57,103 @@ In the wikitext parsing section, we prepared spans and ids for wikilinks. We mer
 
 \chybi{na obrázku s volemortem ukázat, jak to nakonec funguje}
 
-\subsection{Relation matching}
+\subsection{Relation Matching}
 So far we obtained sentences with tagged entity mentions. For each tuple of entity mentions within the same sentence, we checked if a relationship of those two entities was present in wikidata (using the prepared QPQ list). Given the filtering in wikidata preprocessing we are guaranteed that there is at most one such relationship. 
 
-At this stage, we need to address likely incorrectly matched entities that make the dataset bloat. One example of such bloating that we encountered was in an article about kindergarten \todo{prolink na https://cs.wikipedia.org/?curid=25590}, in the sentence Jsou závazná pro předškolní vzdělávání v mateřských školách, v mateřských školách zřízených podle § 16 odst. 9 školského zákona, v lesních mateřských školách a v přípravných třídách základních škol. thousands of relation mentions were found. Many kindergartens are named Mareřská škola (kindergarten), all of them are an instance of the abstract kindergarten entity and therefore candidate entities. If a sentence contains the term “mateřská škola” (or its form), all these entities will be matched. And the relationship “Mateřská škola is a mateřská škola” will be assigned many times as well. 
+At this stage, we need to address likely incorrectly matched entities that make the dataset bloat. One example of such bloating that we encountered was in an article about kindergarten\footnote{\url{https://cs.wikipedia.org/w/index.php?oldid=18388144}}, in the sentence Jsou závazná pro předškolní vzdělávání v mateřských školách, v mateřských školách zřízených podle § 16 odst. 9 školského zákona, v lesních mateřských školách a v přípravných třídách základních škol. thousands of relation mentions were found. Many kindergartens are named Mareřská škola (kindergarten), all of them are an instance of the abstract kindergarten entity and therefore candidate entities. If a sentence contains the term “mateřská škola” (or its form), all these entities will be matched. And the relationship “Mateřská škola is a mateřská škola” will be assigned many times as well. 
 
 After investigating many other unusual cases, we decided to discard any sentence with at least 10 entity mentions in it. We also tried to experiment with different limits, but the results were unconvincing. For example, increasing the constant to 50 keeps an additional 13\% of relationship mentions but extends the set of sentences only by 1\%.
-\subsection{statistiky jak to dopadlo}
+
+\subsection{Characteristics of the Generated Dataset}
 The full CERED dataset, which was obtained by the process we described in the previous sections, contains almost one and a half million relation mentions. In the next few paragraphs, we will talk about some more detailed statistic of CERED. And we will propose a few other CERED versions.
 
-The mentions are from 293591 articles (=293591 přispělo aspoň jedním), on average slightly less than 5 mentions are from the same article with the median of nearly 7. The article with most mentions is Spojené království \todo{https://cs.wikipedia.org/?curid=1031} (United Kingdom).
+The mentions are from 293591 articles (=293591 přispělo aspoň jedním), on average slightly less than 5 mentions are from the same article with the median of nearly 7. The article with most mentions is Spojené království\footnote{\url{https://cs.wikipedia.org/w/index.php?oldid=18752891}} (United Kingdom). The distribution of mentions in articles is shown
 
-There are 490501 different sentences that are used in the mentions. We set the limit on entity mentions per sentence to 10. On average there were approximately 3 relation mentions in a sentence (that had at least one mention) and the maximum of 72 mentions per sentence was reached 34 times. The length of sentences ranges from 2 to 401 tokens, the very short ones usually came from templates that were not removed, on the other hand, the very long ones are often caused by incorrectly written articles. \todo{https://cs.wikipedia.org/w/index.php?title=Petr\_Jan\%C4\%8D\%C3\\\%A1rek\&oldid=18723498 } We tried to remove all templates to see if the range (and distribution) of the number of words improves, but we did not find a significant improvement.
-
-Another possibility is to observe how the position of a sentence in an article influences the number of relation mentions. We expected that the first sentences in an article will contain the highest number of relation mentions. The first sentences tend to contain wikilinks and the use of pronounces or shorter names is limited because each entity has to first be introduced by its full name. As we can see in Figure XX, our hypothesis seems to be correct. 904803 mentions come from sentences that are first in their respective articles. This constitutes over 60% of all mentions.
+There are 490501 different sentences that are used in the mentions. We set the limit on entity mentions per sentence to 10. On average there were approximately 3 relation mentions in a sentence (that had at least one mention) and the maximum of 72 mentions per sentence was reached 34 times. The length of sentences ranges from 2 to 401 tokens, the very short ones usually came from templates that were not removed, on the other hand, the very long ones are often caused by incorrectly written articles\footnote{Example of an incorrectly written article \url{https://cs.wikipedia.org/w/index.php?oldid=18723498}}. We tried to remove all templates to see if the range (and distribution) of the number of words improves, but we did not find a significant improvement.
 
 
 
+\begin{figure}[h]\centering
+\includegraphics[width=119mm, height=54mm]{./img/CERED0_sentence_number_histogram}
+\caption{todo}
+\label{obr10:vety_histogram}
+\end{figure}
 
 
-\subsection{CERED Versions}
+Another possibility is to observe how the position of a sentence in an article influences the number of relation mentions. We expected that the first sentences in an article will contain the highest number of relation mentions. The first sentences tend to contain wikilinks and the use of pronounces or shorter names is limited because each entity has to first be introduced by its full name. As we can see in \autoref{obr10:vety_histogram}, our hypothesis seems to be correct, ant partially applicable to a couple of sentences, not just the first one. 904803 mentions come from sentences that are first in their respective articles. This constitutes over 60\% of all mentions.
+
+
+
+
+
+\section{CERED Versions}
+In this section we describe how and why we decided to postprocess the generated datasets. 
+
 The full CERED is already a valid relationship classification dataset. It has nearly one and a half million mentions, but as we discussed in the previous section, some of them might be of poorer quality than others. In this section, we will describe different versions of CERED with CERED0 being the biggest (least filtered) and CERED4 the smallest. 
 
 Each version is split up into three disjunct sets: train set, dev set and test set. Ideally, the test set would operate on a different set of entities (so that models learn to predict relationships based on sentences, not on the knowledge of entities). We believe that such a restriction is unnecessarily strong. Some entities are mentioned in many articles, which does, in fact, make them part of common knowledge (connected to the language we train on). Instead, we decided to relax the restriction to distinct articles. We sampled two sets of 10000 articles, one for test and one for dev set. In each version of CERED, the same articles are used for dev, test and train.
-\subsubsection{CERED0}
+\subsection{CERED0}
 CERED0 is the raw dataset just as we described it in the previous section. We do not artificially change the relation type, so no negative relation is present. We do not recommend this version for direct training, we mostly keep it to preserve the full information obtainable from our generator.
 
-\subsubsection{CERED1}
-CERED1 is close in size to CERED0. We removed long (over 100 words) and short (under 5 words) sentences. We also changed labels of underrepresented relations to “other relation”, which will be the negative relation in CERED1.
+\subsection{CERED1}
+CERED1 is close in size to CERED0. We removed long (over 100 words) and short (under 5 words) sentences. We also removed overly represented relations and changed labels of underrepresented relations to \relationtype{other}, which will be the negative relation in CERED1. We will properly define under-represented and over-represented relations in the next paragraph where we describe the CERED2 dataset.
 
-\subsubsection{CERED2}
-So far, one sentence could be included multiple times in a dataset. Moreover, there was no required number of mentions per relation, for the relation to be considered a valid relation. And lastly, we did not try to handicap overly represented relations. In CERED2 we start with CERED1, we discard relations (and their mentions) that were not represented enough (under 100 mentions). Then, if a sentence was used in multiple mentions, we choose the mention of the least common relation in the sentence and we discard the others. 
+\subsection{CERED2}
+
+CERED1 has 3 potential flaws that we have not addressed, yet. First, one sentence could be included multiple times in a dataset. Second, there were some relations with only a few relation mentions. Third, we did not try to handicap overly represented relatations. We try to address these issues in CERED2.
+
+We start
+
+So far, one sentence could be included multiple times in a dataset. Moreover, there was no required number of mentions per relation, for the relation to be considered a valid relation. And lastly, we did not try to handicap overly represented relations. 
+
+In CERED2 we start with CERED1 and for each sentence, we keep the mention that was the least represented in CERED1 and discard the others. Then we count the sizes of representations in the filtered dataset of each CERED0 relation and create the list of underrepresented as those, who scored less then 1000 mentions. We relabeled all mentions in CERED1-4, whose relation is considered underrepresented in CERED1, to \relationtype{other}. After such relabeling, the \relationtype{other} relation still was not the best represented. We decided to discard mentions of the two most represented relations: P31 (instance of) and P17 (country). 
+
+
+
+\begin{table}
+
+\caption{CEREDs statistics.}
+
+\label{table01:S10T8}
+
+\begin{tabular}{p{2,3cm} P{2,3cm} P{2,3cm} P{2,3cm} P{2,3cm} }
+
+\hline
+Dataset & \# mentions & Inventory size & Negative \% & Test dataset\\
+\hline
+\hline
+CERED0 & 10101010 & 1010 & 10.1 & 1010\\
+CERED1 & 10101010 & 1010 & 10.1 & 1010\\
+CERED2 & 10101010 & 1010 & 10.1 & 1010\\
+CERED3 & 10101010 & 1010 & 10.1 & 1010\\
+CERED4 & 10101010 & 1010 & 10.1 & 1010\\
+\hline
+
+
+\end{tabular}
+
+\end{table}
+
+ 
+
+
+
+
 
 \subsubsection{CERED3}
-Even after the restriction on the uniqueness of sentences, half of the CERED2 sentences are the first sentences within the articles they originated from. Such sentences have a rather unique structure that is not as common outside of Wikipedia. This inspired CERED3 which is the remainder of CERED2 after removing all mentions in “first” sentences.
+Even after the restriction on the uniqueness of sentences, half of the CERED2 sentences are the first sentences within the articles they originated from. Such sentences have a rather unique structure that is not as common outside of Wikipedia. This inspired CERED3 which is the remainder of CERED2 after removing all mentions in \vuvozovkach{first} sentences.
 
 \subsubsection{CERED4}
-There are two stages in the CERED generation process that might be relatively unprecise. The entity matching stage and the relation matching stage. CERED4 keeps only the relation mentions from CERED3, in which both entities were manually-labelled directly in wikitext in the form of wikilinks. The CERED4 dataset is, therefore, the smallest, but has the highest potential to be precise.
+There are two stages in the CERED generation process that might be relatively unprecise. The entity matching stage and the relation matching stage. CERED4 keeps only the relation mentions from CERED3, in which both entities were manually-labelled directly in wikitext in the form of wikilinks. The CERED4 dataset is, unfortunately, small, but has the highest potential to be precise.
+
+\subsubsection{Other Considered Variations}
+When curating the CEREDs we considered many different criteria. For example, we chose the constant 1000 for underrepresentated relations after many thougts and experiments. With this value we liked, that only two relations were more dominant than the new \relationtype{other} relation and at the same time, we kept 63 positive relations. We wanted our dataset to be at least somewhat comparable to the described datasets in the proportion of data and inventory size. S10T8 contains 10717 mentions and 10 relations, TACRED contains around 100 000 mentions and 41 relations. The size of Riedel NYT depends, just like its inventory, on what data is used (and whether duplicates are removed and so on). We worked with nearly 700 000 mentions and 58 relations. Since the sizes of CERED1-3 range from approximately a milion to approximately 160 000 mentions, we wanted the size to be around 50 or 60. We hope that our dataset will be slightly easier to train on, because it is more balanced, therefore we raised the wanted inventory size and therefore the value 1000 fit well.
+
+One more labour intensive variation we wanted to created was supposed to be focused on named entities. We tried to curate set of named entity types (such as person, place, etc.) based on wikidata. We used the QPQ triples described in the \nameref{sec:wikidata_preprocessing} section to create an oriented graph with two types of edges. The first edge type - instance edges - connect wikidata items Q\textsubscript{1} and Q\textsubscript{2} if there is a triple Q\textsubscript{1}P31Q\textsubscript{2}, where P31 is the wikidata property P31 (instance of), the second type - subclass edges - are added for P279 (subclass of) property. We consider a wikidata item to be a named entity, if it is an instance of some other item. If the entity type is identifiable with some wikidata item, we can get all named entities of this type as those named entities, from which there is a path to the type item.
+
+We hoped that with such representation, we will be able to curate reasonable set of types. For example, we might intuitively consider Harry Potter Q3244512 (fictional characted) to be human but since he is fictional, in a way, he is not. Such issue is easily solvable by using the person Q215627 item as a type. But overall, understanding wikidata ontology is difficult and not part of this thesis. We still believe that it could be beneficial to create a CERED version that would capture only the relations of named entities, as applications of relationship extraction is likely focused on named entities.
+
+
 
 \todo{tabulka, řádky CERED0-4\_set, sloupce počet mentions, počet vztahů}
 
-\subsection{•}
-
-
-Even though this is not exactly part of wikidata preproccesing we will o tom, že named entity jsou instance, že stačí jít po cestě instance-podtřída*. Že je těžké vybrat rozumné věci jako “rodiče”, že mezi nepříjemnými entitami jsou třeba seznamy, kategorie a podobně, že ve finále to hlavní jméno je velké právě když je to instance. 
-
-někam zmínit, že test data jsou ze spešl článků

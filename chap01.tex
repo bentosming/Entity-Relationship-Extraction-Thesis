@@ -1,4 +1,4 @@
-\chapter{Relationship extraction intro} \todo{změnit název}
+\chapter{Relationship Extraction, Terminology and the Czech Language} \todo{změnit název}
 
 This thesis is split into two parts that focus on different aspects of relationship extraction in the Czech language. In this section, we provide a glossary of some NLP and relation extraction terms, we elaborate on the task itself, and we include an introduction to the Czech language for non-Czech readers.
 
@@ -11,7 +11,9 @@ Terminology in NLP subtasks is often non-standardized or not exact. We will atte
 
 \todo{obrázek pro příklad v dalším odstavci}
 
-\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, and the object is the second. In the sentence \vuvozovkach{Albus Severus is Harry Potters's son.} a relation of type \relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkach{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
+\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, and the object is the second. In the sentence \vuvozovkachtextit{Albus Severus is Harry Potters's son.} a relation of type \relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkachtextit{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
+
+
 
 Both the subject and the object can generally be any word or sequence of words that represent concepts that can form relations. In some cases, subjects, objects, or both are limited to entities or named entities.
 
@@ -32,20 +34,20 @@ Both the subject and the object can generally be any word or sequence of words t
 
 
 \section{Relationship Extraction}
-
 The relationship extraction task concentrates on the prediction of relationships. In the typical setup, the goal is to predict a relation type based on a sentence with two tagged entities. Variations of this exist, for example, in real-life applications, the goal might be to output a set of relationships based on a longer piece of text (and therefore the extractor would have several sentences mentioning the same entities). 
 
 Since the input for a relationship extraction model should contain tagged entities, a pipeline of an entity tagging tool and relationship extraction model would be necessary to perform relationship extraction on real data. 
 
 We are aware of two sources of motivation for relationship extraction. First, it can be an alternative to a summarization tool. Therefore it could be used anywhere where people are required to read long texts in a short amount of time. In the second application, the extractor could convert texts into structured data and therefore build a database of relationships. For both applications, an entity linking tool would be beneficial (such a tool disambiguates named entities to a knowledge base) to eliminate the confusion of similarly named entities.
 
+\label{sec:relation_extraction_pipeline_proposal}
 Since many applications are likely to benefit from entity disambiguation, a pipeline of named entity recognizer, entity linker and finally relationship extraction would potentially be useful.
 
 \section{Czech language}
 One of the objectives of this thesis is to work with the Czech language. Therefore we find it useful to make some notes on Czech (for non-Czech speaking readers). Czech is a Slavic language with rich morphology and relatively free word order. Most of the Czech morphology can be treated with a morphological analyzer. Still, it might be useful to have a better understanding of the language we will work with.
 
 \subsection{Inflexion}
-In Czech, nouns, adjectives, pronounce and numerals are declined. The declination expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has grammatical gender. For words, that have natural gender, those two genders align: \vuvozovkach{žena} (\textit{woman}) is feminine and \vuvozovkach{muž} (\textit{man}) is masculine. The inflexion of each declinable word follows a pattern. This all means that a single word can have relatively many different forms.
+In Czech, nouns, adjectives, pronounce and numerals are declined. The declination expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has grammatical gender. For words, that have natural gender, those two genders align: \vuvozovkach{žena} \preklad{woman} is feminine and \vuvozovkach{muž} \preklad{man} is masculine. The inflexion of each declinable word follows a pattern. This all means that a single word can have relatively many different forms.
 
 Verbs are conjugated, the conjugation expresses person, numeral, tense, voice, and mode. Verbs follow one of 14 patterns. An average Czech either finds the theory about Czech verbs and tenses confusing or is even unaware of the existence of the verb patterns. That likely contributes to common use of incorrect forms of verbs even in the official language.
 
@@ -69,5 +71,5 @@ We include an example to help grasp these concepts to readers who do not speak a
 \subsection{Word order}
 Unlike in English, the sentence structure is relatively relaxed in Czech. The basic sentence structure is of SVO (subject verb object) type, but even when the word order is entirely different, the sentence might still be understandable thanks to the inflected forms of words. At the same time, the word order is not arbitrary; some orderings of words do not form a valid sentence. Those that are valid can carry a different message (completely different, with a different emotion or a different emphasis).
 
-The position of attributes tends to be mostly fixed. Some attributes are prepositive, some postpositive, but most of them stay the same (within the noun phrase) unless some enumeration is used. If we return to the \vuvozovkach{Příčná ulice} example, we are not able to recollect a sentence, where the reversed order is used.
+The position of attributes tends to be mostly fixed. Some attributes are prepositive, some postpositive, but most of them stay at the same position (within the noun phrase) unless some enumeration is used. If we return to the \vuvozovkach{Příčná ulice} example, we are not able to recollect a sentence, where the reversed order is used.
 
