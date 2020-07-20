@@ -1,4 +1,4 @@
-\chapter{Relationship Extraction, Terminology and the Czech Language} \todo{změnit název}
+\chapter{Background}
 
 This thesis is split into two parts that focus on different aspects of relationship extraction in the Czech language. In this section, we provide a glossary of some NLP and relation extraction terms, we elaborate on the task itself, and we include an introduction to the Czech language for non-Czech readers.
 
@@ -11,7 +11,7 @@ Terminology in NLP subtasks is often non-standardized or not exact. We will atte
 
 \todo{obrázek pro příklad v dalším odstavci}
 
-\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, and the object is the second. In the sentence \vuvozovkachtextit{Albus Severus is Harry Potters's son.} a relation of type \relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkachtextit{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{will we, lepší vzhled}
+\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, and the object is the second. In the sentence \vuvozovkachtextit{Albus Severus is Harry Potters's son.} a relation of type \relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkachtextit{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{lepší vzhled}
 
 
 
@@ -44,10 +44,11 @@ We are aware of two sources of motivation for relationship extraction. First, it
 Since many applications are likely to benefit from entity disambiguation, a pipeline of named entity recognizer, entity linker and finally relationship extraction would potentially be useful.
 
 \section{Czech language}
+\label{sec:Czech}
 One of the objectives of this thesis is to work with the Czech language. Therefore we find it useful to make some notes on Czech (for non-Czech speaking readers). Czech is a Slavic language with rich morphology and relatively free word order. Most of the Czech morphology can be treated with a morphological analyzer. Still, it might be useful to have a better understanding of the language we will work with.
 
 \subsection{Inflexion}
-In Czech, nouns, adjectives, pronounce and numerals are declined. The declination expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has grammatical gender. For words, that have natural gender, those two genders align: \vuvozovkach{žena} \preklad{woman} is feminine and \vuvozovkach{muž} \preklad{man} is masculine. The inflexion of each declinable word follows a pattern. This all means that a single word can have relatively many different forms.
+In Czech, nouns, adjectives, pronouns and numerals are declined. The declination expresses (not necessarily unambiguously) one of seven cases and a number (singular or plural). Any inflected word in Czech has grammatical gender. For words, that have natural gender, those two genders align: \vuvozovkach{žena} \preklad{woman} is feminine and \vuvozovkach{muž} \preklad{man} is masculine. The inflexion of each declinable word follows a pattern. This all means that a single word can have relatively many different forms.
 
 Verbs are conjugated, the conjugation expresses person, numeral, tense, voice, and mode. Verbs follow one of 14 patterns. An average Czech either finds the theory about Czech verbs and tenses confusing or is even unaware of the existence of the verb patterns. That likely contributes to common use of incorrect forms of verbs even in the official language.
 

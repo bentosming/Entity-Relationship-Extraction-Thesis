@@ -28,6 +28,15 @@ Word embeddings could be seen as an example of pre-training. Word embedding is a
 Nowadays a new type of embeddings is starting to get popular. In the classical word embeddings, a word always has the same embedding. The word \vuvozovkach{book} has the same embedding in \vuvozovkachtextit{She wrote a book on car maintenance.} and \vuvozovkachtextit{We were advised to book early if we wanted to get a room.} which is intuitively wrong. Contextualized embeddings take into account the entire (or at least preceding part of) sentence. One such embedding can be created via the BERT model.
 
 \subsection{BERT}
+BERT (Bidirectional Encoder Representations from Transformers, \cite{bert}) is a family of models that achieves state-of-the-art results on various NLP tasks. BERT model takes a sequence of words as an input and computes a representation of each word, while taking into account both the left and right-side contexts of of the word. BERT models are pre-trained on large corporas of unlabeled text and then fine-tuned for a specific task. 
+
+The model was pretrained on two NLP tasks - Masked Language Modeling (MLM) and Next Sentence Prediction (NSP). 
+
+MLM is an adaptation of the task of prediction of a word from its context. The model takes a sentence, where some of the words are replaced with a special token. The goal is to predict the original words in the sentence. If we allways masked the words with the special token, a big mismatch between real sentences and the one used in training would be created. The masking is therefore more sophisticated. If a word is to be masked, with 80\% change, it is replaced with the special token, with 10\% it is replaced with a random word and in the last 10\% the word is kept (which helps to bias the model towards the actual word).
+
+In NSP we try to guess whether two sentences were consequent in the original text. This means that the task is a binary classification. The input was structured into two sentences via some special tokens and modified positional embeddings. This helps the model to learn to work on the sentence level, not just on a token level.
+
+To fine tune the model, we usually add a shallow feed forward network on top of the BERT, which classifies chosen features from the BERT into the result space. Then we train the model on the task specific dataset as we would train any other model.
 
 
 \section{Metrics}
@@ -129,16 +138,14 @@ An easy way to combine a metric over multiple classes into a single value is to 
 \subsubsection{Micro-averaged metrics}
 The second most used approach of computing a single metric over mutliple classes is to compute a weighted average with the weight correspoding to the support of individual classes. In most libraries and papers the term micro-[metric] (micro-recall, micro-F1, etc.) is used. 
 
-The main difference between micro and macro metrics is that macro metrics treat all classes equally, i.e. if there is a class that is heavily under-represented, the metric prefers TODO. On the other hand, we should use micro metric if we want to optimize the total accuracy of the model. \chybi{co je support}
-
-\chybi{vzorec}
+The main difference between micro and macro metrics is that macro metrics treat all classes equally, i.e. if there is a class that is heavily under-represented, the metric prefers TODO. On the other hand, we should use micro metric if we want to optimize the total accuracy of the model.
 
 \subsection{Relationship extraction metrics}
 
 In \nameref{chap:datasets} we described three relationship extraction datasets. je zvykem, že k datasetu je definovaná metrika, aby šlo porovnávat řešení. teď představíme metriky používané pro tamty datasety podle nlpprogress. Pak navrhneme metriku pro CERED, poučeni a inspirováni.
 
 \subsubsection{S10T8 metric}
-For the S10T8 datasets, authors (\cite{semeval}) define the official metric directly in the paper: \vuvozovkach{Our official scoring metric is macro-averaged F1-Score for (9+1)-way classification, taking directionality into account.} avoiding any confusion.
+For the S10T8 datasets, authors (\cite{semeval}) define the official metric directly in the paper: \vuvozovkach{Our official scoring metric is macro-averaged F1-Score for (9+1)-way classification, taking directionality into account.} This means that the model classifies into all $2*9+1$ classes but before they compute the macro averaging, they merge the result into only the $9+1$ direction-less classes.
 
 \subsubsection{TACRED}
 On TACRED's git page\footnote{\url{https://github.com/yuhaozhang/tacred-relation}}, we can find the official implementation of an evaluator which computes a slightly modified version of micro metrics. Micro metrics are computed as average of metric per class weighted the by the support of that class. The authors modified the metric such that the weight of the \relationtype{no relation} class is zero. The micro-F1 is computed from the micro-precision and micro-recall. The main metric for comparing results seems to be the micro-F1.
@@ -148,15 +155,12 @@ The decision to exclude the \relationtype{no relation} class is understandable. 
 
 \subsubsection{Riedel NYT}
 
-
+\chybi{nemá nic oficiálního .. napsat, že samo osobě nemít oficiální je hloupé? že na nlpprogres se reportuje .. }
 
 \subsubsection{CERED}
 
+\chybi{jakou metriku použít? Micro? Macro? Použít tu, co u tacredu nemá smysl..}
 
-
-\subsubsection{TACRED}
-
-\chybi{problémy s tím, že CERED je sice taky nevyvážený, ale dost jinak}
 
 
 
@@ -164,6 +168,5 @@ The decision to exclude the \relationtype{no relation} class is understandable. 
 
 \section{Relationship Extraction Models}
 
-\chybi{matching the blanks}
+\chybi{matching the blanks .. psát? i když se neimplementuje? Njaké jiné články?}
 
-\chybi{další články}

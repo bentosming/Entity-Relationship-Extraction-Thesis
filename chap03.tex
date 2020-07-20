@@ -29,6 +29,7 @@ To be able to perform distant supervision we need to find suitable data - Czech 
 \label{obr03:DSD}
 \end{figure}
 
+\todo{jako pdf kvůli rozlišení}
 \subsection{Constraints and requirements}
 The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we will prefer encyclopedic or journalistic genre. One option is to focus on some subset of Czech National Corpus\footnote{\url{https://www.korpus.cz/}}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
 
@@ -55,10 +56,10 @@ Information about any item is recorded in statements. Statement is a key-value p
 \begin{itemize}
 \item \wikiitem{sibling}{P3373} \wikiitem{Ginny Weasley}{Q187923},
 \item \wikiitem{sibling}{P3373} \wikiitem{Fred Weasley}{Q13359612},
-\item \wikiitem{sibling}{P3373} \wikiitem{George Weasley}{Q13359613} and so on.
-\end{itemize}  \todo{formating}
+\item \wikiitem{sibling}{P3373} \wikiitem{George Weasley}{Q13359613} and so on. 
+\end{itemize}  \todo{formating} \todo{mám zadefinovanou jinou typografii pro vztahy, použít}
 
-Wikidata project contains over 80 000 000 items, which raises \todo{jiná slova} requirements on technological resources so that we can work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
+Wikidata project contains over 80 000 000 items, which raises requirements on technological resources so that we can work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
 
 \input{chap_03_analysis}
 
@@ -79,7 +80,7 @@ Apache Spark framework provides query like API and runs on clusters. This way pa
 MorphoDiTa \cite{Morphodita} (Morphological Dictionary and Tagger) is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. MorphoDiTa has a python package via which we can do all standard operation such as tokenization (splitting text into sentences and words) and lemmatization (disambiguation of the inflected form of a word).
 
 \subsection{Streamlit}
-Streamlit is a framework for creating simple web apps. It has minimal and practical API designed for users from the data science / machine learning community. \todo{typografie} We use this library to create a more pleseant way of viewing the generated dataset.
+Streamlit is a framework for creating simple web apps. It has minimal and practical API designed for users from the machine learning community. We use this library to create a more pleseant way of viewing the generated dataset.
 
 \input{chap_03_implemenation}
 
