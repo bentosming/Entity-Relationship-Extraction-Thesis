@@ -1,6 +1,6 @@
 \section{Implementation}
 
-\chybi{chybí úvod do sekce}
+In this section we build on the analysis. In the \nameref{sec:analysis} we described different approaches we could choose to solve different aspects of the generation of the dataset. Now, we will detail on the approaches we chose.
 
 
 \subsection{Wikidata Preprocessing}
@@ -34,7 +34,7 @@ Based on the analysis of all the available data, we decided not to include the f
 \item headings
 \item tables
 \item lists
-\item templates matching the following patterns: obsazení*, sloupce*, seznam*, příbuzenstvo*, *předkové*, *box*, *locmap*, *tabulka*.
+\item templates matching the following patterns: obsazení*, sloupce*, seznam*, příbuzenstvo*, *předkové*, *box*, *locmap*, *tabulka*. (In English: cast*, columns*, lists*, relatives*, *ancestors*, *box*, *locmap*, *table*)
 \item wikilinks to categories and files
 
 \end{itemize}
@@ -55,9 +55,6 @@ We intended to allow a less strict word order, but we were unable to justify suc
 We considered allowing one special case. Most articles are based on one entity, therefore we expect many sentences to mention this entity. Often the entity is mentioned either by a pronoun (pronouns that express the subject are typically omitted in Czech), or by part of its full name.  Přijali ho do školy čar a kouzel v Bradavicích. Když se Harry vydal do Bradavic, našel nového kamaráda Rona Weasleyho. .. Pak už jel \vuvozovkach{domů} a musel přežít další dva měsíce u Dursleyových. We already stated that we will not attempt to deal with pronouns. We tried to propose rules for choosing the correct substring of the entity name. The diversity of wikdata makes such a task extremely difficult. Together with the risk that we would decrease the precision of entity matching we decided to stick with full names only.
 
 In the wikitext parsing section, we prepared spans and ids for wikilinks. We merge these with the ones matched by this module and post-process them. We discard each mention whose span is within a span of different mention of the same entity. This removes duplicates and keeps the one that is more specific.
-
-
-\chybi{jestli bude čas, tak udělat statistiky i pro jiné metody}
 
 \chybi{na obrázku s volemortem ukázat, jak to nakonec funguje}
 
@@ -109,7 +106,7 @@ CERED1 is close in size to CERED0. We removed long (over 100 words) and short (u
 
 CERED1 has 3 potential flaws that we have not addressed, yet. First, one sentence could be included multiple times in a dataset. Second, there were some relations with only a few relation mentions. Third, we did not try to handicap overly represented relatations. 
 
-We try to address these issues in CERED2. We start with CERED1 and for each sentence, if there are multiple relation mentions, we keep only the mention that was the least represented in CERED1, and discard the others. Next, we count the sizes of representations of all mentions and say that a relation is under-represented if it has less than 1000 mentions. We take all the mentions whose relation is considered under-represented and relabel them to \relationtype{other}. This change is also applied to CERED1. After such relabeling, the \relationtype{other} relation still was not the most represented. We decided to discard mentions of the two most represented relations: P31 (instance of) and P17 (country). \todo{typografie}
+We try to address these issues in CERED2. We start with CERED1 and for each sentence, if there are multiple relation mentions, we keep only the mention that was the least represented in CERED1, and discard the others. Next, we count the sizes of representations of all mentions and say that a relation is under-represented if it has less than 1000 mentions. We take all the mentions whose relation is considered under-represented and relabel them to \relationtype{other}. This change is also applied to CERED1. After such relabeling, the \relationtype{other} relation still was not the most represented. We decided to discard mentions of the two most represented relations: \relationtype{\wikiitem{instance of}{P31}} and \relationtype{\wikiitem{country}{P17}}.
 
 \begin{table}
 
@@ -147,10 +144,11 @@ Even after the restriction on the uniqueness of sentences, half of the CERED2 se
 There are two stages in the CERED generation process that might be relatively unprecise. The entity matching stage and the relation matching stage. CERED4 keeps only the relation mentions from CERED3, in which both entities were manually-labelled directly in wikitext in the form of wikilinks. The CERED4 dataset is, unfortunately, small, but has the highest potential to be precise.
 
 
-\input{datasets_relation_distribution}
+%\input{datasets_relation_distribution}
 
 
 \subsubsection{Other Considered Variations}
+\label{sec:otherconsideredvariations}
 When curating the CEREDs we considered many different criteria. For example, we chose the constant 1000 for underrepresented relations after several experiments. The good thing about this value is that only two relations were more dominant than the new \relationtype{other} relation and at the same time, we would keep 63 positive relations. We wanted our dataset to be at least somewhat comparable to other datasets in the proportion of data and inventory size. S10T8 contains 10717 mentions and 10 relations, TACRED contains around 100 000 mentions and 41 relations. The size of Riedel NYT depends, just like its inventory, on what data is used (and whether duplicates are removed and so on). We worked with nearly 700 000 mentions and 58 relations. Since the sizes of CERED1-3 range from approximately a million to approximately 160 000 mentions, we wanted the size to be around 50 or 60. The distributions of relations in different datasets is captured in \autoref{fig:corridors}.
 
 \paragraph{Named entities.}

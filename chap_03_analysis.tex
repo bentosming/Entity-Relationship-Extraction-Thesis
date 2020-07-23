@@ -182,6 +182,30 @@ If a sentence contains two entity mentions that are related, chances are that th
 
 They sampled 600 relation mentions from two corpora, both created by distant supervision on Freebase (knowledge base commonly used before Wikidata took over) and two text corpora - Wikipedia articles and the New York Times corpus. These 600 samples represented three different relation types (nationality, place of birth, and contains) and were sampled so that there were 100 samples of each type in each corpus. We include their results in table XX \todo{table, opsat, do caption citace} They concluded that Wikipedia is a very specific type of text corpora, because articles are centered around entities. We believe that the reasoning can be extended with the fact, that freebase contained information from Wikipedia infoboxes, and those infoboxes were created based on the textual information. 
 
+\begin{table}
+
+
+\label{table:nytvswikiDS}
+
+\centering
+\begin{tabular}{ l c c }
+
+\hline
+ & NYT & Wikipedia\\
+\hline
+\hline
+\relationtype{nationality} & 38\% & 20\% \\
+\relationtype{place of birth}  & 35\% & 20\% \\
+\relationtype{contains}  & 20\% & 10\%\\
+\hline
+
+
+\end{tabular}
+
+\caption{Percentage of times a related pair of entities is mentioned in the same sentence, but where the sentence does not express the corresponding relation. Taken from \citep{nytdistant}.}
+\end{table}
+
+
 For the authors the results signalized that a more sophisticated tool is needed instead of relying on the distant supervision assumption. We acknowledge that such a tool is needed but at the same time we believe that in our case, where we create CERED based on Wikipedia and Wikidata, the precision they estimated is sufficient. We also assume that Wikidata project is more suitable for this task than was Freebase.
 
 We want to mention that we build CERED to easily fit into the modern deep learning models and to be as simple as possible. Therefore, the main piece of text we use is a sentence, it might seem intuitive, but it has one downfall. If the relationship extractor was to be used on a real text not to determine where some relations are mentioned but to provide a summary of relations expressed by the text as a whole, some information will be lost. \todo{najít článek nebo někam přesunout? 

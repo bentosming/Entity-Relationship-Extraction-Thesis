@@ -1,32 +1,25 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
-\chybi{Celá kapitola introduction je napsaná před zbytkem textu, je třeba aktualizovat. Nemá smysl si ji teď číst}
 
-This thesis researches relationship extraction in Czech. Relationship extraction is the task of extracting semantic relationship from a text. It is closely connected to named entity recognition, the task of tagging entities in text with their corresponding type, and entity linking, the task of disambiguating named entities to a knowledge base. If all those task are used together, we could gain knowledge databases automatically from text. 
 
-For English multiple attempts were made to solve or at least advance in relationship extraction, varying both in task assignment and in used technologies. 
+Relationship extraction is the task of extracting semantic relationships from a text. It is closely connected to named entity recognition, the task of tagging entities in text with their corresponding type, and entity linking, the task of disambiguating named entities to a knowledge base. If all these task are used together, we can, for example, construct a knowledge database automatically from text. 
 
-To be able to approach this set of tasks, we will focus on pure  relationship extraction and thus the following restriction: we will only extract relations from sentences with labeled subject and object for the potential relation. We will benefit from the state-of-the-are technologies such as BERT from \cite{devlin2018bert}. \todo{divná věta} 
+For English, multiple attempts were made to solve or at least advance in relationship extraction, varying both in the exact formulation of the task and in used technologies. 
 
-A key role in modern machine learning play datasets. In major part of this thesis, we will address the absence of a Czech dataset for relationship extraction. We will generate our dataset by aligning Wikidata\footnote{https://www.wikidata.org/wiki/} with Czech Wikipedia\footnote{https://cs.wikipedia.org/wiki/}. This type of aligning is sometimes referred to as distant supervision. We will also need to recognize entities includes other . We will than be able to train different models and we will also be able to discuss how choices made in dataset generation affect the ability of a model to learn.
+In this thesis, we will focus on relationship extraction in the Czech language. Our goal is to construct a neural network model that will extract relationships from sentences with labelled subject and object entities. %We will benefit from the state-of-the-art technologies such as BERT from \cite{devlin2018bert}. \todo{divná věta} 
 
-Given the absence of a dataset, we also deal with an absence of a baseline for model performance. To show that, at least the proposed architecture and training method we used, are comparable to state of the art result we will perform the same training with English BERT and we will evaluate it on some well known English datasets. 
+In modern machine learning, the quality of datasets plays a key role. In the first part of this thesis, we will address the absence of a Czech dataset for relationship extraction. We will generate our dataset by aligning Wikidata\footnote{https://www.wikidata.org/wiki/} with Czech Wikipedia\footnote{https://cs.wikipedia.org/wiki/}. This type of aligning is referred to as distant supervision. %We will also need to recognize entities includes other . We will than be able to train different models and we will also be able to discuss how choices made in dataset generation affect the ability of a model to learn.
 
-.
+Given the absence of a dataset, we also deal with an absence of a baseline our model could be compared to. We evaluate the performance of the proposed model architecture on some well known English datasets to show that it is comparable to the state-of-the-art results.
 
-.
-
-\todo{previous work: Existing work on relation extraction (e.g., Zelenko et al., 2003; Mintz et al., 2009; Adel et al.,
-2016) }
+%\todo{previous work: Existing work on relation extraction (e.g., Zelenko et al., 2003; Mintz et al., 2009; Adel et al.,2016) }
 
 
 
 
-\section*{Thesis organization}
-This thesis is split into two parts. Before we dive into the first part, we will provide information that is relevant for this thesis, but is not part-specific, such as more details on relationship extraction, connected terminology and further motivation. We will briefly introduce the Czech language to explain why existing distant supervision methods were most likely not applied on Czech. \todo{which methods, were they not?}
+\section*{Thesis Organization}
+This thesis is split into two parts. Before we dive into the first part, we will provide background information that is relevant to this thesis, such as more details on relationship extraction, related terminology and further motivation. We will briefly introduce the Czech language.
 
-The first part will focus on datasets. We will present some existing supervised datasets, we will propose methodology for generating the dataset via distant supervision and elaborate on the process of implementation and on the results we obtained. \todo{co víc tam je}  
+The first part focuses on datasets. First, we will present some existing supervised and unsupervised datasets. Second, we will propose methodology for generating a Czech relationship extraction dataset via distant supervision. Using the methodology we will elaborate on the implementation process and on the generated dataset - the Czech Relationship Extraction Dataset (CERED).
 
-In the second part, we will finally talk about the modern deep learning technologies, we will try to pinpoint the important aspects of models, etc. we are using. \chybi{Vysvětlíme, jaké metriky se používají a proč a v čem je s nimi problém. Natrénujeme a zkusíme interpretovat výsledky.}
-
-\chybi{Přesunout We will use the Transformers\footnote{https://github.com/huggingface/transformers/} library which makes training well-known pre-trained models accesible.} \todo{whatever, prostě to nejdřív udělej, pak o tom piš}
+In the second part, we will overview some concepts, that are used in modern natural language processing models. Then we describe the architecture of our model and compare its performance with reported results on popular English relationship extraction datasets. We will also report our results on CERED. 

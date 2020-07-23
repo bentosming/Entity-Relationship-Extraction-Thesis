@@ -5,5 +5,80 @@ If we just trained the model on our dataset, we would be unable to determine, if
 
 In this chapter, we first describe the model, then we evaluate it on English datasets and lastly we report the results on CEREDs.
 
-\section{Jak jsme trénovali}
-\section{Jak to dopadlo na CEREDech na na anglických}
+\section{Model}
+
+We based our model on the BERT model described in the \nameref{sec:bert} section. The model architecture is quite straight forward. The goal of the whole model is to predict the relation based on a given relation mention. We modify the input by adding some special tokens as we show in \autoref{obr:rose}. Then we use the tokenizer, that is attached to the specific BERT, and we feed the output of the tokenizer to the model. The model computes abstract representations of all input tokens. We concatenate the representations that correspond to some of the special tokens ([E1], [E2] and [CLS]). On top we apply a dropout layer and finally a dense layer which predicts the class. 
+
+For Czech, we fine-tune the multilingual BERT, for English we fine-tune BERT\textsubscript{BASE}. We use the transformers library (\cite{Wolf2019HuggingFacesTS}) for BERT manipulation.
+
+\begin{figure}[h]
+\includegraphics[width = 1\textwidth]{./img/rose}
+\caption{Special tokens added for each mention. The sentence is a mention of \relation{father}{Ron Weasley}{Rose Weasley}. We add tokens to mark where each entity starts and end. The [CLS] token is part of BERT input and was pre-trained to capture the whole input sequence.}
+\label{obr:rose}
+\end{figure}
+
+
+
+\section{Results}
+
+We trained the model described in the previous section on the three datasets introduced in \nameref{chap:datasets} and on CEREDs. We hoped for our model to be competitive with other models, that build on BERTs. At the same time, we will not use any additional data for the training, therefore we do not expect to score as well as state of-the-art results. We referred to results provided by nlpprogres\footnote{\url{http://nlpprogress.com/english/relationship_extraction.html}} when researching the scores achieved on each dataset.
+
+We did not try to fine-tune the meta parameters (such as the learning rate or dropout rate). 
+
+
+\subsection{S10T8}
+
+On S10T8 the model stopped training after 10 epochs (i.e. in less than 20 minutes on a singe GPU) and achieved  86.54\% in the official metric. The state-of-the-art result was achieved by \cite{baldini-soares-etal-2019-matching} with 89.5\%.
+
+\subsection{TACRED}
+
+Training on TACRED did not take much longer (4 epochs and under two hours). The state-of-the-art on this dataset was also achieved by \cite{baldini-soares-etal-2019-matching} with 71.5\% F1 (micro-averaged over instances with positive relationships). We scored 65.65.
+
+\subsection{Riedel NYT}
+We are not able to properly compare our result with other, since the Riedel NYT dataset (introduced in \citep{nytdistant}), is extremely underdocumented. We did not find any official information about which data should be used for training. We also are not sure, if duplicities test datasets should be removed as part of preprocessing, or if they should be kept. Moreover, there is no official metric on this dataset. 
+
+Apart from that, our model learns to always predict the negative relation (about 80\% of the dataset is the negative relation). So no matter the metric, the model does not work. The aim of evaluating our model on more datasets was to show how it performs, not to change the architecture, so that it performs well.
+
+
+
+\subsection{CEREDs}
+We trained our model on all the CERED versions. The performance of respective models was mostly as expected.  We will pinpoint few things we observed in the results. 
+
+We assume, that the highest macro-F1 was achieved on CERED2 because we choose the relation inventory for CERED1-4 based on CERED2. CERED0 has a huge relation inventory and therefore it is not surprising, that when weighting over classes, the metric is low.
+
+The fact, that model trained on CERED4 preforms relatively well, shows, how remarkable BERTs (or pre-trained models) are for tasks with small datasets. The low macro-F1 on CERED4 can be explained quite easily. When we put constraints on which mentions will be kept in CERED4, we did not ensure, that the dataset will be balanced. In figure \autoref{obr:cered4_relations} we see, how imbalanced the dataset really is.
+
+
+\begin{figure}[h]\centering
+\includegraphics[width=80mm]{./img//CERED4_relations}
+\caption{Relation representation in CERED4.}
+\label{obr:cered4_relations}
+\end{figure}
+
+
+
+\begin{table}[h]
+
+\caption{Results on CEREDs, we measured micro and macro F1 on the corresponding test sets for each version. Moreover, we measured the performance of models trained on CERED1-4 on CERED2 test set, to see the direct comparison.}
+
+\label{table01:S10T8}
+
+\begin{tabular}{p{2,3cm} r r r }
+
+\hline
+Dataset & \# micro-F1 & macro-F1 & micro-F1 on CERED2 test \\
+\hline
+\hline
+CERED0 & 84.49 & 22 & -\\
+CERED1 & 83.94 & 77 & 81.72 \\
+CERED2 & 84.78 & 80 & 84.78 \\
+CERED3 & 77.29 & 74 & 82.33 \\
+CERED4 & 77.66 & 32 & 79.79 \\
+\hline
+
+
+\end{tabular}
+
+\end{table}
+
+
