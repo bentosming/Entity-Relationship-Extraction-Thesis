@@ -21,7 +21,17 @@ The issue of the accumulation of the right information at the right place is add
 
 An additional attention mechanism - self-attention - was introduced in the Transformer architecture. Unlike the traditional attention, which is used to look at a different layer (for example, it can transfer information from encoder to decoder), the self-attention usually works with inputs of the same layer as where it is applied. Self-attention attempts to add context information to the current embedding from the current embedding of the input sequence. For each input vector, we first compute three vectors: key, query and value. When computing self-attention for the $i$-th input, we compute the dot product of the $i$-th query vector with each key vector, we call the resulting numbers scores. The $j$-th score represents the distance of the $i$-the query and the $j$-the key vector. We then convert the scores to non-negative numbers that sum up to 1 and use those values to weight the value vectors (simply by multiplication). Lastly, we sum such weighted vectors to create the $i$-th output. We described the operations on vectors, but they can be rewritten for whole matrices, which makes them faster to compute. Precisely, let $Q$, $K$ and $V$ be matrices, where the $i$-th row is the $i$-the query, key and value vector. Then the attention can be computed as $Attention(Q,K,V) = softmax(\frac{QK^{T}}{\sqrt{d}})V$, where $d$ is the dimension of the key vectors.
 
-In the Transformer architecture, both the decoder and the encoder contain a sequence of blocks, where each block is a self-attention layer followed by a feed-forward network. 
+
+\begin{figure}[h]\centering
+\includegraphics[scale=0.7]{./img/transformer}
+\caption{Diagram of the Transformer architecture as proposed in \cite{vaswani2017attention}. Taken from \cite{vaswani2017attention}}
+\label{obr:transformer}
+\end{figure}
+
+
+In the Transformer architecture, both the decoder and the encoder contain a sequence of blocks, where each block is a self-attention layer followed by a feed-forward network. We include a diagram of the architecture from the original paper (\autoref{obr:transformer})
+
+
 
 So far, we ignored the fact that words cannot be directly fed to the network as an input. Usually, words are mapped to a vector in an embedding space. Such mapping is reusable in multiple tasks and brings us to the next section, where we will explain them a bit more.
  

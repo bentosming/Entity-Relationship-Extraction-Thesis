@@ -21,9 +21,9 @@ After these steps, the first list contains approximately 2 million QPQ triples.
 
 This module aims to parse wikitext (Wikipedia markup language) from the Czech Wikipedia dump into a clean text with attached information about wikilinks in the original markup.
 
-As we already explained in XX, wikitext contains a lot more than fully unstructured data. Different kinds of infoboxes, tables or lists are contained within the sentence-like text. Some of these elements are implemented using the so-called template syntax. Therefore, it would be tempting to simply remove all the text that is contained in a template. The problem is that not all templates are bad. For example, we may use a template to divide the text into two columns containing valid sentences. Therefore, discarding all such data seems unnecessarily harsh.
+As we already explained in \nameref{sec:wikipedia_parsing_analysis}, wikitext contains a lot more than fully unstructured data. Different kinds of infoboxes, tables or lists are contained within the sentence-like text. Some of these elements are implemented using the so-called template syntax. Therefore, it would be tempting to simply remove all the text that is contained in a template. The problem is that not all templates are bad. For example, we may use a template to divide the text into two columns containing valid sentences. Therefore, discarding all such data seems unnecessarily harsh.
 
-When developing the methodology for wikitext parsing, there was not a “gold” to compare it with. The only means of evaluation we had at the time was repeatedly going through a small set of articles and trying to discard unnecessary data. We tailored the rules for wikitext parsing to these articles in such a way that only sentence-like parts remained. 
+When developing the methodology for wikitext parsing, there was not a \vuvozovkach{gold} to compare it with. The only means of evaluation we had at the time was repeatedly going through a small set of articles and trying to discard unnecessary data. We tailored the rules for wikitext parsing to these articles in such a way that only sentence-like parts remained. 
 
 Once we implemented the whole CERED generator and were able to see the relation mentions, we realized that the previous method of evaluation was not good enough. Therefore, we adopted a new one, as described in XX (\chybi{nedopsaná sekce v analýza - result evaluation}\todo{do závorky dát jméno metodiky}). We looked at the different histograms and investigated the abnormalities. For example, a lot of sports articles report results of a match (tournament, event?) and these are often stored in custom tables that were not filtered by the rules from the previous paragraph. Moreover, these tables oftentimes contain information about the nationality of the players, resulting in a huge amount of matched entities and relations.
 
@@ -140,16 +140,24 @@ CERED4 & 10 766 & 59 & 22.1 & 188\\
 \subsection{CERED3}
 Even after the restriction on the uniqueness of sentences, half of the CERED2 sentences are the first sentences within the articles they originated from. Such sentences have a rather unique structure that is not as common outside of Wikipedia. This inspired CERED3 which is the remainder of CERED2 after removing all mentions in \vuvozovkach{first} sentences.
 
-\subsubsection{CERED4}
+\subsection{CERED4}
 There are two stages in the CERED generation process that might be relatively unprecise. The entity matching stage and the relation matching stage. CERED4 keeps only the relation mentions from CERED3, in which both entities were manually-labelled directly in wikitext in the form of wikilinks. The CERED4 dataset is, unfortunately, small, but has the highest potential to be precise.
 
 
 %\input{datasets_relation_distribution}
 
 
-\subsubsection{Other Considered Variations}
+\subsection{Other Considered Variations}
 \label{sec:otherconsideredvariations}
-When curating the CEREDs we considered many different criteria. For example, we chose the constant 1000 for underrepresented relations after several experiments. The good thing about this value is that only two relations were more dominant than the new \relationtype{other} relation and at the same time, we would keep 63 positive relations. We wanted our dataset to be at least somewhat comparable to other datasets in the proportion of data and inventory size. S10T8 contains 10717 mentions and 10 relations, TACRED contains around 100 000 mentions and 41 relations. The size of Riedel NYT depends, just like its inventory, on what data is used (and whether duplicates are removed and so on). We worked with nearly 700 000 mentions and 58 relations. Since the sizes of CERED1-3 range from approximately a million to approximately 160 000 mentions, we wanted the size to be around 50 or 60. The distributions of relations in different datasets is captured in \autoref{fig:corridors}.
+When curating the CEREDs we considered many different criteria. For example, we chose the constant 1000 for underrepresented relations after several experiments. The good thing about this value is that only two relations were more dominant than the new \relationtype{other} relation and at the same time, we would keep 63 positive relations. We wanted our dataset to be at least somewhat comparable to other datasets in the proportion of data and inventory size. S10T8 contains 10717 mentions and 10 relations, TACRED contains around 100 000 mentions and 41 relations. The size of Riedel NYT depends, just like its inventory, on what data is used (and whether duplicates are removed and so on). We worked with nearly 700 000 mentions and 58 relations. Since the sizes of CERED1-3 range from approximately a million to approximately 160 000 mentions, we wanted the size to be around 50 or 60. The distributions of relations in different datasets is captured in \autoref{fig:relations}.
+
+
+
+\begin{figure}[h]\centering
+\includegraphics[scale=1]{./img/Relations1-4}
+\caption{Sizes of relation representations. For each we ordered the relations by their frequency.}
+\label{obr:relations}
+\end{figure}
 
 \paragraph{Named entities.}
 
