@@ -1,24 +1,23 @@
-\chapter{Existing datasets}
+\chapter{Existing Datasets}
 \label{chap:datasets}
 
-In this chapter, we will overview three well-known datasets related to Entity Relationship Extraction. We will start with supervised datasets (SEMEVAL 2010 task 8 and TACRED), then we will focus on distant supervision.
+In this chapter, we overview three well-known datasets related to Entity Relationship Extraction. We start with supervised datasets (SEMEVAL 2010 task 8 and TACRED), then we focus on distant supervision.
 
 
-\section{SEMEVAL 2010 task 8 dataset}
-The SemEval-2010 Task 8 dataset (S10T8) was introduced in SemEval-2010 Task 8: Multi-Way Classification of Semantic Relations Between Pairs of Nominals \cite{semeval}. We will summarize how S10T8 was created and some other information from the article so that we can compare it later with other datasets.
+\section{SEMEVAL 2010 Task 8 Dataset}
+The SemEval-2010 Task 8 dataset (S10T8) was introduced in SemEval-2010 Task 8: Multi-Way Classification of Semantic Relations Between Pairs of Nominals \citep{semeval}. We summarize how S10T8 was created and present additional information from the article, so that we can compare it later with other datasets.
 
 The authors started by choosing an inventory of semantic relations. They aimed for such a set of relations that is exhaustive (enables the description of relations between any pair of nominals) and mutually exclusive (given the context and the pair of nominals, only one relation should be selectable).  Chosen relations with descriptions and examples are listed in \autoref{table01:S10T8}. 
 
+They decided to accept as relation arguments any noun phrases with common-noun heads, not just for example named entities mentioning: \vuvozovkach{Named entities are a specific category of nominal expressions best dealt with using techniques which do not apply to common nouns.} They restricted noun phrases to single words with the exception to lexicalized terms (such as science fiction).
 
-They decided to accept as relation arguments any noun phrases with common-noun heads not just, for example, named entities mentioning: \vuvozovkach{Named entities are a specific category of nominal expressions best dealt with using techniques which do not apply to common nouns.} They restricted noun phrases to single words with the exception to lexicalized terms (such as science fiction).
+The annotation process consisted of three rounds. In the first round, authors manually collected around \num{1200} sentences for each relation through pattern-based Web search (with at least a hundred patterns per relation). This way, they obtained around \num{1200} sentences for each relation. In the second round, each sentence was annotated by two independent annotators. In the third round, disagreements were resolved, and the dataset was finalized. Every sentence was classified either as a true relation mention or was a near-miss. The near-miss sentences were classified as \relationtype{other}, or were removed.
 
-The annotation process consisted of three rounds. In the first round, authors manually collected around 1,200 sentences for each relation through pattern-based Web search (with at least a hundred patterns per relation). This way, they obtained around 1200 sentences for each relation. In the second round, each sentence was annotated by two independent annotators. In the third round, disagreements were resolved, and the dataset was finished. Every sentence was classified either as a true relation mention or was a near-miss. The near-miss sentences were classified as \relationtype{other}, or were removed.
+The relations inventory constains nine positive relations and one positive. The authors decided to include the directionality into the relation a therefore the inventory size is $9 \cdot 2 + 1$ in total. 
 
-The relations inventory constains nine positive relations and one positive. The authors decided to include the directionality into the relation a therefore the inventory size is $9*2 + 1$ in total. 
+The dataset contains \num{10717} relation mentions. For the original competition, teams were given three training dataset of sizes \num{1000} (TD1), \num{2000} (TD2), \num{4000} (TD3), and \num{8000} (TD4). Since there was a notable gain TD3 →TD4, the authors concluded that even larger dataset might be helpful to increase the performance of models. On the topic, the creators have written:
 
-The dataset contains 10717 relation mentions. For the original competition, teams were given three training dataset of sizes 1000 (TD1), 2000 (TD2), 4000 (TD3), and 8000 (TD4). Since there was a notable gain TD3 →TD4, the authors concluded that even larger dataset might be helpful to increase the performance of models. On the topic, the creators have written:
-
-\begin{quotation}.. that is so much easier said than done: it took the organizers well in excess of 1000 person-hours to pin down the problem, hone the guidelines and
+\begin{quotation}.. that is so much easier said than done: it took the organizers well in excess of \num{1000} person-hours to pin down the problem, hone the guidelines and
 relation definitions, construct sufficient amounts of trustworthy training data, and run the task.
 \end{quotation}
 
@@ -26,7 +25,7 @@ relation definitions, construct sufficient amounts of trustworthy training data,
 
 
 \section{TACRED dataset}
-The TAC Relation Extraction Dataset was introduced in \cite{zhang2017tacred}. TACRED is a supervised dataset obtained via crowdsourcing. It contains about 100 000 examples, which makes it about ten times bigger than S10T8 dataset. 
+The TAC Relation Extraction Dataset was introduced in \citep{zhang2017tacred}. TACRED is a supervised dataset obtained via crowdsourcing. It contains about \num{100000} examples, which makes it about ten times bigger than S10T8 dataset. 
 
 The authors are relatively brief about the data collection process:
 
@@ -34,7 +33,7 @@ The authors are relatively brief about the data collection process:
 We create TACRED based on query entities and annotated system responses in the yearly TAC KBP evaluations. ... We make use of Mechanical Turk to annotate each sentence in the source corpus that contains one of these query entities. For each sentence, we ask crowd workers to annotate both the subject and object entity spans and the relation types.
 \end{quote}
 
-TACRED relation inventory captures 41 relations with the subject being an organization or a person and a negative relation. Objects are of the following types: cause of death, city, country, criminal charge, date, duration, ideology, location, misc (used for alternative name relation and no\_relation only), nationality, number, organization, person, religion, state or province, title and URL. The choice of subjects and objects it therefore very different from the S10T8 dataset.
+TACRED relation inventory captures 41 relations with the subject being an organization or a person; plus a negative relation. Objects are of the following types: cause of death, city, country, criminal charge, date, duration, ideology, location, misc (used for alternative name relation and \relationtype{no relation} only), nationality, number, organization, person, religion, state or province, title and URL. The choice of subjects and objects it therefore very different from the S10T8 dataset.
 
 
 TACRED was designed to be highly unbalanced. 79.5\% of mentions represents the  \relationtype{no relation} relation. This ratio of negative relation should be closer to real-world text and supposedly should help avoid false-positive predictions. However, even if we look only at positive relations, there are vast differences in frequency: the top six relations make up half the dataset and the bottom six less than 2\%. In absolute numbers, the least common \relationtype{ord:dissolved} relation has only 33 mentions, and the median is only 286 mentions.
@@ -45,15 +44,13 @@ TACRED was designed to be highly unbalanced. 79.5\% of mentions represents the  
 
 
 \section{Riedel NYT dataset}
-The previous two datasets were obtained through a tedious human labour - human annotators went through texts and manually annotated the data. This process is slow and expensive, which explains the relatively small data volume of the datasets. In this section, we will introduce a dataset that was presented in \cite{nytdistant}, and that was created without the need for any additional manual annotation.
+The previous two datasets were obtained through a tedious human labour -- human annotators went through texts and manually annotated the data. This process is slow and expensive, which explains the relatively small data volume of the datasets. In this section, we introduce a dataset presented in \citep{nytdistant} that was created without the need for any additional manual annotation.
 
 
-This dataset was generated with the distant supervision approach. This approach is based on aligning structured data (knowledge base) with text, i.e. automatically tagging mentions of the structured data in the text. In distant supervision, we usually expect that if there are two entity mentions in a sentence that are related, then the sentence expresses their relationship. The authors acknowledge that this assumption is often violated and they propose a methodology that attempts to predict whether the assumption is violated in a sentence. Using this methodology, they generated a dataset from the The New York Times Annotated Corpus \todo{možná citace? nebo není třeba?} and Freebase. We will refer to this dataset as Riedel NYT.
-
-The dataset is divided into two parts, each of them containing a test set and a train set. We will use both train sets for training and the \vuvozovkach{heldout} test set for evaluation in the second part of this thesis. We were unable to find any documentation that would describe the expected use of each part, nor did we find an official instruction concerning the metric for reporting results.
+This dataset was generated with the distant supervision approach. This approach is based on aligning structured data (knowledge base) with text, i.e. automatically tagging mentions of the structured data in text. In distant supervision, we usually expect that if there are two entity mentions in a sentence that are related, then the sentence expresses their relationship. The authors acknowledge that this assumption is often violated and they propose a methodology that attempts to predict whether the assumption is violated in a sentence. Using this methodology, they generated a dataset from the The New York Times Annotated Corpus \citep{linguistic2008new} and Freebase \citep{Bollacker08freebase}. We will refer to this dataset as Riedel NYT.
 
 
-Relation inventory for the part of the dataset that we used contains 58 relations. The best represented is the \relationtype{NA} relation with over 80\%. The representation of relations varies between the train and test set. For example, two relations are present only in the test set. 
+Relation inventory for the usual training part of the dataset contains 58 relations. The best represented is the \relationtype{NA} relation with over 80\%. The representation of relations varies between the train and test set. For example, two relations are present only in the test set. 
 
 
 \input{nyt_table}
