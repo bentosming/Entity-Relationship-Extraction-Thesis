@@ -5,7 +5,7 @@ The process of creation of CERED is mostly an attempt to execute the first two p
 
 Therefore we need to find a way to get to similar results as the first stages of the pipeline would get. We do not expect that our CERED generator will be as powerful as the respective dedicated tools would be. We will not try to create general entity recognition and linking tools - on the contrary, we will exploit any extra information that chosen Wikimedia projects provide.
 
-There are several aspects that we need to think through. We introduce them in the following list for better orientation. A subsection in this section is dedicated to each of those aspects. \todo{úplně odstranit ten list?}
+There are several aspects that we need to think through. We introduce them in the following list for better orientation. A subsection in this section is dedicated to each of those aspects. 
 \begin{itemize}
  \item  Dataflow - we chose Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome so that we can proceed to locating mentions.
  \item  Entity Matching - suppose we collected a piece of text together wit a set of entities that could be mentioned in the text. The process of entity matching attempts to mark words in the text that mention an entity.
@@ -51,9 +51,6 @@ So far we mostly discussed the advantages of the proposed informed approach, mai
 One more way to locate item mentions is trough \defineterm{Wikilinks}. A Wikilink links a page to another page within the same-language Wikipedia. First additional information this brings is simply the item mention (if the linked page or article has its main item). We can also consider the textual part of the link to be another name for the linked item. The quality and suitability of this name are to be examined and if we will find these names useful, they can be added to the item names we use.
 
 
-\chybi{podívat se do nakreslených obrázků, jestli tam není něco použitelného sem}
-
-
 \subsection{Entity Matching}
 
 We have text on one side, gathered candidate items on the other and our goal is to find occurrences of these items in the text. We call this process \defineterm{entity matching} and each found occurrence is an \defineterm{entity mention}.
@@ -96,7 +93,7 @@ Entity matching can be done with various degrees of sophistication. We provide a
 \includegraphics[width = 0.9\textwidth]{./img/Voldemort_infinitivy_preklad}
 
 \caption{First paragraph from Czech Wikipedia page about \wikiitem{Lord Voldemort}{Q176132}, also known as \vuvozovkach{Tom Rojvol Raddle} (Tom Marvolo Riddle) ,\vuvozovkach{Volemort} and \vuvozovkach{Pán zla}. Highlighted words are not in its lemmatic form. }
-
+\label{obr:Voldemort_preklad}
 
 \end{figure}
 
@@ -111,7 +108,7 @@ Another problem that we may encounter is how to properly handle spaces. We will 
 
 It is also not clear if word order in entity names is fixed (or at least almost always fixed). Even a simple reversion in name will affect the performance of this method (J. K. Rowling and Rowling, J. K.).
 
-The greatest weakness of this method is its inability to recognize entities if their name is inclined. To emphasize how many words are not in the same form as their lemma in Czech text, we colored them in the sample text. \todo{vybarvit a dát link} We elaborated on Czech language in \autoref{sec:Czech}, but just for simplicity - in English the verb \vuvozovkach{to be} has many different forms (am, are, were, was, would and so on), all nouns and verbs in Czech behave like this, quite often with many more forms.
+The greatest weakness of this method is its inability to recognize entities if their name is inclined. To emphasize how many words are not in the same form as their lemma in Czech text, we colored them in the sample text \autoref{obr:Voldemort_preklad}. We elaborated on Czech language in \autoref{sec:Czech}, but just for simplicity - in English the verb \vuvozovkach{to be} has many different forms (am, are, were, was, would and so on), all nouns and verbs in Czech behave like this, quite often with many more forms.
 
 
 \begin{figure}[h]
@@ -191,7 +188,7 @@ We want to enable the users of CERED to distinguish relation mentions that were 
 
 
 \subsection{Relation Matching}
-If a sentence contains two entity mentions that are related, chances are that the sentence in fact does express their relationship and thus is a relation mention. This concept is called \defineterm{distatnt supervision assumption} and can be also formulated in the following way: If two entities participate in a relation, all sentences that  mention these two entities express that relation. This assumption is commonly used, even though it is clearly not correct, because it is easy to use it. To tell how often this assumption is violated is labor-intensive, luckily research has been done on this topic. In \cite{nytdistant}, the distant supervision assumption is compared to an \defineterm{express-at-least-once assumption} which states that if two entities participate in a relation, at least one sentence that mentions these two entities might express that relation. 
+If a sentence contains two entity mentions that are related, chances are that the sentence in fact does express their relationship and thus is a relation mention. This concept is called \defineterm{distatnt supervision assumption} and can be also formulated in the following way: If two entities participate in a relation, all sentences that  mention these two entities express that relation. This assumption is commonly used, even though it is clearly not correct, because it is easy to use it. To tell how often this assumption is violated is labor-intensive, luckily research has been done on this topic. In \citep{nytdistant}, the distant supervision assumption is compared to an \defineterm{express-at-least-once assumption} which states that if two entities participate in a relation, at least one sentence that mentions these two entities might express that relation. 
 
 They sampled 600 relation mentions from two corpora, both created by distant supervision on Freebase (knowledge base commonly used before Wikidata took over) and two text corpora - Wikipedia articles and the New York Times corpus. These 600 samples represented three different relation types (nationality, place of birth, and contains) and were sampled so that there were 100 samples of each type in each corpus. We include their results in table \autoref{table:nytvswikiDS}. They concluded that Wikipedia is a very specific type of text corpora, because articles are centered around entities. We believe that the reasoning can be extended with the fact, that freebase contained information from Wikipedia infoboxes, and those infoboxes were created based on the textual information. 
 
@@ -230,61 +227,34 @@ By restricting the Wikidata inventory to just some properties we reduce the size
 
 \subsubsection{Issue 2}Knowledge bases, in general, do not contain negative relations (such relations that could be easily mapped to the \relationtype{no relation} or \relationtype{other relation}), but for relationship extraction negative mentions are essential. If we generate mentions using all properties we can later decide which relationships will be in the inventory and the rest of them relabel to \relationtype{other relation}. If we were to assign all tuples of entity mentions that share a sentence and are not related as \relationtype{no relation}, we could increase the noise in CERED because not all relationships are in Wikidata and therefore some of the \relationtype{no relation} mentions could in fact be a positive mention. The ratio of negative and positive mentions in the two bigger datasets we introduced in the \nameref{chap:datasets} chapter were approximately 80\%.
 
-While curating the inventory, we should keep in mind that we are not just choosing the relations but also their representations and we need to attempt to fulfill the three following requirements to the best of our abilities:
+While curating the inventory, we should keep in mind that we are not just choosing the relations but also their representations and we need to attempt to fulfil the three following requirements to the best of our abilities:
 \begin{itemize}
 \item Each relation needs to be represented enough.
 \item The more balanced relation representation sizes the better.
-\item There should be enough negative mentions and their negativity should be assured. \todo{reformulovat}
+\item There should be enough negative mentions and their negativity should be assured.
 
 \end{itemize}
 
-\subsubsection{Result Evaluation}
+\subsection{Result Evaluation}
+\label{sec:implementaceevaluace}
 The most challenging aspect of working with Czech Wikipedia and Wikidata is their size and diversity. To the best of our knowledge there is no strictly followed guideline when it comes to editing either the articles or item information. Just converting Wikipedia dump to clean text will be challenging due to user defined templates and other constructs we might be unaware of. On the other side names in Wikidata can be too general (like someone's first name) and create false entity mentions. 
 
-We prepared several metrics and methods to measure the quality of the implemented generator and we will list them in the table \ref{tab:qualityEval}. Unfortunately going through the article and seeing what did and did not get recognized as a mention is still the most powerful method, therefore we decided to develop a simple app that can prettify the output of the generator and makes the process of looking at the results less painful. \todo{příliš neformální?} 
-\chybi{tabulka není hotová a nedává smysl, přepsat.}
+Any change we make in the generator likely affects the generated dataset and analysing the consequences is difficult. We used several methods to measure the quality of the implemented generator.
+
+The simplest characteristic of the dataset is its size. Even though we want to maximize the size of dataset, we want to keep the precision high (eliminate false positives).
+
+We can find false positives by finding anomalies in the dataset. We can look at different graph characterizing the dataset, identify unexpected peeks and investigate the mentions that caused them. An example of such graph is the distribution (histogram) of the number of words in a sentence \todo{fig blabla}. Other useful characteristics include the length of a sentence in characters, relation distribution, article distribution, the number of sentence within its article and so on.
+
+Such graphs are better at capturing false positives than false negatives. It is necessary to compare the articles with the corresponding mentions in the dataset. We created a tool that can visualize the whole article and both the entity and relation mentions in a more pleasant way.
+
+Originally we wanted to manually label entity mentions and relation mentions on some articles and use them to automatically evaluate the generator. We encountered too many challenges when we tried to create such manual dataset, the main three are:
+\begin{itemize}
+\item the selected articles should represent Wikipedia (for example, articles about people are very different from articles about sport matches);
+\item we are unable to know if a phrase refers to a Wikidata item (because we are not aware it exists) and it is difficult to draw the line of what we expect to match (in the \autoref{obr:Voldemort_preklad} example, the \vuvozovkach{prostředí knih a filmů o Harrym Potterovi} clearly mentions the \wikiitem{Harry Potter universe}{Q5410773} and Voldemort is a ommited subject of the second sentence);
+\item it is time consuming to look for relations in wikidata
 
 
-\begin{figure}
-
-\begin{tabular}{p{0.05\linewidth}p{0.8\linewidth}}
-
-FA & The overall count of found mentions - to some extent the greater the better - at least in the beginning with naive matching methods. With more sophisticated matching, this number should increase. On the other side, this measure will decrease with more higher precision. \\ 
-FA & If the distribution of the amount of found mentions (both the entity mentions before relation matching and the relation mentions) over some domain is peculiar (contains abnormalities such unexpected peeks) the quality of not only those mentions might be lower. The domain can be anything from the following or even multiple of them at the same time:
-sentence, article, relation, entity, sentence number (the order of the sentence in an article), entity pair. \\ 
-NA & Checking the anomalies detected by the previous methods.  \\ 
-NA & Checking an article and realizing what did and did not get matched. \\ 
-FA & Some articles could be labeled by hand and test could be created.\\
-
-\end{tabular} 
-
-\caption{Quality evaluation methods and the potential for automatization (Fully Automatic, Not-Automatic)}
-\label{tab:qualityEval}
-\end{figure}
-
-
-\subsubsection{Viewer}
-\todo{co je viewer}
-\chybi{Začít tím, co je to viewer, že je třeba, aby prohlížení dat nebylo tolik bolestivé, zmíit, co všechno do něj implementujeme a že sice není použitelný pro ostatní, ale doporučilibychom každému ať si něco tkaového udělá.}
-The purpose of this viewer is to present the results in a more graphical way to fasten and pleasant the process of checking them, which will be done often and will take a significant amount of time.
-
-We want the viewer to be able to show the statistics about the generated data, that were collected during the generation, the configuration that was used to generate the dataset, and mainly to show an article with the found mentions (entity and relation). 
-
-Streamlit made implementing such viewer quite easy and we used spaCy’s \todo{footnote} visualizations. \todo{přestěhovat někam dopryč tento odstavec}
-
-\todo{screen viewertu k implementaci}
-
-
-
-
-
-%\begin{figure}[p]\centering
-%\includegraphics[width=140mm, height=117mm]{./img/Corpus_diagram}
-%\caption{Zjednodušený diagram výroby korpusu}
-%\label{obr03:Nhust}
-%\end{figure}
-
-
+\end{itemize}
 
 
 

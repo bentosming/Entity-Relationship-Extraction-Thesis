@@ -29,7 +29,7 @@ To be able to perform distant supervision we need to find suitable data - Czech 
 \label{obr03:DSD}
 \end{figure}
 
-\todo{jako pdf kvůli rozlišení}
+
 \subsection{Constraints and Requirements}
 The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we will prefer encyclopedic or journalistic genre. One option is to focus on some subset of Czech National Corpus\footnote{\url{https://www.korpus.cz/}}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
 
@@ -50,16 +50,16 @@ Wikidata is a knowledge base which acts as a central storage of the structured d
 
 The database focuses on \defineterm{items}, which represent objects, entities, concepts, etc.  The first data collected in Wikidata were links to the multilingual versions of Wikipedia articles on the same topic - on the same Wikidata item. Each item is assigned an identifier, prefix Q and a unique number, referred to as \defineterm{QID}. A label together with a description of an item should serve as a human readable identifier. Labels, descriptions and optional aliases are language dependant.
 
-\defineterm{Properties}, another big concept of Wikidata, can be thought of as categories of items (\wikiitem{mother}{P25} implies a category of all mothers) or as relations between items (\wikiitem{Ron Weasley}{Q173998} has a \wikiitem{mother}{P25} \wikiitem{Molly Weasley}{Q3255012}). Each property has its \defineterm{PID}, an identifier consisting of a prefix P and a unique number, and a data type for a value it can be paired with (such as an item, string, url, number or media file). \todo{hezčí formátování wikiitemm}
+\defineterm{Properties}, another big concept of Wikidata, can be thought of as categories of items (\wikiitem{mother}{P25} implies a category of all mothers) or as relations between items (\wikiitem{Ron Weasley}{Q173998} has a \wikiitem{mother}{P25} \wikiitem{Molly Weasley}{Q3255012}). Each property has its \defineterm{PID}, an identifier consisting of a prefix P and a unique number, and a data type for a value it can be paired with (such as an item, string, url, number or media file). 
 
 Information about any item is recorded in statements. Statement is a key-value pair of a property and a value of prescribed data type. For example, for \wikiitem{Ron Weasley}{Q173998} there are six statements about his siblings:
 \begin{itemize}
-\item \wikiitem{sibling}{P3373} \wikiitem{Ginny Weasley}{Q187923},
-\item \wikiitem{sibling}{P3373} \wikiitem{Fred Weasley}{Q13359612},
-\item \wikiitem{sibling}{P3373} \wikiitem{George Weasley}{Q13359613} and so on. 
-\end{itemize}  \todo{formating} \todo{mám zadefinovanou jinou typografii pro vztahy, použít}
+\item \wikiitem{sibling}{P3373}: \wikiitem{Ginny Weasley}{Q187923},
+\item \wikiitem{sibling}{P3373}: \wikiitem{Fred Weasley}{Q13359612},
+\item \wikiitem{sibling}{P3373}: \wikiitem{George Weasley}{Q13359613} and so on. 
+\end{itemize}  
 
-Wikidata project contains over 80 000 000 items, which raises requirements on technological resources so that we can work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
+Wikidata project contains over \num{80000000} items, which raises requirements on technological resources so that we can work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
 
 \input{chap_03_analysis}
 
@@ -77,7 +77,7 @@ Apache Spark framework provides query like API and runs on clusters. This way pa
 
 \subsection{MorphoDiTa}
 
-MorphoDiTa \cite{Morphodita} (Morphological Dictionary and Tagger) is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. MorphoDiTa has a python package via which we can do all standard operation such as tokenization (splitting text into sentences and words) and lemmatization (disambiguation of the inflected form of a word).
+Morphological Dictionary and Tagger (MorphoDiTa) \citep{Morphodita} is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. MorphoDiTa has a python package via which we can do all standard operation such as tokenization (splitting text into sentences and words) and lemmatization (disambiguation of the inflected form of a word).
 
 \subsection{Streamlit}
 Streamlit is a framework for creating simple web apps. It has minimal and practical API designed for users from the machine learning community. We use this library to create a more pleseant way of viewing the generated dataset.

@@ -9,9 +9,9 @@ Terminology in NLP subtasks is often non-standardized or not exact. We attempt t
 
 \defineterm{Relation} in this context is an abstraction of a semantic relation, for example, a father relation. A relation has a type (father), it is binary (between a son and the father) and oriented (the father and the son are not interchangeable), and describes the relationship between a subject (the son) and an object (the father). We will use the term relation as an equivalent for its type and the term relationship for an instance of the relation. 
 
-\todo{obrázek pro příklad v dalším odstavci}
 
-\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, and the object is the second. In the sentence \vuvozovkachtextit{Albus Severus is Harry Potter's son.} a relation of type \relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkachtextit{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. \todo{lepší vzhled}
+
+\defineterm{Subject} and \defineterm{Object}. The subject is the first argument of a relation, and the object is the second. In the sentence \vuvozovkachtextit{Albus Severus is Harry Potter's son.} a relation of type \relationtype{son} is captured, the subject is Harry and the object is Albus Severus. The reasoning for this choice of direction is as follows: suppose we are gathering information about Harry, then we would probably have both the information that his son is Albus Severus and that his father is James. So we are gathering information about the subject (Harry Potter), even though in most sentences Harry is likely to be the grammatical object: \vuvozovkachtextit{James is Harry's father.} We will use the notation \relation{relation}{subject}{object}: \relation{son}{Harry Potter}{Albus Severus Potter}. 
 
 
 
@@ -26,7 +26,7 @@ Both the subject and the object can generally be any word or sequence of words t
 \defineterm{Negative mention} is close to a (positive) relation mention in the sense that it is a sentence with tagged subject and object, but the relation type is one of the following types: 
 \begin{itemize}
 \item \relationtype{other} - human annotator would classify a relation, that is not in the inventory.
-\item \relationtype{no relation} - in this case, human annotators should feel an absence of a relationship between the subject and the object. \todo{doplnit příklady, včetně vyloženě ne příkladu}
+\item \relationtype{no relation} - in this case, human annotators should feel an absence of a relationship between the subject and the object.
 
 \end{itemize}
 
