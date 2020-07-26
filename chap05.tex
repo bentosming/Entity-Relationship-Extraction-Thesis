@@ -3,7 +3,7 @@ The goal of this part of the thesis is to train a relationship extraction model 
 
 If we just trained the model on our dataset, we would be unable to determine, whether the model is well designed. We therefore adapt the model to be trainable both on Czech and on English. We assume that if the English version is competitive on popular English relationship extraction dataset, the Czech version is reasonably good.
 
-In this chapter, we first describe the model, then we evaluate it on English datasets and lastly we report the results on CEREDs.
+In this chapter, we first describe the model, then we evaluate it on English datasets and lastly we report the results on CERED.
 
 \section{Model}
 
@@ -82,7 +82,7 @@ Our model was unable to properly train on this dataset. It learns to always pred
 
 
 
-\subsection{CEREDs}
+\subsection{CERED}
 We trained our model on all CERED versions. The performance of respective models was mostly as expected.  We pinpoint few things we observed in the results. 
 
 We assume that the highest macro-F1 was achieved on CERED2 because we choose the relation inventory for CERED1-4 based on CERED2. CERED0 has a huge relation inventory and therefore it is not surprising that when weighting over classes, the metric is low.
@@ -95,7 +95,7 @@ The fact, that model trained on CERED4 preforms relatively well, shows, how rema
 
 \begin{table}[h]
 
-\caption{Results on CEREDs, we measured micro and macro F1 on the corresponding test sets for each version. Moreover, we measured the performance of models trained on CERED1-4 on CERED2 test set, to see the direct comparison.}
+\caption{Results on CERED, we measured micro and macro F1 on the corresponding test sets for each version. Moreover, we measured the performance of models trained on CERED1-4 on CERED2 test set, to see the direct comparison.}
 
 \label{table:CEREDsResults}
 
