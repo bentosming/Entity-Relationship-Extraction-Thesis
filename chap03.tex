@@ -64,23 +64,23 @@ Wikidata project contains over \num{80000000} items, which raises requirements o
 \input{chap_03_analysis}
 
 \section{Used Technologies}
-We chose Python to be our main programming language. To be able to work faster with a bigger volume of data, we wanted to use a CPU cluster, which leads to Spark. To top it, we will use MorphoDiTa to work with the Czech language. We implemented a simple Streamlit app we used to comfortably view the results of our Spark queries.
+We chose Python to be our main programming language. To be able to work faster with a bigger volume of data, we wanted to use a CPU cluster, which leads to Spark. To top it, we use MorphoDiTa to work with the Czech language. We implemented a simple Streamlit application, which we used to comfortably view the results of our Spark queries.
 
-In this section we will briefly introduce these technologies.
+In this section, we briefly introduce these technologies.
 
 \subsection{Python}
-Python is probably the most popular programming language in the ML community. It is a high-level language with a wide range of libraries. Libraries as NumPy, Pandas and Spark enable fast and accesible computation. Tensorflow, scikit and PyTorch allow users to focus mostly on data and ideas in machine learning. Less known libraries help us with Wikipedia parsing (wikitextparser, mwparserfromhell) or easy-to-create web apps (streamlit).
+Python is probably the most popular programming language in the ML community. It is a high-level language with a wide range of libraries. Libraries as NumPy, Pandas, and Spark enable fast and accesible computation. Tensorflow, scikit, and PyTorch allow users to focus mostly on data and ideas in machine learning. Less known libraries help us with Wikipedia parsing (wikitextparser, mwparserfromhell) or easy-to-create web applications (Streamlit).
 
 \subsection{Spark}
-Apache Spark framework provides query like API and runs on clusters. This way parallel computation can be implemented without actually implementing any parallelism. Therefore, Spark can boost the speed of computation as well as the available memory for the computation.
+Apache Spark framework provides a dataset manipulation API and allows executing it in a distributed way on a cluster, without actually implementing any parallelism. Therefore, Spark can boost the speed of computation as well as the available memory for the computation.
 
 
 \subsection{MorphoDiTa}
 
-Morphological Dictionary and Tagger (MorphoDiTa) \citep{Morphodita} is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. MorphoDiTa has a python package via which we can do all standard operation such as tokenization (splitting text into sentences and words) and lemmatization (disambiguation of the inflected form of a word).
+Morphological Dictionary and Tagger (MorphoDiTa) \citep{Morphodita} is an open-source tool for morphological analysis of natural language texts. It is designed to work well on inflective languages and achieves state-of-the-art results for the Czech language. MorphoDiTa provides a Python package trough which we can perform all standard operations such as tokenization and lemmatization.
 
 \subsection{Streamlit}
-Streamlit is a framework for creating simple web apps. It has minimal and practical API designed for users from the machine learning community. We use this library to create a more pleseant way of viewing the generated dataset.
+Streamlit is a framework for creating simple web applications. It has minimal and practical API designed for users from the machine learning community. We use this library to create a pleasant way of viewing the generated dataset.
 
 \input{chap_03_implemenation}
 
