@@ -1,27 +1,27 @@
 \chapter{CERED}
 
-In the previous chapter, we concluded that creating relationship extraction manually is expesive. We introduced Riedel NYT dataset that shouws, that automatic generation of relationship extraction datasets is possible. In this chapter we will describe our process of generating \textbf{C}z\textbf{e}ch \textbf{R}elationship \textbf{E}xtraction \textbf{D}ataset (CERED). We will discuss various decisions that we made during this process and their impacts.
+In the previous chapter, we concluded that creating relationship extraction dataset manually is expensive. We introduced Riedel NYT dataset that shows, that automatic generation of relationship extraction datasets is possible. In this chapter we describe our process of generating \textbf{C}z\textbf{e}ch \textbf{R}elationship \textbf{E}xtraction \textbf{D}ataset (CERED). We will discuss various decisions that we made during this process and their impacts.
 
 
 \section{Overview}
 
-The objective is to use distant supervision to create a Relationship Extraction dataset for the Czech language. This section is a brief summary for easier orientation in this chapter. Each of these paragraphs is a teaser for one section of this chapter.
+The objective is to use distant supervision to create a relationship extraction dataset for the Czech language. This section is a brief summary for easier orientation in this chapter. Each of these paragraphs is a teaser for one section of this chapter.
 
 First we research available knowledge bases and Czech text corpora to determine which ones will best suit our purpose. We chose Wikimedia projects Wikidata and Czech Wikipedia.
 
-Next we analyze how we will find mentions of Wikidata relations in Czech Wikipedia. We sketch out dataflow diagrams and we think about all the different complex aspects of this task.
+Next we analyze how we will find mentions of Wikidata relations in Czech Wikipedia. We sketch out dataflow diagrams and we discuss all the different complex aspects of this task.
 
 We continue by choosing technologies that we use. Aware of the volume and other characteristics of chosen data, we choose Python as the main programming language, Spark as a way to speed up the computations and MorphoDita to deal with the specifics of the Czech language.
 
-The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine what will work best. As a result, we generated CERED0.
+The questions and options that rose from the analysis get at least partially answered and decided during implementation. We tested different configurations and went through the data to determine which works the best. As a result, we generated CERED0.
 
-The generated dataset have a huge relation inventory and other properties that would be impractical for training. We describe variations of the generated dataset CERED1-4, that were designed to be more practical.
+The generated dataset has a huge relation inventory and other properties that would be impractical for training. We describe variations of the generated dataset CERED1-4, which were designed to be more practical.
 
 
 
 \section{Data Sources}
 
-To be able to perform distant supervision we need to find suitable data - Czech text corpus and a knowledge base (Figure \ref{obr03:DSD}). In the first subsection, we will explain the requirements and constraints we have on such data and present our options. In the next two subsections, we will provide more information on the chosen ones.
+To be able to perform distant supervision we need to find suitable data - Czech text corpus and a knowledge base (Figure \ref{obr03:DSD}). In the first subsection, we will explain the requirements and constraints we have on such data and present our options. In the next two subsections, we will provide more information on the selected ones.
 
 \begin{figure}[h]\centering
 \includegraphics[width=60mm]{./img//Diplomka diagramy-Distant supervision}
@@ -31,11 +31,11 @@ To be able to perform distant supervision we need to find suitable data - Czech 
 
 
 \subsection{Constraints and Requirements}
-The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we will prefer encyclopedic or journalistic genre. One option is to focus on some subset of Czech National Corpus\footnote{\url{https://www.korpus.cz/}}, for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
+The main constraint is quite straightforward, there has to be a nontrivial shared set of entities and relations mentioned in the text and stored in the knowledge base. We expect fact-based text to be more suitable then fiction literature. Therefore we prefer encyclopedic or journalistic genre. One option is to focus on some subset of Czech National Corpus,\footnote{\url{https://www.korpus.cz/}} for example SYN2013PUB, SYN2009PUB, and SYN2009PUB are corpora of written journalism. The other option is to lean in the direction of encyclopedic text with Czech Wikipedia.
 
-To the best of our knowledge, our options for knowledge base are limited to Wikidata or Google Knowledge graph\footnote{\url{https://developers.google.com/knowledge-graph}}.
+To the best of our knowledge, our options for knowledge base are limited to Wikidata or Google Knowledge graph.\footnote{\url{https://developers.google.com/knowledge-graph}}
 
-We decided to use Czech Wikipedia and Wikidata, mostly because the intersection of information expressed in text data and in structured data seems promising because they are build on each other. Another advantage could be the multilingualism of Wikimedia projects, and therefore the transferability of this work will be higher. Moreover, the Wikimedia projects are downloadable, which makes them easier to work with.
+We decided to use Czech Wikipedia and Wikidata, mostly because the intersection of information expressed in text data and in structured data seems promising because they are build on each other. Another advantage is the multilingualism of Wikimedia projects, and therefore the transferability of this work is higher. Moreover, the Wikimedia projects are downloadable, which makes them easier to work with.
 
 
 \subsection{Czech Wikipedia}
@@ -48,7 +48,7 @@ A dump of Czech Wikipedia is about 1,6GB and 770MB when compressed.
 
 Wikidata is a knowledge base which acts as a central storage of the structured data of Wikimedia projects. Just like Wikipedia, this project is freely available and edited by users (and bots). It provides the option to query the database online (for small enough queries), but it is also possible to download the database in standard formats.
 
-The database focuses on \defineterm{items}, which represent objects, entities, concepts, etc.  The first data collected in Wikidata were links to the multilingual versions of Wikipedia articles on the same topic - on the same Wikidata item. Each item is assigned an identifier, prefix Q and a unique number, referred to as \defineterm{QID}. A label together with a description of an item should serve as a human readable identifier. Labels, descriptions and optional aliases are language dependant.
+The database focuses on \defineterm{items}, which represent objects, entities, concepts, etc.  The first data collected in Wikidata were links to the multilingual versions of Wikipedia articles on the same topic -- on the same Wikidata item. Each item is assigned an identifier, prefix Q and a unique number, referred to as \defineterm{QID}. A label together with a description of an item should serve as a human readable identifier. Labels, descriptions and optional aliases are language dependent.
 
 \defineterm{Properties}, another big concept of Wikidata, can be thought of as categories of items (\wikiitem{mother}{P25} implies a category of all mothers) or as relations between items (\wikiitem{Ron Weasley}{Q173998} has a \wikiitem{mother}{P25} \wikiitem{Molly Weasley}{Q3255012}). Each property has its \defineterm{PID}, an identifier consisting of a prefix P and a unique number, and a data type for a value it can be paired with (such as an item, string, url, number or media file). 
 
@@ -59,7 +59,7 @@ Information about any item is recorded in statements. Statement is a key-value p
 \item \wikiitem{sibling}{P3373}: \wikiitem{George Weasley}{Q13359613} and so on. 
 \end{itemize}  
 
-Wikidata project contains over \num{80000000} items, which raises requirements on technological resources so that we can work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
+Wikidata project contains over \num{80000000} items, which raises requirements on technological resources required to work efficiently with such data. JSON dump of Wikidata takes 110GB of disk space or 37GB if bzip2 compressed.
 
 \input{chap_03_analysis}
 

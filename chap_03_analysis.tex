@@ -1,18 +1,18 @@
 \section{Analysis}
 \label{sec:analysis}
-The process of creation of CERED is mostly an attempt to execute the first two parts of the pipeline we mention in the 
-\nameref{sec:relation_extraction_pipeline_proposal} section. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for named entity recognition that we could theoretically use to our advantage if we decided to focus on named entities only.
+The process of CERED creation is mostly an attempt to execute the first two parts of the pipeline we mention in 
+\autoref{sec:relation_extraction_pipeline_proposal}. To the best of our knowledge, there is no suitable entity linking tool for Czech. There are tools for named entity recognition that we could theoretically use to our advantage, if we decided to focus on named entities only.
 
-Therefore we need to find a way to get to similar results as the first stages of the pipeline would get. We do not expect that our CERED generator will be as powerful as the respective dedicated tools would be. We will not try to create general entity recognition and linking tools - on the contrary, we will exploit any extra information that chosen Wikimedia projects provide.
+Therefore, we need to find a way to get to similar results as the first stages of the pipeline. We do not expect that our CERED generator will be as powerful as the respective dedicated tools would be. We do not try to create general entity recognition and linking tools -- on the contrary, we exploit all suitable extra information that chosen Wikimedia projects provide.
 
-There are several aspects that we need to think through. We introduce them in the following list for better orientation. A subsection in this section is dedicated to each of those aspects. 
+There are several aspects that we need to think through. We introduce them in the following list for better orientation, and then elaborate every one in more detail in dedicated subsection. 
 \begin{itemize}
- \item  Dataflow - we chose Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome so that we can proceed to locating mentions.
- \item  Entity Matching - suppose we collected a piece of text together wit a set of entities that could be mentioned in the text. The process of entity matching attempts to mark words in the text that mention an entity.
- \item  Wikilink Mentions - Wikilinks are (mostly) human labeled entity mentions. Utilizing them is the closest we can get to a supervised dataset without actually supervising the dataset.
- \item  Relation Matching - entities are matched in the Wikipedia texts, relationships are extracted from the Wikidata dump, we use distant supervision assumption to locate relation mentions in the texts.
-\item Relation Inventory - we generated CERED, but the relation inventory is overly diverse. Moreover, the dataset is extremely unbalanced - the number of mentions per relation varies. And no “no relation” relation is obtained.
- \item  Result Evaluation - every time we generate CERED during development, we need to evaluate its quality. We propose methods for this evaluation. 
+ \item  \textbf{Dataflow} -- we chose Wikidata and Czech Wikipedia, but we did not discuss how to connect them and what exactly should be the outcome so that we can proceed to locating mentions.
+ \item  \textbf{Entity Matching} -- suppose we collected a piece of text together with a set of entities that could be mentioned in the text. The process of entity matching attempts to mark words in the text that mention an entity.
+ \item  \textbf{Wikilink Mentions} -- Wikilinks are (mostly) human labeled entity mentions. Utilizing them is the closest we can get to a supervised dataset without actually supervising the dataset.
+ \item \textbf{Relation Matching} -- after entities are matched in the Wikipedia texts, relationships are extracted from the Wikidata dump and we use distant supervision assumption to locate relation mentions in the texts.
+\item \textbf{Relation Inventory} -- we generated CERED, but the relation inventory is overly diverse. Moreover, the dataset is extremely unbalanced -- the number of mentions per relation varies -- and we lack negative relation.
+ \item  \textbf{Result Evaluation} -- every time we generate CERED during development, we need to evaluate its quality. We propose methods for this evaluation. 
 \end{itemize}
 
 
@@ -246,6 +246,19 @@ The simplest characteristic of the dataset is its size. Even though we want to m
 We can find false positives by finding anomalies in the dataset. We can look at different graph characterizing the dataset, identify unexpected peeks and investigate the mentions that caused them. An example of such graph is the distribution (histogram) of the number of words in a sentence \todo{fig blabla}. Other useful characteristics include the length of a sentence in characters, relation distribution, article distribution, the number of sentence within its article and so on.
 
 Such graphs are better at capturing false positives than false negatives. It is necessary to compare the articles with the corresponding mentions in the dataset. We created a tool that can visualize the whole article and both the entity and relation mentions in a more pleasant way.
+
+\begin{figure}
+\begin{subfigure}{1\textwidth}
+\centering
+\includegraphics[width = 1\textwidth]{./img/Histograms_2020-07-19_21-00-53_CEREDalpha.png}
+\end{subfigure}
+\begin{subfigure}{1\textwidth}
+\centering
+\includegraphics[width = 1\textwidth]{./img/Histograms_2020-07-19_21-00-53_CERED0.png}
+\end{subfigure}
+\caption{Graphs charasterizing the generated dataset}
+
+\end{figure}
 
 Originally we wanted to manually label entity mentions and relation mentions on some articles and use them to automatically evaluate the generator. We encountered too many challenges when we tried to create such manual dataset, the main three are:
 \begin{itemize}

@@ -6,9 +6,9 @@ Relationship extraction is the task of extracting semantic relationships from a 
 
 For English, multiple attempts were made to solve or at least advance in relationship extraction, varying both in the exact formulation of the task and in used technologies. 
 
-In this thesis, we will focus on relationship extraction in the Czech language. Our goal is to construct a neural network model that will extract relationships from sentences with labelled subject and object entities. %We will benefit from the state-of-the-art technologies such as BERT from \cite{devlin2018bert}. \todo{divná věta} 
+In this thesis, we focus on relationship extraction in the Czech language. Our goal is to construct a neural network model that extracts relationships from sentences with labelled subject and object entities. %We will benefit from the state-of-the-art technologies such as BERT from \cite{devlin2018bert}. \todo{divná věta} 
 
-In modern machine learning, the quality of datasets plays a key role. In the first part of this thesis, we will address the absence of a Czech dataset for relationship extraction. We will generate our dataset by aligning Wikidata\footnote{https://www.wikidata.org/wiki/} with Czech Wikipedia\footnote{https://cs.wikipedia.org/wiki/}. This type of aligning is referred to as distant supervision. %We will also need to recognize entities includes other . We will than be able to train different models and we will also be able to discuss how choices made in dataset generation affect the ability of a model to learn.
+In modern machine learning, the quality of datasets plays a key role. In the first part of this thesis, we address the absence of a Czech dataset for relationship extraction. We generate our dataset by aligning Wikidata\footnote{https://www.wikidata.org/wiki/} with Czech Wikipedia.\footnote{https://cs.wikipedia.org/wiki/} This type of aligning is referred to as distant supervision. %We will also need to recognize entities includes other . We will than be able to train different models and we will also be able to discuss how choices made in dataset generation affect the ability of a model to learn.
 
 Given the absence of a dataset, we also deal with an absence of a baseline our model could be compared to. We evaluate the performance of the proposed model architecture on some well known English datasets to show that it is comparable to the state-of-the-art results.
 
@@ -18,8 +18,8 @@ Given the absence of a dataset, we also deal with an absence of a baseline our m
 
 
 \section*{Thesis Organization}
-This thesis is split into two parts. Before we dive into the first part, we will provide background information that is relevant to this thesis, such as more details on relationship extraction, related terminology and further motivation. We will briefly introduce the Czech language.
+This thesis is split into two parts. Before we dive into the first part, we provide background information that is relevant to this thesis, such as more details on relationship extraction, related terminology and further motivation. We also briefly introduce the Czech language.
 
-The first part focuses on datasets. First, we will present some existing supervised and unsupervised datasets. Second, we will propose methodology for generating a Czech relationship extraction dataset via distant supervision. Using the methodology we will elaborate on the implementation process and on the generated dataset - the Czech Relationship Extraction Dataset (CERED).
+The first part focuses on datasets. First, we present some existing supervised and unsupervised datasets. Second, we propose methodology for generating a Czech relationship extraction dataset via distant supervision. Using the methodology we elaborate on the implementation process and on the generated dataset - the Czech Relationship Extraction Dataset (CERED).
 
-In the second part, we will overview some concepts, that are used in modern natural language processing models. Then we describe the architecture of our model and compare its performance with reported results on popular English relationship extraction datasets. We will also report our results on CERED. 
+In the second part, we overview some concepts, that are used in modern natural language processing models. Then we describe the architecture of our model and compare its performance with reported results on popular English relationship extraction datasets. We also report our results on CERED. 
