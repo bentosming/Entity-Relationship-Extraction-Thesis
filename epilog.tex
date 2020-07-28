@@ -1,25 +1,25 @@
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
-In this thesis, we proposed a methodology for generating relationship extraction datasets using Wikipedia and Wikidata. We analysed different pitfalls that we faced when we implemented the generator and generated CERED (Czech Relationship Extraction Dataset). 
+In this thesis, we proposed a methodology for generating relationship extraction datasets using Wikipedia and Wikidata. We analysed several pitfalls we faced, and generated CERED (Czech Relationship Extraction Dataset). 
 
-We designed a neural network architecture for the relationship extraction task. In the network, we employ BERT, which increases the quality of the network. We demonstrated that the proposed architecture preforms not much worse than the state-of-the-art on multiple English relationship extraction datasets. We reported the performance of the network on CERED.
+We then designed a neural network architecture for the relationship extraction task. In the network, we employ BERT contextual embeddings, which increase the quality of the network. We demonstrated, that the proposed architecture preforms reasonably well on two English relationship extraction datasets, and we reported the performance of our model on CERED.
 
 
 \section{Future work}
 
 \subsection{Other Languages}
 
-This thesis focused on relationship extraction in the Czech  Language. We believe that our work could be extended into different languages. In the CERED generation process, there are three language-dependent steps:
+This thesis focused on relationship extraction in the Czech  Language. We believe, that our work could be easily extended into different languages. In the CERED generation process, there are three language-dependent steps:
 \begin{itemize}
-\item Wikidata preprocessing - we only worked with items, that had at least one Czech name. The filtering can be easily changed to arbitrary language. For languages with small Wikipedia, it might be reasonable to consider relaxing the condition.
-\item Wikitext parsing - names of templates are in the language of the Wikipedia. We can remove the content of all templates. It will negatively impact the size of the dataset, but it too drastically.
-\item Entity matching - this step is heavily dependant on the language. We believe that for some languages it might be satisfactory to change the language in MorphoDiTa (for example MorphoDiTa supports the Slovak language). We might consider exchanging MorphoDiTa with a more mainstream tool (for example, spaCy) that supports more languages.
+\item Wikidata preprocessing -- we only worked with items that had at least one Czech name. The filtering can be easily changed to arbitrary language. For languages with small Wikipedia, it might be reasonable to consider relaxing the condition.
+\item Wikitext parsing -- names of templates are in the language of the Wikipedia. We could remove the content of all templates, but it would of course negatively impact the size of the dataset.
+\item Entity matching -- this step is heavily dependent on the language. We believe that for some languages it might be satisfactory to change the language in MorphoDiTa (for example MorphoDiTa supports the Slovak language). We might consider exchanging MorphoDiTa with a more universal (UDPipe \citep{udpipe:2017}) or mainstream (spaCy \citep{spacy2}) tool that supports more languages.
 
 \end{itemize}
 
-If we implemented the changes proposed above and automatised the whole process, we might be able to create a dataset (and a model) for each language, that the multilingual BERT supports (coincidentally BERT was trained on the 100 biggest Wikipedias).
+If we implemented the changes proposed above, we would be able to create a dataset and a model for each language that the multilingual BERT supports (coincidentally, BERT was trained on the 102 biggest Wikipedias).
 
 \subsection{Wikidata ontology}
-In section \nameref{sec:otherconsideredvariations}, we mentioned that additional information for training could be obtained from wikidata. Such information is often available in other relationship extraction dataset. In the future, we would like to use Wikidata for extracting such information and add it to CERED.
+In \autoref{sec:otherconsideredvariations}, we mentioned that additional information for training could be obtained from Wikidata. Such information is often available in other relationship extraction datasets. In the future, we would like to use Wikidata for extracting such information and add it to CERED.
 
 
