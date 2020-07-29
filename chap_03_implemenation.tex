@@ -39,7 +39,7 @@ Based on the analysis of all the available data, we decided not to include the f
 
 \end{itemize}
 
-One more technical issue we encountered was correctly assigning spans to Wikilinks, i.e. where the link starts and ends in the text. We can demonstrate the problem on the \todo{uvozovky} following sentence: 
+One more technical issue we encountered was correctly assigning spans to Wikilinks, i.e. where the link starts and ends in the text. We can demonstrate the problem on the  following sentence: 
 \begin{quote}
 \vuvozovkach{The main [[story arc]] concerns Harry's struggle against [[Lord Voldemort]], a dark wizard who intends to become immortal, overthrow the wizard governing body known as the [[Ministry of Magic]] and subjugate all wizards and [[Muggle]]s (non-magical people).}
 \end{quote}
@@ -71,20 +71,14 @@ After investigating many other unusual cases, we decided to discard any sentence
 \subsection{Characteristics of the Generated Dataset}
 The full dataset, which was obtained by the process we described in the previous sections, contains almost one and a half million relation mentions. In the next few paragraphs, we present more detailed statistic of this dataset - CERED0. 
 
-We found at least one mention in \num{293591} articles. In these articles, the average number of found mentions is slightly less than 5 and the median is nearly 7. The article with most mentions is Spojené království\footnote{\url{https://cs.wikipedia.org/w/index.php?oldid=18752891}} (United Kingdom). The distribution of mentions in articles is shown \chybi{vložit histogramy}
+We found at least one mention in \num{293591} articles. In these articles, the average number of found mentions is slightly less than 5 and the median is nearly 7. The article with most mentions is Spojené království\footnote{\url{https://cs.wikipedia.org/w/index.php?oldid=18752891}} (United Kingdom). The distribution of mentions in articles is shown in \autoref{fig:kolaceCered0}.
 
-There are \num{490501} different sentences that contain a mentions. We set the upper bound on the number of entity mentions per sentence to 10. On average there were approximately 3 relation mentions in a sentence (that had at least one mention) and the maximum of 72 mentions per sentence was reached 34 times. The length of sentences ranges from 2 to 401 tokens, where the very short ones usually come from templates that were not removed. On the other hand, the very long ones are often caused by incorrectly written articles.\footnote{Example of an incorrectly written article \url{https://cs.wikipedia.org/w/index.php?oldid=18723498}} We tried to remove all templates to see if the range (and distribution) of the number of words improves, but we did not achieve a significant improvement.
-
-
-
-\begin{figure}[h]\centering
-\includegraphics[width=119mm, height=54mm]{./img/CERED0_sentence_number_histogram}
-\caption{todo}
-\label{obr10:vety_histogram}
-\end{figure}
+There are \num{490501} different sentences that contain a mentions. We set the upper bound on the number of entity mentions per sentence to 10. On average there were approximately 3 relation mentions in a sentence (that had at least one mention) and the maximum of 72 mentions per sentence was reached 34 times. The full distribution is captured in \autoref{obr:wordsinsentences} (CERED0). The length of sentences ranges from 2 to 401 tokens, where the very short ones usually come from templates that were not removed. On the other hand, the very long ones are often caused by incorrectly written articles.\footnote{Example of an incorrectly written article \url{https://cs.wikipedia.org/w/index.php?oldid=18723498}} We tried to remove all templates to see if the range (and distribution) of the number of words improves, but we did not achieve a significant improvement.
 
 
-Another possibility is to observe how the position of a sentence in an article influences the number of relation mentions. We expected that the first sentences in the articles would contain the highest number of relation mentions. The first sentences tend to contain Wikilinks and the use of pronouns or shorter names is limited, because each entity has to first be introduced by its full name. As we can see in \autoref{obr10:vety_histogram}, our hypothesis seems to be correct, and partially applicable to several initial sentences, not just the first one. Surprisingly, \num{904803} mentions come from sentences that are first in their respective articles -- this constitutes over 60\% of all mentions.
+
+
+Another possibility is to observe how the position of a sentence in an article influences the number of relation mentions. We expected that the first sentences in the articles would contain the highest number of relation mentions. The first sentences tend to contain Wikilinks and the use of pronouns or shorter names is limited, because each entity has to first be introduced by its full name. As we can see in \autoref{obr:firstsentences} (CERED0), our hypothesis seems to be correct, and partially applicable to several initial sentences, not just the first one. Surprisingly, \num{904803} mentions come from sentences that are first in their respective articles -- this constitutes over 60\% of all mentions.
 
 
 
@@ -146,6 +140,19 @@ Even after the restriction on the uniqueness of sentences, half of the CERED2 se
 There are two stages in the CERED generation process that might be relatively unprecise. The entity matching stage and the relation matching stage. CERED4 keeps only the relation mentions from CERED3, in which both entities were manually labelled directly in wikitext in the form of wikilinks. The CERED4 dataset is, unfortunately, small, but has the highest potential to be precise.
 
 
+\begin{figure}[h]\centering
+\includegraphics[scale=1.2]{./img/firstsentence0-4_valid}
+\caption{Distribution of the sentence number within article. For CERED0-2, first sentences dominate the datasets. CERED2 and CERED3 differ only in the first sentences, therefore CERED2 is mostly hidden by CERED3.}
+\label{obr:firstsentences}
+\end{figure}
+
+\begin{figure}[h]\centering
+\includegraphics[scale=1.2]{./img/Words0-4_valid}
+\caption{todo}
+\label{obr:wordsinsentences}
+\end{figure}
+
+
 \subsection{Other Considered Variations}
 \label{sec:otherconsideredvariations}
 When curating the CERED we considered many different criteria. For example, we chose the constant \num{1000} for underrepresented relations after several experiments. The advantage of this value is that only two relations were more dominant than the new \relationtype{other} relation and at the same time, we would keep 63 positive relations. We wanted our dataset to be at least somewhat comparable to other datasets in the proportion of data and inventory size. S10T8 contains \num{10717} mentions and 10 relations, TACRED contains around \num{100000} mentions and 41 relations. The size of Riedel NYT depends, just like its inventory, on what data is used (and whether duplicates are removed and so on), but commonly used version contains nearly \num{700000} mentions and 58 relations. Since the sizes of CERED1-3 range from approximately a million to approximately \num{160000} mentions, we wanted the relation inventory size to be around 50 or 60. The distributions of relations in different datasets is captured in \autoref{fig:kolace} and detailed for CERED1-4 in \autoref{obr:relations}.
@@ -157,7 +164,7 @@ When curating the CERED we considered many different criteria. For example, we c
 
 
 \begin{figure}[h]\centering
-\includegraphics[scale=1]{./img/Relations1-4}
+\includegraphics[scale=1]{./img/Relations1-4_valid}
 \caption{Sizes of relation representations. For each we ordered the relations by their frequency.}
 \label{obr:relations}
 \end{figure}
@@ -166,7 +173,7 @@ When curating the CERED we considered many different criteria. For example, we c
 
 One more labour intensive variation we wanted to create was supposed to be focused on named entities. We tried to curate a set of named entity types (such as person, place, etc.) based on Wikidata, in order to later use them as additional information during training. 
 
-We used the QPQ triples described in \autoref{sec:wikidata_preprocessing_implementation} to create an oriented graph with two types of edges. The first edge type -- instance edges -- connects Wikidata items Q\textsubscript{1} and Q\textsubscript{2} if there is a triple Q\textsubscript{1}P31Q\textsubscript{2}, where P31 is the Wikidata property \wikiitem{instance of}{P31}, and the second type -- subclass edges -- are added for the \wikiitem{subclass of}{P279} property. The goal of the graph is to capture the transitive nature of the two properties, i.e. if Harry Potter is an instance of a fictional human and fictional human is a subclass of a human, we can assume that Harry Potter is a human. We consider a Wikidata item to be a named entity if it is an instance of some other item. If we are interested in all the named entities belonging to some entity type (node in the graph), we can simply find all the named entities for which there is a path between the type and the entity.
+We used the QPQ triples described in \autoref{sec:wikidata_preprocessing_implementation} to create an oriented graph with two types of edges. The first edge type -- instance edges -- connects Wikidata items Q\textsubscript{1} and Q\textsubscript{2} if there is a triple Q\textsubscript{1}P31Q\textsubscript{2}, where P31 is the Wikidata property \wikiitem{instance of}{P31}, and the second type -- subclass edges -- are added for the \wikiitem{subclass of}{P279} property. The goal of the graph is to capture the transitive nature of the two properties, i.e. if Harry Potter is an instance of a fictional human and fictional human is a subclass of a human, we can assume that Harry Potter is a human.\todo{pozor, chyba} We consider a Wikidata item to be a named entity if it is an instance of some other item. If we are interested in all the named entities belonging to some entity type (node in the graph), we can simply find all the named entities for which there is a path between the type and the entity.
 
 We hoped that with such representation, we would be able to curate reasonable set of types. For example, we might want to have a \vuvozovkach{human} entity type and we might intuitively expect \wikiitem{Harry Potter}{Q3244512} (fictional human) to be a human. However, as he is fictional, he is not considered to be human in the wikidata ontology. Such an issue can be solved, for example, by adding another type of edges for \wikiitem{fictional analog of}{P1074}. The problem is that there are just too many similar problems and it is out of scope for this thesis to properly analyze the whole wikidata ontology. 
 

@@ -260,7 +260,7 @@ Any change we make in the generator affects the generated dataset and analysing 
 
 The simplest characteristic of the dataset is its size. Even though we want to maximize the size of dataset, we want to keep the precision high (eliminate false positives).
 
-We can find false positives by finding anomalies in the dataset. We can look at different graphs characterizing the dataset, identify unexpected peeks and investigate the mentions causing them. An example of such graph is the distribution (histogram) of the number of words in a sentence and article representation is shown in \autoref{obr:ukazka_histogramu}. Other useful characteristics include the length of a sentence in characters, relation distribution, article distribution, the number of sentence within its article, and so on.
+We can find false positives by finding anomalies in the dataset. We can look at different graphs characterizing the dataset, identify unexpected peeks and investigate the mentions causing them. Two such graphs -- the distribution of the number of words in a sentence and of the number of mentions per article -- are shown in  \autoref{obr:ukazka_histogramu}. Other useful characteristics include the length of a sentence in characters, relation distribution, article distribution, the number of sentence within its article, and so on.
 
 Such graphs are better at capturing false positives than false negatives. To evaluate false negatives, it is necessary to compare the articles with the corresponding mentions in the dataset. To that account, we created a tool, which can visualize the whole article and both the entity and relation mentions.
 
@@ -268,7 +268,7 @@ Such graphs are better at capturing false positives than false negatives. To eva
 \begin{subfigure}{1\textwidth}
 \centering
 \includegraphics[width = 1\textwidth]{./img/Histograms_2020-07-19_21-00-53_CEREDalpha.png}
-\caption{CEREDalpha -- alpha version of the dataset before we removed Wikitext templates}
+\caption{CERED$\alpha$ -- alpha version of the dataset before we removed Wikitext templates}
 \end{subfigure}
 \par\medskip
 \begin{subfigure}{1\textwidth}
@@ -276,7 +276,7 @@ Such graphs are better at capturing false positives than false negatives. To eva
 \includegraphics[width = 1\textwidth]{./img/Histograms_2020-07-19_21-00-53_CERED0.png}
 \caption{CERED0 -- the final version of the generated dataset}
 \end{subfigure}
-\caption{Comparison of the histogram of the number of words (left column) and article id (right column) in two different versions of the dataset. In the left column, we can see that the curve is smoother and also less skewed to the right in CERED0. In the right column, we can see that in CEREDalpha several articles contributed over 5000 mentions, in contrast with the maximum contribution of approximately 400 mentions in CERED0. Considering that CEREDalpha is approximately two times bigger than CERED0, such smoothing of the distribution is significant.}
+\caption{Comparison of the histogram of the number of words (left column) and number of mentions per article (right column) in two different versions of the dataset. In the left column, we can see that the curve is smoother and also less skewed to the right in CERED0. In the right column, we can see that in CERED$\alpha$ several articles contributed over \num{5000} mentions, in contrast with the maximum contribution of approximately 400 mentions in CERED0. Considering that CERED$\alpha$ is approximately two times bigger than CERED0, such smoothing of the distribution is significant.}
 \label{obr:ukazka_histogramu}
 \end{figure}
 

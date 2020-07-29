@@ -13,7 +13,7 @@ This thesis focused on relationship extraction in the Czech  Language. We believ
 \begin{itemize}
 \item Wikidata preprocessing -- we only worked with items that had at least one Czech name. The filtering can be easily changed to arbitrary language. For languages with small Wikipedia, it might be reasonable to consider relaxing the condition.
 \item Wikitext parsing -- names of templates are in the language of the Wikipedia. We could remove the content of all templates, but it would of course negatively impact the size of the dataset.
-\item Entity matching -- this step is heavily dependent on the language. We believe that for some languages it might be satisfactory to change the language in MorphoDiTa (for example MorphoDiTa supports the Slovak language). We might consider exchanging MorphoDiTa with a more universal (UDPipe \citep{udpipe:2017}) or mainstream (spaCy \citep{spacy2}) tool that supports more languages.
+\item Entity matching -- this step is heavily dependent on the language. We believe that for some languages it might be satisfactory to change the language in MorphoDiTa (for example MorphoDiTa supports the Slovak language). We might also consider exchanging MorphoDiTa with a more universal tool supporting more languages (for example UDPipe \citep{udpipe:2017} or mainstream spaCy \citep{spacy2}).
 
 \end{itemize}
 
