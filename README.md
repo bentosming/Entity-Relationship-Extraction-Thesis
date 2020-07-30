@@ -8,7 +8,7 @@ Entity Relationship Extraction Thesis
 - diagram creately.com
 
 
-## Never ending TODO
+## Maybe ending TODO
 - [ ] thesis.xmpdata keywords
 - {Institute of Formal and Applied Linguistics}, {Institute} {RNDr. Milan Straka, Ph.D.}, {Institute of Formal and Applied Linguistics}, {Computer Science}, {IUI} ok?
 - podkěování
